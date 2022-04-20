@@ -10,20 +10,34 @@
         android:id="@+id/tv_viewport_for_get_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/button_post"
+        app:layout_constraintBottom_toTopOf="@id/linearlayout_post_button_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_post"
+    <LinearLayout
+        android:id="@+id/linearlayout_post_button_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="POST"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/button_get_as_jsonobject"
-        app:layout_constraintTop_toBottomOf="@id/tv_viewport_for_get_button" />
+        app:layout_constraintTop_toBottomOf="@id/tv_viewport_for_get_button">
+
+        <Button
+            android:id="@+id/button_post_bread"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="bread" />
+
+        <Button
+            android:id="@+id/button_post_water"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="water" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/button_get_as_jsonobject"
@@ -31,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="GET_JSONObject"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/button_post"
+        app:layout_constraintLeft_toRightOf="@id/linearlayout_post_button_container"
         app:layout_constraintRight_toLeftOf="@id/button_get_as_jsonarray"
         app:layout_constraintTop_toBottomOf="@id/tv_viewport_for_get_button" />
 

@@ -18,7 +18,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
+import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
+import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,11 +34,14 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private final String URL_POST = "http://192.168.1.143:8080/kafka/publish";
+    private final String URL_POST_AS_JSON_OBJECT = "http://192.168.1.143:8080/kafka/publish_jsonobject";
+    private final String URL_POST_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/publish_jsonarray";
     private final String URL_GET_AS_JSON_OBJECT = "http://192.168.1.143:8080/kafka/receive_jsonobject";
     private final String URL_GET_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_jsonarray";
 
-    private TextView textViewViewportForGetButton;
-    private Button buttonPost;
+    private TextView textViewForGetAsJSONArrayButton;
+    private Button buttonPostBread;
+    private Button buttonPostWater;
     private Button buttonGetAsJSONObject;
     private Button buttonGetAsJSONArray;
 
@@ -44,15 +50,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textViewViewportForGetButton = findViewById(R.id.tv_viewport_for_get_button);
-        buttonPost = findViewById(R.id.button_post);
+        textViewForGetAsJSONArrayButton = findViewById(R.id.tv_viewport_for_get_button);
+        buttonPostBread = findViewById(R.id.button_post_bread);
+        buttonPostWater = findViewById(R.id.button_post_water);
         buttonGetAsJSONObject = findViewById(R.id.button_get_as_jsonobject);
         buttonGetAsJSONArray = findViewById(R.id.button_get_as_jsonarray);
 
-        buttonPost.setOnClickListener(new View.OnClickListener() {
+        buttonPostBread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postData();
+                List<MenuItem> meal = new ArrayList<MenuItem>();
+                meal.add(new Bread());
+                meal.add(new Bread());
+                meal.add(new Water());
+                meal.add(new Water());
+                meal.add(new Bread());
+
+                postDataAsJSONArray(meal);
+            }
+        });
+
+        buttonPostWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postDataAsJSONObject(new Water());
             }
         });
 
@@ -71,7 +92,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void postData() {
+    private void postDataAsJSONArray(List<MenuItem> menuItems) {
+        JSONArray jsonArray = new JSONArray();
+        for (MenuItem menuItem : menuItems) {
+            jsonArray.put(menuItem.toJSON());
+        }
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
+                URL_POST_AS_JSON_ARRAY,
+                jsonArray,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        AppController.getInstance(this).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void postDataAsJSONObject(MenuItem menuItem) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                URL_POST_AS_JSON_OBJECT,
+                menuItem.toJSON(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        AppController.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void postData(Meal mealToBeSent) {
         Toast.makeText(this, "postData() called", Toast.LENGTH_SHORT).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -95,9 +158,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("message", "Mom is the best");
                 //params.put("message", "Green");
 
+                String menuItemsAsJSONStringSeparatedBySpace = mealToBeSent.getMenuItemsAsJSONStringSeparatedBySpace();
+                params.put("meal", menuItemsAsJSONStringSeparatedBySpace);
                 return params;
             }
         };
@@ -106,6 +170,42 @@ public class MainActivity extends AppCompatActivity {
         Log.i("stringRequest::", stringRequest.toString());
         AppController.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+//    private void postData() {
+//        Toast.makeText(this, "postData() called", Toast.LENGTH_SHORT).show();
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+//                URL_POST,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // response
+//                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//                        Log.d("PostResponse:::", response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // error
+//                        Log.d("Error.Response", error.toString());
+//                    }
+//                }) {
+//            @Nullable
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("message", "Mom is the best");
+//                //params.put("message", "Green");
+//
+//                return params;
+//            }
+//        };
+//
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
+//        Log.i("stringRequest::", stringRequest.toString());
+//        AppController.getInstance(this).addToRequestQueue(stringRequest);
+//    }
 
     private void getDataAsJSONArray() {
         Toast.makeText(this, "getDataAsJSONArray() called", Toast.LENGTH_SHORT).show();
@@ -118,25 +218,52 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.i("jsonArrayRequest::", response.toString());
 
-                        List<Bread> breads = new ArrayList<Bread>();
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                Bread bread = new Bread(jsonObject);
-                                breads.add(bread);
+                        if (response.length() != 0) {
+                            List<MenuItem> menuItems = new ArrayList<MenuItem>();
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject jsonObject = response.getJSONObject(i);
+                                    String name = jsonObject.getString("name");
+
+                                    if (name.equals("bread")) {
+                                        Bread bread = new Bread(jsonObject);
+                                        menuItems.add(bread);
+                                    } else if (name.equals("water")) {
+                                        Water water = new Water(jsonObject);
+                                        menuItems.add(water);
+                                    } else {
+                                        Log.i("MainActivity", ".getDataAsJSONArray(): Not bread, not water");
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
-                        double totalPrice = 0;
-                        for (Bread bread : breads) {
-                            totalPrice += bread.getPrice();
-                        }
+                            StringBuilder sb = new StringBuilder();
+                            for (MenuItem menuItem : menuItems) {
+                                sb.append(menuItem.getName() + "\n");
+                            }
 
-                        textViewViewportForGetButton.setText(
-                                "price: " + totalPrice
-                        );
+                            String previousMenuItemsOnTextView = textViewForGetAsJSONArrayButton.getText().toString();
+                            String newMenuItemsToAppendToTextView = sb.toString();
+                            textViewForGetAsJSONArrayButton.setText(
+                                    previousMenuItemsOnTextView + newMenuItemsToAppendToTextView
+                            );
+//                            double totalPrice = 0;
+//                            for (MenuItem menuItem : menuItems) {
+//                                totalPrice += menuItem.getPrice();
+//                            }
+//
+//                            textViewViewportForGetButton.setText(
+//                                    "price: " + totalPrice
+//                            );
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "response.length() == 0", Toast.LENGTH_SHORT).show();
+//                            textViewViewportForGetButton.setText(
+//                                    "response.length() == 0"
+//                            );
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -161,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.i("jsonObjectRequest::", response.toString());
                         Bread bread = new Bread(response);
-                        textViewViewportForGetButton.setText(
+                        textViewForGetAsJSONArrayButton.setText(
                                 "price: " + bread.getPrice()
                         );
                     }

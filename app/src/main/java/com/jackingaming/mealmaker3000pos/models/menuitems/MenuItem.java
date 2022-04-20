@@ -4,8 +4,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class MenuItem {
+    public static final String JSON_NAME = "name";
     public static final String JSON_PRICE = "price";
 
+    protected String name;
     protected double price;
 
     public MenuItem() {
@@ -13,16 +15,30 @@ public abstract class MenuItem {
 
     public MenuItem(JSONObject json) {
         try {
+            name = json.getString(JSON_NAME);
             price = json.getDouble(JSON_PRICE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    protected JSONObject toJSON() throws JSONException {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put(JSON_PRICE, price);
+        try {
+            json.put(JSON_NAME, name);
+            json.put(JSON_PRICE, price);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return json;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPrice() {
