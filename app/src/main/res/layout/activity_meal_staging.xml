@@ -6,14 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".MealStagingActivity">
 
-    <TextView
-        android:id="@+id/textView_meal_viewer"
+    <LinearLayout
+        android:id="@+id/linearLayout_left_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/button_bread"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView_meal_viewer"
+            android:layout_width="match_parent"
+            android:hint="text view for meal viewer"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+
+        <Button
+            android:id="@+id/button_post_meal_to_kafka"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="post to kafka" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/button_bread"
@@ -21,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="bread"
         app:layout_constraintBottom_toTopOf="@id/button_water"
-        app:layout_constraintLeft_toRightOf="@id/textView_meal_viewer"
+        app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="water"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/textView_meal_viewer"
+        app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_bread" />
 
