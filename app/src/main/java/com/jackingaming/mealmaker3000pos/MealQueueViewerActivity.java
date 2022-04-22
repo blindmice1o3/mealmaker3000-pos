@@ -15,9 +15,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
+import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,24 +26,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealQueueViewerActivity extends AppCompatActivity {
-    private final String URL_GET_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_jsonarray";
-    private static final String CONTENT_OF_STRING_BUILDER = "sb";
+    private final static String TAG = "MealQueueViewerActivity";
+    private final String URL_GET_MEAL_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_meal_as_jsonarray";
+    private final String PREFERENCE_CONTENT_OF_SB = "preferenceContentOfSB";
 
     private TextView textViewMealQueueViewer;
     private Button buttonRefresh;
 
     private StringBuilder sb = new StringBuilder();
 
-    private static final String PREFERENCE_CONTENT_OF_SB = "preferenceContentOfSB";
-
-    public static boolean setPreference(Context context, String key, String value) {
+    private boolean setPreference(Context context, String key, String value) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         return editor.commit();
     }
 
-    public static String getPreference(Context context, String key) {
+    private String getPreference(Context context, String key) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
         return settings.getString(key, "defaultValue");
     }
@@ -71,7 +69,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT)
                         .show();
 
-                getDataAsJSONArray();
+                getMealAsJSONString();
             }
         });
 
@@ -83,11 +81,11 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         }
     }
 
-    private void getDataAsJSONArray() {
-        Toast.makeText(this, "getDataAsJSONArray() called", Toast.LENGTH_SHORT).show();
+    private void getMealAsJSONString() {
+        Toast.makeText(this, "getMealAsJSONString() called", Toast.LENGTH_SHORT).show();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                URL_GET_AS_JSON_ARRAY,
+                URL_GET_MEAL_AS_JSON_ARRAY,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -95,39 +93,26 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         Log.i("jsonArrayRequest::", response.toString());
 
                         if (response.length() != 0) {
-                            List<MenuItem> menuItems = new ArrayList<MenuItem>();
                             try {
                                 for (int i = 0; i < response.length(); i++) {
-                                    JSONObject jsonObject = response.getJSONObject(i);
-                                    String name = jsonObject.getString("name");
+                                    String mealAsJSONString = response.getString(i);
+                                    JSONObject jsonObject = new JSONObject(mealAsJSONString);
+                                    Meal meal = new Meal(jsonObject);
+                                    int numberOfMenuItemInMeal = meal.getNumberOfMenuItemInMeal();
+                                    Log.i(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
 
-                                    if (name.equals("bread")) {
-                                        Bread bread = new Bread(jsonObject);
-                                        menuItems.add(bread);
-                                    } else if (name.equals("water")) {
-                                        Water water = new Water(jsonObject);
-                                        menuItems.add(water);
-                                    } else {
-                                        Log.i("MainActivity", ".getDataAsJSONArray(): Not bread, not water");
+                                    List<String> namesOfMenuItem = meal.getNameOfMenuItems();
+                                    for (String name : namesOfMenuItem) {
+                                        sb.append(name + "\n");
                                     }
                                 }
+
+                                textViewMealQueueViewer.setText(sb.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-                            for (MenuItem menuItem : menuItems) {
-                                sb.append(menuItem.getName() + "\n");
-                            }
-
-//                            String previousMenuItemsOnTextView = textViewMealQueueViewer.getText().toString();
-//                            String newMenuItemsToAppendToTextView = sb.toString();
-                            textViewMealQueueViewer.setText(
-//                                    previousMenuItemsOnTextView + newMenuItemsToAppendToTextView
-                                    sb.toString()
-                            );
                         } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "response.length() == 0", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "meals.size <= 0");
                         }
                     }
                 },
