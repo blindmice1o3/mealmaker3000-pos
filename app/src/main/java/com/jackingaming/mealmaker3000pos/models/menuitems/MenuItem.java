@@ -3,7 +3,7 @@ package com.jackingaming.mealmaker3000pos.models.menuitems;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class MenuItem {
+public class MenuItem {
     public static final String JSON_NAME = "name";
     public static final String JSON_PRICE = "price";
 

@@ -1,10 +1,12 @@
 package com.jackingaming.mealmaker3000pos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -12,21 +14,24 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
-import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MealStagingActivity extends AppCompatActivity {
-    private final String URL_POST_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/publish_jsonarray";
+    private final String URL_POST_MEAL_AS_JSON_STRING = "http://192.168.1.143:8080/kafka/publish_jsonmeal";
 
     private TextView textViewMealViewer;
     private Button buttonPostMealToKafka;
@@ -34,14 +39,14 @@ public class MealStagingActivity extends AppCompatActivity {
     private Button buttonBread;
     private Button buttonWater;
 
-    private List<MenuItem> menuItems;
+    private Meal meal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_staging);
 
-        menuItems = new ArrayList<MenuItem>();
+        meal = new Meal();
 
         textViewMealViewer = findViewById(R.id.textView_meal_viewer);
         buttonPostMealToKafka = findViewById(R.id.button_post_meal_to_kafka);
@@ -51,9 +56,11 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonPostMealToKafka.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: double check this functionality.
-                postDataAsJSONArray(menuItems);
-                menuItems.clear();
+                JSONObject mealAsJSONObject = meal.toJSON();
+                String mealAsJSONString = mealAsJSONObject.toString();
+
+                postMealAsJSONString(mealAsJSONString);
+                meal.clearMenuItems();
                 updateTextView();
             }
         });
@@ -61,7 +68,7 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonBread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuItems.add(new Bread());
+                meal.addMenuItem(new Bread());
                 updateTextView();
             }
         });
@@ -69,7 +76,7 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menuItems.add(new Water());
+                meal.addMenuItem(new Water());
                 updateTextView();
             }
         });
@@ -99,35 +106,46 @@ public class MealStagingActivity extends AppCompatActivity {
 
     private void updateTextView() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < menuItems.size(); i++) {
-            String nameOfMenuItem = menuItems.get(i).getName();
-            String newLine = nameOfMenuItem + "\n";
-            sb.append(newLine);
+        List<String> nameOfMenuItems = meal.getNameOfMenuItems();
+        for (String nameOfMenuItem : nameOfMenuItems) {
+            sb.append(nameOfMenuItem + "\n");
         }
 
         textViewMealViewer.setText(sb.toString());
     }
 
-    private void postDataAsJSONArray(List<MenuItem> menuItems) {
-        JSONArray jsonArray = new JSONArray();
-        for (MenuItem menuItem : menuItems) {
-            jsonArray.put(menuItem.toJSON());
-        }
+    private void postMealAsJSONString(String mealToPostAsJSONString) {
+        Toast.makeText(this, "postMealAsJSONString(String) called", Toast.LENGTH_SHORT).show();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST,
-                URL_POST_AS_JSON_ARRAY,
-                jsonArray,
-                new Response.Listener<JSONArray>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                URL_POST_MEAL_AS_JSON_STRING,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-
+                    public void onResponse(String response) {
+                        // response
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        Log.d("PostResponse:::", response);
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }) {
+            @Nullable
             @Override
-            public void onErrorResponse(VolleyError error) {
-
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                //params.put("message", "Green");
+                params.put("meal", mealToPostAsJSONString);
+                return params;
             }
-        });
-        AppController.getInstance(this).addToRequestQueue(jsonArrayRequest);
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
+        Log.i("stringRequest::", stringRequest.toString());
+        AppController.getInstance(this).addToRequestQueue(stringRequest);
     }
 }
