@@ -16,18 +16,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
-import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MealQueueViewerActivity extends AppCompatActivity {
     private final static String TAG = "MealQueueViewerActivity";
-    private final String URL_GET_MEAL_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_meal_as_jsonarray";
+    private final String URL_GET_NEW_MEALS_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_new_meals_as_jsonarray";
     private final String PREFERENCE_CONTENT_OF_SB = "preferenceContentOfSB";
 
     private TextView textViewMealQueueViewer;
@@ -48,12 +46,6 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        setPreference(getApplicationContext(), "keySB", sb.toString());
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_queue_viewer);
@@ -69,7 +61,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT)
                         .show();
 
-                getMealAsJSONString();
+                getNewMealsAsJSONArray();
             }
         });
 
@@ -81,11 +73,11 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         }
     }
 
-    private void getMealAsJSONString() {
+    private void getNewMealsAsJSONArray() {
         Toast.makeText(this, "getMealAsJSONString() called", Toast.LENGTH_SHORT).show();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                URL_GET_MEAL_AS_JSON_ARRAY,
+                URL_GET_NEW_MEALS_AS_JSON_ARRAY,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -93,24 +85,11 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         Log.i("jsonArrayRequest::", response.toString());
 
                         if (response.length() != 0) {
-                            try {
-                                for (int i = 0; i < response.length(); i++) {
-                                    String mealAsJSONString = response.getString(i);
-                                    JSONObject jsonObject = new JSONObject(mealAsJSONString);
-                                    Meal meal = new Meal(jsonObject);
-                                    int numberOfMenuItemInMeal = meal.getNumberOfMenuItemInMeal();
-                                    Log.i(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
+                            appendNewMealsToSB(response);
 
-                                    List<String> namesOfMenuItem = meal.getNameOfMenuItems();
-                                    for (String name : namesOfMenuItem) {
-                                        sb.append(name + "\n");
-                                    }
-                                }
-
-                                textViewMealQueueViewer.setText(sb.toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            textViewMealQueueViewer.setText(sb.toString());
+                            setPreference(getApplicationContext(), "keySB", sb.toString());
+//                            setPreference(getApplicationContext(), "keySB", "");
                         } else {
                             Log.d(TAG, "meals.size <= 0");
                         }
@@ -124,5 +103,24 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 });
 
         AppController.getInstance(this).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void appendNewMealsToSB(JSONArray response) {
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                String mealAsJSONString = response.getString(i);
+                JSONObject jsonObject = new JSONObject(mealAsJSONString);
+                Meal meal = new Meal(jsonObject);
+                int numberOfMenuItemInMeal = meal.getNumberOfMenuItemInMeal();
+                Log.i(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
+
+                List<String> namesOfMenuItem = meal.getNameOfMenuItems();
+                for (String name : namesOfMenuItem) {
+                    sb.append(name + "\n");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
