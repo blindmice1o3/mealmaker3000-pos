@@ -21,7 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MealQueueViewerActivity extends AppCompatActivity {
     private final static String TAG = "MealQueueViewerActivity";
@@ -108,9 +110,20 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     private void appendNewMealsToSB(JSONArray response) {
         try {
             for (int i = 0; i < response.length(); i++) {
-                String mealAsJSONString = response.getString(i);
-                JSONObject jsonObject = new JSONObject(mealAsJSONString);
-                Meal meal = new Meal(jsonObject);
+                String recordOfNewMealsAsJSONString = response.getString(i);
+                JSONObject recordOfNewMealsAsJSON = new JSONObject(recordOfNewMealsAsJSONString);
+
+//                String mealAsJSONString = response.getString(i);
+                Long keyNumberOfMealServed = recordOfNewMealsAsJSON.getLong("key");
+                String valueMealAsJSONString = recordOfNewMealsAsJSON.getString("value");
+                int partition = recordOfNewMealsAsJSON.getInt("partition");
+                long offset = recordOfNewMealsAsJSON.getLong("offset");
+                Log.i(TAG, "KEY: " + keyNumberOfMealServed + ", partition: " + partition + ", offset: " + offset);
+
+//                JSONObject menuAsJSON = new JSONObject(mealAsJSONString);
+                JSONObject menuAsJSON = new JSONObject(valueMealAsJSONString);
+                Meal meal = new Meal(menuAsJSON);
+
                 int numberOfMenuItemInMeal = meal.getNumberOfMenuItemInMeal();
                 Log.i(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
 
