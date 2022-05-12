@@ -15,8 +15,10 @@ import java.util.List;
 
 public class Meal {
     private static final String TAG = "Meal";
-    public static final String JSON_MENU_ITEMS = "menu_items";
+    public static final String JSON_ID = "id";
+    public static final String JSON_MENU_ITEMS = "menuItems";
 
+    private long id;
     private List<MenuItem> menuItems;
 
     public Meal() {
@@ -24,22 +26,21 @@ public class Meal {
     }
 
     public Meal(JSONObject json) {
-        menuItems = new ArrayList<MenuItem>();
+        this();
+
         try {
-            JSONArray jsonArray = json.optJSONArray(JSON_MENU_ITEMS);
-            if (jsonArray != null) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject menuItemAsJSON = jsonArray.getJSONObject(i);
-                    String nameOfMenuItem = menuItemAsJSON.getString(MenuItem.JSON_NAME);
-                    if (nameOfMenuItem.equals("bread")) {
-                        menuItems.add(new Bread(menuItemAsJSON));
-                    } else if (nameOfMenuItem.equals("water")) {
-                        menuItems.add(new Water(menuItemAsJSON));
-                    } else {
-                        Log.i(TAG, "nameOfMenuItem does NOT equals() \"bread\" nor \"water\".");
-                    }
-                }
+            id = json.optLong(JSON_ID);
+            Log.i(TAG, "Meal(JSONObject) constructor id: " + id);
+
+            JSONArray menuItemsAsJSONArray = (JSONArray) json.get(JSON_MENU_ITEMS);
+            Log.i(TAG, "Meal(JSONObject) constructor menuItemsAsJSONArray: " + menuItemsAsJSONArray);
+            for (int i = 0; i < menuItemsAsJSONArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) menuItemsAsJSONArray.get(i);
+                MenuItem menuItem = new MenuItem(jsonObject);
+                Log.i(TAG, "Meal(JSONObject) constructor menuItem.price: " + menuItem + "-" + menuItem.getPrice());
+                menuItems.add(menuItem);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,26 +67,38 @@ public class Meal {
     }
 
     public JSONObject toJSON() {
-        JSONArray jsonArray = new JSONArray();
-        for (MenuItem menuItem : menuItems) {
-            jsonArray.put(menuItem.toJSON());
-        }
-
         JSONObject json = new JSONObject();
         try {
-            json.put(JSON_MENU_ITEMS, jsonArray);
+            json.put(JSON_ID, id);
+            json.put(JSON_MENU_ITEMS, convertToJSONArray(menuItems));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return json;
     }
 
-    public String getMenuItemsAsJSONStringSeparatedBySpace() {
-        StringBuilder sb = new StringBuilder();
+    private JSONArray convertToJSONArray(List<MenuItem> menuItems) {
+        JSONArray jsonArray = new JSONArray();
         for (MenuItem menuItem : menuItems) {
-            String menuItemAsJSONString = menuItem.toJSON().toString();
-            sb.append(menuItemAsJSONString + " ");
+            JSONObject menuItemAsJSON = menuItem.toJSON();
+            jsonArray.put(menuItemAsJSON);
         }
-        return sb.toString();
+        return jsonArray;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
     }
 }

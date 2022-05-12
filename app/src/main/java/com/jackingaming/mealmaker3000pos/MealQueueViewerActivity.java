@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,31 +22,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MealQueueViewerActivity extends AppCompatActivity {
     private final static String TAG = "MealQueueViewerActivity";
     private final String URL_GET_NEW_MEALS_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_new_meals_as_jsonarray";
     private final String PREFERENCE_CONTENT_OF_SB = "preferenceContentOfSB";
+    private final String KEY_SB = "keySB";
 
     private TextView textViewMealQueueViewer;
     private Button buttonRefresh;
 
     private StringBuilder sb = new StringBuilder();
-
-    private boolean setPreference(Context context, String key, String value) {
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(key, value);
-        return editor.commit();
-    }
-
-    private String getPreference(Context context, String key) {
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
-        return settings.getString(key, "defaultValue");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,25 +46,21 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),
+                Toast toast = Toast.makeText(getApplicationContext(),
                         "refresh button clicked.",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                        Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
 
                 getNewMealsAsJSONArray();
             }
         });
 
-        String stringFromPreviousSB = getPreference(getApplicationContext(), "keySB");
-        if (stringFromPreviousSB.equals("defaultValue")) {
-            Toast.makeText(getApplicationContext(), "nothing saved in preferences", Toast.LENGTH_SHORT).show();
-        } else {
-            sb.append(stringFromPreviousSB);
-        }
+        loadSB();
     }
 
     private void getNewMealsAsJSONArray() {
-        Toast.makeText(this, "getMealAsJSONString() called", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "getNewMealsAsJSONArray()");
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 URL_GET_NEW_MEALS_AS_JSON_ARRAY,
@@ -84,23 +68,23 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i("jsonArrayRequest::", response.toString());
+                        Log.i(TAG, "jsonArrayRequest:: onResponse(JSONArray)");
 
                         if (response.length() != 0) {
-                            appendNewMealsToSB(response);
+                            Log.d(TAG, "response.length() != 0");
 
-                            textViewMealQueueViewer.setText(sb.toString());
-                            setPreference(getApplicationContext(), "keySB", sb.toString());
-//                            setPreference(getApplicationContext(), "keySB", "");
+                            appendNewMealsToSB(response);
+                            saveSB();
+                            updateTextViewMealQueueViewer();
                         } else {
-                            Log.d(TAG, "meals.size <= 0");
+                            Log.d(TAG, "response.length() == 0");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("jsonArrayRequest::", "onErrorResponse(VolleyError)");
+                        Log.i(TAG, "jsonArrayRequest:: onErrorResponse(VolleyError)");
                     }
                 });
 
@@ -113,27 +97,54 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 String recordOfNewMealsAsJSONString = response.getString(i);
                 JSONObject recordOfNewMealsAsJSON = new JSONObject(recordOfNewMealsAsJSONString);
 
-//                String mealAsJSONString = response.getString(i);
                 Long keyNumberOfMealServed = recordOfNewMealsAsJSON.getLong("key");
                 String valueMealAsJSONString = recordOfNewMealsAsJSON.getString("value");
+                long timestamp = recordOfNewMealsAsJSON.getLong("timestamp");
+                String topic = recordOfNewMealsAsJSON.getString("topic");
                 int partition = recordOfNewMealsAsJSON.getInt("partition");
                 long offset = recordOfNewMealsAsJSON.getLong("offset");
-                Log.i(TAG, "KEY: " + keyNumberOfMealServed + ", partition: " + partition + ", offset: " + offset);
+                Log.i(TAG, "timestamp: " + timestamp +
+                        ", topic: " + topic +
+                        ", partition: " + partition +
+                        ", offset: " + offset +
+                        ", KEY: " + keyNumberOfMealServed
+                );
 
-//                JSONObject menuAsJSON = new JSONObject(mealAsJSONString);
                 JSONObject menuAsJSON = new JSONObject(valueMealAsJSONString);
                 Meal meal = new Meal(menuAsJSON);
 
                 int numberOfMenuItemInMeal = meal.getNumberOfMenuItemInMeal();
-                Log.i(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
+                Log.d(TAG, "***** this meal has " + numberOfMenuItemInMeal + " menu item(s).");
 
                 List<String> namesOfMenuItem = meal.getNameOfMenuItems();
                 for (String name : namesOfMenuItem) {
-                    sb.append(name + "\n");
+                    sb.append(keyNumberOfMealServed + ". " + name + "\n");
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void saveSB() {
+        SharedPreferences settings = getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(KEY_SB, sb.toString());
+        editor.commit();
+    }
+
+    private void loadSB() {
+        SharedPreferences settings = getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
+        String stringFromPreviousSB = settings.getString(KEY_SB, "defaultValue");
+        if (stringFromPreviousSB.equals("defaultValue")) {
+            Log.d(TAG, "nothing [saved in preferences] from the previous sb");
+        } else {
+            Log.d(TAG, "there is data [saved in preferences] from the previous sb");
+            sb.append(stringFromPreviousSB);
+        }
+    }
+
+    private void updateTextViewMealQueueViewer() {
+        textViewMealQueueViewer.setText(sb.toString());
     }
 }

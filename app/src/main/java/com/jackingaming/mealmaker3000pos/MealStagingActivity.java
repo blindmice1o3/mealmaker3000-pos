@@ -60,6 +60,7 @@ public class MealStagingActivity extends AppCompatActivity {
                 String mealAsJSONString = mealAsJSONObject.toString();
 
                 postMealAsJSONString(mealAsJSONString);
+
                 meal.clearMenuItems();
                 updateTextView();
             }
@@ -114,7 +115,7 @@ public class MealStagingActivity extends AppCompatActivity {
         textViewMealViewer.setText(sb.toString());
     }
 
-    private void postMealAsJSONString(String mealToPostAsJSONString) {
+    private void postMealAsJSONString(String mealAsJSONString) {
         Toast.makeText(this, "postMealAsJSONString(String) called", Toast.LENGTH_SHORT).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -122,7 +123,6 @@ public class MealStagingActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                         Log.d("PostResponse:::", response);
                     }
@@ -130,7 +130,6 @@ public class MealStagingActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
                         Log.d("Error.Response", error.toString());
                     }
                 }) {
@@ -139,7 +138,7 @@ public class MealStagingActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //params.put("message", "Green");
-                params.put("meal", mealToPostAsJSONString);
+                params.put("meal", mealAsJSONString);
                 return params;
             }
         };
