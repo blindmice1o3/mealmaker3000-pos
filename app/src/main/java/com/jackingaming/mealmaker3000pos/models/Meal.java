@@ -2,9 +2,7 @@ package com.jackingaming.mealmaker3000pos.models;
 
 import android.util.Log;
 
-import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +28,6 @@ public class Meal {
 
         try {
             id = json.optLong(JSON_ID);
-            Log.i(TAG, "Meal(JSONObject) constructor id: " + id);
 
             JSONArray menuItemsAsJSONArray = (JSONArray) json.get(JSON_MENU_ITEMS);
             Log.i(TAG, "Meal(JSONObject) constructor menuItemsAsJSONArray: " + menuItemsAsJSONArray);
