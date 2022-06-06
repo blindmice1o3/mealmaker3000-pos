@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_actionview_custom"
+        android:icon="@drawable/ic_menu_camera"
+        android:orderInCategory="1"
+        android:title="custom"
+        android:visible="false"
+        app:actionLayout="@layout/action_view_custom"
+        app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/menu_item_refresh"
+        android:icon="@drawable/perm_group_sync_settings"
+        android:orderInCategory="50"
+        android:title="refresh"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_item_actionview_progressbar"
+        android:orderInCategory="100"
+        android:title="progressbar"
+        android:visible="false"
+        app:actionLayout="@layout/action_view_progressbar"
+        app:showAsAction="always" />
+</menu>
