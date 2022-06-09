@@ -2,6 +2,7 @@ package com.jackingaming.mealmaker3000pos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,13 +10,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,10 +36,9 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     private final String KEY_RECORDS_OF_MEAL = "keyRecordsOfMeal";
 
     private List<RecordOfMeal> recordsOfMeal;
-    private RecordOfMealAdapter adapter;
 
     private RecyclerView rvMealQueueViewer;
-    private Button buttonRefresh;
+    private RecordOfMealAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,23 +58,24 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         // Lookup the recyclerview in activity layout
         rvMealQueueViewer = findViewById(R.id.rv_meal_queue_viewer);
         // Create adapter passing in the records of meal data
-        adapter = new RecordOfMealAdapter(recordsOfMeal);
+        adapter = new RecordOfMealAdapter(recordsOfMeal,
+                new RecordOfMealAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View itemView, int position) {
+                        Log.i(TAG, "onItemClick(View, int)");
+                        recordsOfMeal.remove(position);
+                        adapter.notifyItemRemoved(position);
+                    }
+                });
         // Attach the adapter to the recyclerview to populate items
         rvMealQueueViewer.setAdapter(adapter);
         // Set layout manager to position the items
         rvMealQueueViewer.setLayoutManager(new LinearLayoutManager(this));
-
-        buttonRefresh = findViewById(R.id.button_refresh);
-        buttonRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "refresh button clicked.",
-                        Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-            }
-        });
+        // Set decorator to display dividers between each item within the list
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this,
+                        DividerItemDecoration.VERTICAL);
+        rvMealQueueViewer.addItemDecoration(itemDecoration);
     }
 
     private void showProgressBar() {
@@ -90,6 +88,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
     private MenuItem refreshMenuItem;
     private MenuItem progressbarActionViewMenuItem;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
