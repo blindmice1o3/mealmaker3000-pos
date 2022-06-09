@@ -19,9 +19,16 @@ import java.util.List;
 public class RecordOfMealAdapter extends
         RecyclerView.Adapter<RecordOfMealAdapter.ViewHolder> {
 
+    // Define the listener interface so the parent activity or fragment
+    // can implement it (passed into the constructor of RecordOfMealAdapter).
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+    private OnItemClickListener listener;
+
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView keyTextView;
@@ -37,13 +44,26 @@ public class RecordOfMealAdapter extends
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-
             keyTextView = (TextView) itemView.findViewById(R.id.tv_key);
             valueTextView = (TextView) itemView.findViewById(R.id.tv_value);
             timestampTextView = (TextView) itemView.findViewById(R.id.tv_timestamp);
             topicTextView = (TextView) itemView.findViewById(R.id.tv_topic);
             offsetTextView = (TextView) itemView.findViewById(R.id.tv_offset);
             partitionTextView = (TextView) itemView.findViewById(R.id.tv_partition);
+
+            // Set up the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -51,8 +71,9 @@ public class RecordOfMealAdapter extends
     private List<RecordOfMeal> recordsOfMeal;
 
     // Pass in the records of meal list into the constructor
-    public RecordOfMealAdapter(List<RecordOfMeal> recordsOfMeal) {
+    public RecordOfMealAdapter(List<RecordOfMeal> recordsOfMeal, OnItemClickListener listener) {
         this.recordsOfMeal = recordsOfMeal;
+        this.listener = listener;
     }
 
     // Usually involves inflating a layout from XML and returning the holder
