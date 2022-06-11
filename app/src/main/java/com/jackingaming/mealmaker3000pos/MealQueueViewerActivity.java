@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
     private List<RecordOfMeal> recordsOfMeal;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvMealQueueViewer;
     private RecordOfMealAdapter adapter;
 
@@ -54,6 +56,20 @@ public class MealQueueViewerActivity extends AppCompatActivity {
             recordsOfMeal.add(new RecordOfMeal(i, "HelloWorld", 1620L, "myTopic", 3, 25L));
         }
         loadRecordsOfMeal();
+
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        // Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+        // performs a swipe-to-refresh gesture.
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
+                        refreshViaSwipe();
+                    }
+                });
 
         // Lookup the recyclerview in activity layout
         rvMealQueueViewer = findViewById(R.id.rv_meal_queue_viewer);
@@ -135,45 +151,87 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_item_refresh:
-                refreshMenuItem.setVisible(false);
-                showProgressBar();
-
-                String tagGetNewMealsAsJSONArrayRequest = "get_new_meals_as_jsonarray";
-                makeJSONArrayWebServiceRequest(Request.Method.GET,
-                        URL_GET_NEW_MEALS_AS_JSON_ARRAY,
-                        tagGetNewMealsAsJSONArrayRequest,
-                        null,
-                        new VolleyResponseListener() {
-                            @Override
-                            public void onVolleySuccess(String url, JSONArray serverResponse) {
-                                Log.i(TAG, "volleyResponseListener:: onVolleySuccess(String, JSONArray)");
-
-                                if (serverResponse.length() != 0) {
-                                    Log.d(TAG, "serverResponse.length() != 0");
-
-                                    appendNewMealsToRecordsOfMeal(serverResponse);
-                                    saveRecordsOfMeal();
-                                    adapter.notifyDataSetChanged();
-                                } else {
-                                    Log.d(TAG, "serverResponse.length() == 0");
-                                }
-
-                                refreshMenuItem.setVisible(true);
-                                hideProgressBar();
-                            }
-
-                            @Override
-                            public void onVolleyFailure(String url) {
-                                Log.i(TAG, "volleyResponseListener:: onVolleyFailure(String)");
-
-                                refreshMenuItem.setVisible(true);
-                                hideProgressBar();
-                            }
-                        });
+                Log.i(TAG, "Refresh menu item selected");
+                refreshViaMenuItem();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void refreshViaSwipe() {
+        refreshMenuItem.setVisible(false);
+
+        String tagGetNewMealsAsJSONArrayRequest = "get_new_meals_as_jsonarray";
+        makeJSONArrayWebServiceRequest(Request.Method.GET,
+                URL_GET_NEW_MEALS_AS_JSON_ARRAY,
+                tagGetNewMealsAsJSONArrayRequest,
+                null,
+                new VolleyResponseListener() {
+                    @Override
+                    public void onVolleySuccess(String url, JSONArray serverResponse) {
+                        Log.i(TAG, "volleyResponseListener:: onVolleySuccess(String, JSONArray)");
+
+                        if (serverResponse.length() != 0) {
+                            Log.d(TAG, "serverResponse.length() != 0");
+
+                            appendNewMealsToRecordsOfMeal(serverResponse);
+                            saveRecordsOfMeal();
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "serverResponse.length() == 0");
+                        }
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        refreshMenuItem.setVisible(true);
+                    }
+
+                    @Override
+                    public void onVolleyFailure(String url) {
+                        Log.i(TAG, "volleyResponseListener:: onVolleyFailure(String)");
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        refreshMenuItem.setVisible(true);
+                    }
+                });
+    }
+
+    private void refreshViaMenuItem() {
+        refreshMenuItem.setVisible(false);
+        showProgressBar();
+
+        String tagGetNewMealsAsJSONArrayRequest = "get_new_meals_as_jsonarray";
+        makeJSONArrayWebServiceRequest(Request.Method.GET,
+                URL_GET_NEW_MEALS_AS_JSON_ARRAY,
+                tagGetNewMealsAsJSONArrayRequest,
+                null,
+                new VolleyResponseListener() {
+                    @Override
+                    public void onVolleySuccess(String url, JSONArray serverResponse) {
+                        Log.i(TAG, "volleyResponseListener:: onVolleySuccess(String, JSONArray)");
+
+                        if (serverResponse.length() != 0) {
+                            Log.d(TAG, "serverResponse.length() != 0");
+
+                            appendNewMealsToRecordsOfMeal(serverResponse);
+                            saveRecordsOfMeal();
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "serverResponse.length() == 0");
+                        }
+
+                        refreshMenuItem.setVisible(true);
+                        hideProgressBar();
+                    }
+
+                    @Override
+                    public void onVolleyFailure(String url) {
+                        Log.i(TAG, "volleyResponseListener:: onVolleyFailure(String)");
+
+                        refreshMenuItem.setVisible(true);
+                        hideProgressBar();
+                    }
+                });
     }
 
     private interface VolleyResponseListener {
