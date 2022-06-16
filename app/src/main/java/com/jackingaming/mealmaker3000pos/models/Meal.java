@@ -43,24 +43,24 @@ public class Meal {
         }
     }
 
-    public int getNumberOfMenuItemInMeal() {
-        return menuItems.size();
+    public MenuItem getMenuItem(int index) {
+        return menuItems.get(index);
     }
 
     public void addMenuItem(MenuItem menuItem) {
         menuItems.add(menuItem);
     }
 
-    public List<String> getNameOfMenuItems() {
-        List<String> nameOfMenuItems = new ArrayList<String>();
-        for (MenuItem menuItem : menuItems) {
-            nameOfMenuItems.add(menuItem.getName());
-        }
-        return nameOfMenuItems;
+    public void removeMenuItem(int index) {
+        menuItems.remove(index);
     }
 
     public void clearMenuItems() {
         menuItems.clear();
+    }
+
+    public int sizeOfMenuItems() {
+        return menuItems.size();
     }
 
     public JSONObject toJSON() {

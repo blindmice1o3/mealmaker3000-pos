@@ -3,6 +3,9 @@ package com.jackingaming.mealmaker3000pos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +26,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
+import com.jackingaming.mealmaker3000pos.recyclerview.MealAdapter;
+import com.jackingaming.mealmaker3000pos.recyclerview.RecordOfMealAdapter;
 
 import org.json.JSONObject;
 
@@ -31,9 +36,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MealStagingActivity extends AppCompatActivity {
+    private final static String TAG = "MealStagingActivity";
     private final String URL_POST_MEAL_AS_JSON_STRING = "http://192.168.1.143:8080/kafka/publish_jsonmeal";
 
-    private TextView textViewMealViewer;
+    private RecyclerView rvMealStaging;
+    private MealAdapter adapter;
     private Button buttonPostMealToKafka;
 
     private Button buttonBread;
@@ -47,12 +54,33 @@ public class MealStagingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meal_staging);
 
         meal = new Meal();
+        meal.addMenuItem(new Bread());
 
-        textViewMealViewer = findViewById(R.id.textView_meal_viewer);
+        // Lookup the recyclerview in activity layout
+        rvMealStaging = findViewById(R.id.rv_meal_staging);
+        // Create adapter passing in the meal as the rv's data source
+        adapter = new MealAdapter(meal,
+                new MealAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View itemView, int position) {
+                        Log.i(TAG, "onItemClick(View, int)");
+                        meal.removeMenuItem(position);
+                        adapter.notifyItemRemoved(position);
+                    }
+                });
+        // Attach the adapter to the recyclerview to populate items
+        rvMealStaging.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvMealStaging.setLayoutManager(new LinearLayoutManager(this));
+        // Set decorator to display dividers between each item within the list
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this,
+                        DividerItemDecoration.VERTICAL);
+        rvMealStaging.addItemDecoration(itemDecoration);
+
+
+
         buttonPostMealToKafka = findViewById(R.id.button_post_meal_to_kafka);
-        buttonBread = findViewById(R.id.button_bread);
-        buttonWater = findViewById(R.id.button_water);
-
         buttonPostMealToKafka.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,23 +90,27 @@ public class MealStagingActivity extends AppCompatActivity {
                 postMealAsJSONString(mealAsJSONString);
 
                 meal.clearMenuItems();
-                updateTextView();
+                adapter.notifyDataSetChanged();
             }
         });
 
+        buttonBread = findViewById(R.id.button_bread);
         buttonBread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 meal.addMenuItem(new Bread());
-                updateTextView();
+                // TODO: adapter.notifyItemInserted(int position)
+                adapter.notifyDataSetChanged();
             }
         });
 
+        buttonWater = findViewById(R.id.button_water);
         buttonWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 meal.addMenuItem(new Water());
-                updateTextView();
+                // TODO: adapter.notifyItemInserted(int position)
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -103,16 +135,6 @@ public class MealStagingActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void updateTextView() {
-        StringBuilder sb = new StringBuilder();
-        List<String> nameOfMenuItems = meal.getNameOfMenuItems();
-        for (String nameOfMenuItem : nameOfMenuItems) {
-            sb.append(nameOfMenuItem + "\n");
-        }
-
-        textViewMealViewer.setText(sb.toString());
     }
 
     private void postMealAsJSONString(String mealAsJSONString) {

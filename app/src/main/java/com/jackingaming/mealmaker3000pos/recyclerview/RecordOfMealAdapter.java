@@ -24,7 +24,6 @@ public class RecordOfMealAdapter extends
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
-
     private OnItemClickListener listener;
 
     // Provide a direct reference to each of the views within an itemView

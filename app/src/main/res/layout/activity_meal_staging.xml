@@ -16,12 +16,11 @@
         app:layout_constraintRight_toLeftOf="@id/button_bread"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_meal_viewer"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_meal_staging"
             android:layout_width="match_parent"
-            android:hint="text view for meal viewer"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_post_meal_to_kafka"
