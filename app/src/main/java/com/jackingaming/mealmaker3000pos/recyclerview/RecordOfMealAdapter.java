@@ -24,19 +24,20 @@ public class RecordOfMealAdapter extends
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+
     private OnItemClickListener listener;
 
-    // Provide a direct reference to each of the views within a data item
+    // Provide a direct reference to each of the views within an itemView
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView keyTextView;
-        public TextView valueTextView;
-        public TextView timestampTextView;
-        public TextView topicTextView;
-        public TextView offsetTextView;
-        public TextView partitionTextView;
+        private TextView keyTextView;
+        private TextView valueTextView;
+        private TextView timestampTextView;
+        private TextView topicTextView;
+        private TextView offsetTextView;
+        private TextView partitionTextView;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -51,7 +52,6 @@ public class RecordOfMealAdapter extends
             offsetTextView = (TextView) itemView.findViewById(R.id.tv_offset);
             partitionTextView = (TextView) itemView.findViewById(R.id.tv_partition);
 
-            // Set up the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -65,18 +65,24 @@ public class RecordOfMealAdapter extends
                 }
             });
         }
+
+        public void bindData(RecordOfMeal recordOfMeal) {
+            keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKey()));
+            valueTextView.setText("VALUE: " + recordOfMeal.getValue());
+            timestampTextView.setText("TIMESTAMP: " + Long.toString(recordOfMeal.getTimestamp()));
+            topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
+            offsetTextView.setText("OFFSET: " + Long.toString(recordOfMeal.getOffset()));
+            partitionTextView.setText("PARTITION: " + Integer.toString(recordOfMeal.getPartition()));
+        }
     }
 
-    // Store a member variable for the records of meal
     private List<RecordOfMeal> recordsOfMeal;
 
-    // Pass in the records of meal list into the constructor
     public RecordOfMealAdapter(List<RecordOfMeal> recordsOfMeal, OnItemClickListener listener) {
         this.recordsOfMeal = recordsOfMeal;
         this.listener = listener;
     }
 
-    // Usually involves inflating a layout from XML and returning the holder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -84,29 +90,20 @@ public class RecordOfMealAdapter extends
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View recordOfMealView = inflater.inflate(R.layout.item_recordofmeal, parent, false);
+        View itemView = inflater.inflate(R.layout.item_recordofmeal, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(recordOfMealView);
+        ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
 
-    // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the data model based on position
+        // Populate data into the item through holder
         RecordOfMeal recordOfMeal = recordsOfMeal.get(position);
-
-        // Set item views based on your views and data model
-        holder.keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKey()));
-        holder.valueTextView.setText("VALUE: " + recordOfMeal.getValue());
-        holder.timestampTextView.setText("TIMESTAMP: " + Long.toString(recordOfMeal.getTimestamp()));
-        holder.topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
-        holder.offsetTextView.setText("OFFSET: " + Long.toString(recordOfMeal.getOffset()));
-        holder.partitionTextView.setText("PARTITION: " + Integer.toString(recordOfMeal.getPartition()));
+        holder.bindData(recordOfMeal);
     }
 
-    // Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return recordsOfMeal.size();
