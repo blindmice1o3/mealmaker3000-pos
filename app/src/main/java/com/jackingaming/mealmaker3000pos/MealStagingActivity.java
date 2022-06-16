@@ -79,7 +79,6 @@ public class MealStagingActivity extends AppCompatActivity {
         rvMealStaging.addItemDecoration(itemDecoration);
 
 
-
         buttonPostMealToKafka = findViewById(R.id.button_post_meal_to_kafka);
         buttonPostMealToKafka.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,14 +144,15 @@ public class MealStagingActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                        Log.d("PostResponse:::", response);
+                        Toast.makeText(getApplicationContext(), "onResponse(String)", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onResponse(String): " + response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
+                        Toast.makeText(getApplicationContext(), "onErrorResponse(VolleyError)", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onErrorResponse(VolleyError): " + error.toString());
                     }
                 }) {
             @Nullable
@@ -166,7 +166,9 @@ public class MealStagingActivity extends AppCompatActivity {
         };
 
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, 0));
-        Log.i("stringRequest::", stringRequest.toString());
         AppController.getInstance(this).addToRequestQueue(stringRequest);
+        Log.i(TAG, String.format("stringRequest (%s) added to request queue.",
+                stringRequest.toString())
+        );
     }
 }

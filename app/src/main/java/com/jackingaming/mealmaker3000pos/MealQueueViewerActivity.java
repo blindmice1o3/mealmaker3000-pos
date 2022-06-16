@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -205,16 +206,16 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 new VolleyResponseListener() {
                     @Override
                     public void onVolleySuccess(String url, JSONArray serverResponse) {
-                        Log.i(TAG, "volleyResponseListener:: onVolleySuccess(String, JSONArray)");
+                        Log.i(TAG, "onVolleySuccess(String, JSONArray)");
 
                         if (serverResponse.length() != 0) {
-                            Log.d(TAG, "serverResponse.length() != 0");
+                            Log.i(TAG, "serverResponse.length() != 0");
 
                             appendNewMealsToRecordsOfMeal(serverResponse);
                             saveRecordsOfMeal();
                             adapter.notifyDataSetChanged();
                         } else {
-                            Log.d(TAG, "serverResponse.length() == 0");
+                            Log.i(TAG, "serverResponse.length() == 0");
                         }
 
                         refreshMenuItem.setVisible(true);
@@ -223,7 +224,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
                     @Override
                     public void onVolleyFailure(String url) {
-                        Log.i(TAG, "volleyResponseListener:: onVolleyFailure(String)");
+                        Log.i(TAG, "onVolleyFailure(String)");
 
                         refreshMenuItem.setVisible(true);
                         hideProgressBar();
@@ -246,14 +247,16 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i(TAG, "jsonArrayRequest:: onResponse(JSONArray)");
+                        Toast.makeText(getApplicationContext(), "onResponse(JSONArray)", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onResponse(JSONArray): " + response.toString());
                         listener.onVolleySuccess(url, response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, "jsonArrayRequest:: onErrorResponse(VolleyError)");
+                        Toast.makeText(getApplicationContext(), "onErrorResponse(VolleyError)", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onErrorResponse(VolleyError): " + error.toString());
                         listener.onVolleyFailure(url);
                     }
                 });
