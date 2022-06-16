@@ -52,9 +52,6 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
         // Initialize recordsOfMeal
         recordsOfMeal = new ArrayList<RecordOfMeal>();
-        for (long i = 1L; i <= 5L; i++) {
-            recordsOfMeal.add(new RecordOfMeal(i, "HelloWorld", 1620L, "myTopic", 3, 25L));
-        }
         loadRecordsOfMeal();
 
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
