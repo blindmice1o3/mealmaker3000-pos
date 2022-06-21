@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,12 +26,10 @@ import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
 import com.jackingaming.mealmaker3000pos.recyclerview.MealAdapter;
-import com.jackingaming.mealmaker3000pos.recyclerview.RecordOfMealAdapter;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MealStagingActivity extends AppCompatActivity {
@@ -52,6 +49,7 @@ public class MealStagingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_staging);
+        Log.i(TAG, "onCreate(Bundle)");
 
         meal = new Meal();
         meal.addMenuItem(new Bread());
@@ -123,9 +121,10 @@ public class MealStagingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected(android.view.MenuItem)");
         switch (item.getItemId()) {
             case R.id.menu_item_change_to_queue_viewer:
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(MealStagingActivity.this,
                         "queue viewer options menu item selected.",
                         Toast.LENGTH_SHORT).show();
                 Intent intentMealQueueViewer = new Intent(this, MealQueueViewerActivity.class);
@@ -137,6 +136,7 @@ public class MealStagingActivity extends AppCompatActivity {
     }
 
     private void postMealAsJSONString(String mealAsJSONString) {
+        Log.i(TAG, "postMealAsJSONString(String)");
         Toast.makeText(this, "postMealAsJSONString(String) called", Toast.LENGTH_SHORT).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -144,14 +144,14 @@ public class MealStagingActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "onResponse(String)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MealStagingActivity.this, "onResponse(String)", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "onResponse(String): " + response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "onErrorResponse(VolleyError)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MealStagingActivity.this, "onErrorResponse(VolleyError)", Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "onErrorResponse(VolleyError): " + error.toString());
                     }
                 }) {
@@ -171,4 +171,5 @@ public class MealStagingActivity extends AppCompatActivity {
                 stringRequest.toString())
         );
     }
+
 }

@@ -79,6 +79,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         Log.i(TAG, "onItemClick(View, int)");
                         recordsOfMeal.remove(position);
                         adapter.notifyItemRemoved(position);
+                        saveRecordsOfMeal();
                     }
                 });
         // Attach the adapter to the recyclerview to populate items
@@ -157,7 +158,21 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshRecyclerViewWithServerResponse(JSONArray serverResponse) {
+        Log.i(TAG, "refreshRecyclerViewWithServerResponse(JSONArray)");
+
+        if (serverResponse.length() != 0) {
+            Log.i(TAG, "serverResponse.length() != 0");
+            appendNewMealsToRecordsOfMeal(serverResponse);
+            adapter.notifyDataSetChanged();
+            saveRecordsOfMeal();
+        } else {
+            Log.i(TAG, "serverResponse.length() == 0");
+        }
+    }
+
     private void refreshViaSwipe() {
+        Log.i(TAG, "refreshViaSwipe()");
         refreshMenuItem.setVisible(false);
 
         String tagGetNewMealsAsJSONArrayRequest = "get_new_meals_as_jsonarray";
@@ -168,17 +183,9 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 new VolleyResponseListener() {
                     @Override
                     public void onVolleySuccess(String url, JSONArray serverResponse) {
-                        Log.i(TAG, "volleyResponseListener:: onVolleySuccess(String, JSONArray)");
+                        Log.i(TAG, "onVolleySuccess(String, JSONArray): " + url + " | serverResponse: " + serverResponse.toString());
 
-                        if (serverResponse.length() != 0) {
-                            Log.d(TAG, "serverResponse.length() != 0");
-
-                            appendNewMealsToRecordsOfMeal(serverResponse);
-                            saveRecordsOfMeal();
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Log.d(TAG, "serverResponse.length() == 0");
-                        }
+                        refreshRecyclerViewWithServerResponse(serverResponse);
 
                         swipeRefreshLayout.setRefreshing(false);
                         refreshMenuItem.setVisible(true);
@@ -186,7 +193,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
                     @Override
                     public void onVolleyFailure(String url) {
-                        Log.i(TAG, "volleyResponseListener:: onVolleyFailure(String)");
+                        Log.i(TAG, "onVolleyFailure(String): " + url);
 
                         swipeRefreshLayout.setRefreshing(false);
                         refreshMenuItem.setVisible(true);
@@ -195,6 +202,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     }
 
     private void refreshViaMenuItem() {
+        Log.i(TAG, "refreshViaMenuItem()");
         refreshMenuItem.setVisible(false);
         showProgressBar();
 
@@ -206,17 +214,9 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                 new VolleyResponseListener() {
                     @Override
                     public void onVolleySuccess(String url, JSONArray serverResponse) {
-                        Log.i(TAG, "onVolleySuccess(String, JSONArray)");
+                        Log.i(TAG, "onVolleySuccess(String, JSONArray): " + url + " | serverResponse: " + serverResponse.toString());
 
-                        if (serverResponse.length() != 0) {
-                            Log.i(TAG, "serverResponse.length() != 0");
-
-                            appendNewMealsToRecordsOfMeal(serverResponse);
-                            saveRecordsOfMeal();
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Log.i(TAG, "serverResponse.length() == 0");
-                        }
+                        refreshRecyclerViewWithServerResponse(serverResponse);
 
                         refreshMenuItem.setVisible(true);
                         hideProgressBar();
@@ -224,7 +224,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
                     @Override
                     public void onVolleyFailure(String url) {
-                        Log.i(TAG, "onVolleyFailure(String)");
+                        Log.i(TAG, "onVolleyFailure(String): " + url);
 
                         refreshMenuItem.setVisible(true);
                         hideProgressBar();
@@ -265,6 +265,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     }
 
     private void appendNewMealsToRecordsOfMeal(JSONArray serverResponse) {
+        Log.i(TAG, "appendNewMealsToRecordsOfMeal(JSONArray)");
         try {
             for (int i = 0; i < serverResponse.length(); i++) {
                 String recordOfNewMealsAsJSONString = serverResponse.getString(i);
@@ -294,6 +295,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     }
 
     private void saveRecordsOfMeal() {
+        Log.i(TAG, "saveRecordsOfMeal()");
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < recordsOfMeal.size(); i++) {
             jsonArray.put(
@@ -308,12 +310,13 @@ public class MealQueueViewerActivity extends AppCompatActivity {
     }
 
     private void loadRecordsOfMeal() {
+        Log.i(TAG, "loadRecordsOfMeal()");
         SharedPreferences settings = getSharedPreferences(PREFERENCE_CONTENT_OF_SB, Context.MODE_PRIVATE);
         String stringFromPreviousRecordsOfMeal = settings.getString(KEY_RECORDS_OF_MEAL, "defaultValue");
         if (stringFromPreviousRecordsOfMeal.equals("defaultValue")) {
-            Log.d(TAG, "nothing [saved in preferences] from the previous recordsOfMeal");
+            Log.i(TAG, "nothing [saved in preferences] from the previous recordsOfMeal");
         } else {
-            Log.d(TAG, "there is data [saved in preferences] from the previous recordsOfMeal");
+            Log.i(TAG, "there is data [saved in preferences] from the previous recordsOfMeal");
             try {
                 JSONArray jsonArray = new JSONArray(stringFromPreviousRecordsOfMeal);
                 for (int i = 0; i < jsonArray.length(); i++) {
