@@ -1,7 +1,5 @@
 package com.jackingaming.mealmaker3000pos.models;
 
-import android.util.Log;
-
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 
 import org.json.JSONArray;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Meal {
-    private static final String TAG = "Meal";
     public static final String JSON_ID = "id";
     public static final String JSON_MENU_ITEMS = "menuItems";
 
@@ -23,21 +20,14 @@ public class Meal {
         menuItems = new ArrayList<MenuItem>();
     }
 
-    public Meal(JSONObject json) {
+    public Meal(JSONObject mealAsJSON) {
         this();
 
         try {
-            id = json.optLong(JSON_ID);
+            id = mealAsJSON.optLong(JSON_ID);
 
-            JSONArray menuItemsAsJSONArray = (JSONArray) json.get(JSON_MENU_ITEMS);
-            Log.i(TAG, "Meal(JSONObject) constructor menuItemsAsJSONArray: " + menuItemsAsJSONArray);
-            for (int i = 0; i < menuItemsAsJSONArray.length(); i++) {
-                JSONObject jsonObject = (JSONObject) menuItemsAsJSONArray.get(i);
-                MenuItem menuItem = new MenuItem(jsonObject);
-                Log.i(TAG, "Meal(JSONObject) constructor menuItem.price: " + menuItem + "-" + menuItem.getPrice());
-                menuItems.add(menuItem);
-            }
-
+            JSONArray menuItemsAsJSONArray = (JSONArray) mealAsJSON.get(JSON_MENU_ITEMS);
+            menuItems = Menu.convertToListOfMenuItem(menuItemsAsJSONArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,20 +57,11 @@ public class Meal {
         JSONObject json = new JSONObject();
         try {
             json.put(JSON_ID, id);
-            json.put(JSON_MENU_ITEMS, convertToJSONArray(menuItems));
+            json.put(JSON_MENU_ITEMS, Menu.convertToJSONArray(menuItems));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return json;
-    }
-
-    private JSONArray convertToJSONArray(List<MenuItem> menuItems) {
-        JSONArray jsonArray = new JSONArray();
-        for (MenuItem menuItem : menuItems) {
-            JSONObject menuItemAsJSON = menuItem.toJSON();
-            jsonArray.put(menuItemAsJSON);
-        }
-        return jsonArray;
     }
 
     public long getId() {
