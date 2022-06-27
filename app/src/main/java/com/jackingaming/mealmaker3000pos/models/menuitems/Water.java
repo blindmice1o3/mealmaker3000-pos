@@ -8,13 +8,13 @@ public class Water extends MenuItem {
 
     public Water() {
         super();
-
         name = NAME;
         price = 0.05;
     }
 
     public Water(JSONObject menuItemAsJSON)
             throws JSONException {
-        fromJSON(menuItemAsJSON);
+        super(menuItemAsJSON);
+        // TODO: insert new member variables
     }
 }

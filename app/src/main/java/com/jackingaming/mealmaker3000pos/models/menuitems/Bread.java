@@ -7,13 +7,15 @@ public class Bread extends MenuItem {
     public static final String NAME = "bread";
 
     public Bread() {
+        super();
         name = NAME;
         price = 0.25;
     }
 
     public Bread(JSONObject menuItemAsJSON)
             throws JSONException {
-        fromJSON(menuItemAsJSON);
+        super(menuItemAsJSON);
+        // TODO: insert new member variables
     }
 
     @Override
@@ -22,12 +24,5 @@ public class Bread extends MenuItem {
         JSONObject json = super.toJSON();
         // TODO: insert new member variables.
         return json;
-    }
-
-    @Override
-    protected void fromJSON(JSONObject json)
-            throws JSONException {
-        super.fromJSON(json);
-        // TODO: insert new member variables.
     }
 }

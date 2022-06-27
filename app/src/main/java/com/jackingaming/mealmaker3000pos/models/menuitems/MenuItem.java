@@ -10,18 +10,23 @@ public abstract class MenuItem {
     protected String name;
     protected double price;
 
+    public MenuItem() {
+        name = "default-unknown-menu-item";
+        price = -0.001;
+    }
+
+    public MenuItem(JSONObject menuItemAsJSON)
+            throws JSONException {
+        name = menuItemAsJSON.getString(JSON_NAME);
+        price = menuItemAsJSON.getDouble(JSON_PRICE);
+    }
+
     public JSONObject toJSON()
             throws JSONException {
         JSONObject json = new JSONObject();
         json.put(JSON_NAME, name);
         json.put(JSON_PRICE, price);
         return json;
-    }
-
-    protected void fromJSON(JSONObject json)
-            throws JSONException {
-        name = json.getString(JSON_NAME);
-        price = json.getDouble(JSON_PRICE);
     }
 
     public String getName() {
