@@ -66,8 +66,8 @@ public class RecordOfMealAdapter extends
         }
 
         public void bindData(RecordOfMeal recordOfMeal) {
-            keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKey()));
-            valueTextView.setText("VALUE: " + recordOfMeal.getValue());
+            keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKeyNumberOfMealServed()));
+            valueTextView.setText("VALUE: " + recordOfMeal.getValueMealAsJSONString());
             timestampTextView.setText("TIMESTAMP: " + Long.toString(recordOfMeal.getTimestamp()));
             topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
             offsetTextView.setText("OFFSET: " + Long.toString(recordOfMeal.getOffset()));

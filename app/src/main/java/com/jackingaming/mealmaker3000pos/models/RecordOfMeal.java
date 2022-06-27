@@ -11,16 +11,16 @@ public class RecordOfMeal {
     public static final String JSON_PARTITION = "partition";
     public static final String JSON_OFFSET = "offset";
 
-    private long key;
-    private String value;
+    private long keyNumberOfMealServed;
+    private String valueMealAsJSONString;
     private long timestamp;
     private String topic;
     private int partition;
     private long offset;
 
-    public RecordOfMeal(long key, String value, long timestamp, String topic, int partition, long offset) {
-        this.key = key;
-        this.value = value;
+    public RecordOfMeal(long keyNumberOfMealServed, String valueMealAsJSONString, long timestamp, String topic, int partition, long offset) {
+        this.keyNumberOfMealServed = keyNumberOfMealServed;
+        this.valueMealAsJSONString = valueMealAsJSONString;
         this.timestamp = timestamp;
         this.topic = topic;
         this.partition = partition;
@@ -29,8 +29,8 @@ public class RecordOfMeal {
 
     public RecordOfMeal(JSONObject recordOfMealAsJSON) {
         try {
-            key = recordOfMealAsJSON.getLong(JSON_KEY);
-            value = recordOfMealAsJSON.getString(JSON_VALUE);
+            keyNumberOfMealServed = recordOfMealAsJSON.getLong(JSON_KEY);
+            valueMealAsJSONString = recordOfMealAsJSON.getString(JSON_VALUE);
             timestamp = recordOfMealAsJSON.getLong(JSON_TIMESTAMP);
             topic = recordOfMealAsJSON.getString(JSON_TOPIC);
             partition = recordOfMealAsJSON.getInt(JSON_PARTITION);
@@ -44,8 +44,8 @@ public class RecordOfMeal {
         JSONObject recordOfMealAsJSON = new JSONObject();
 
         try {
-            recordOfMealAsJSON.put(JSON_KEY, key);
-            recordOfMealAsJSON.put(JSON_VALUE, value);
+            recordOfMealAsJSON.put(JSON_KEY, keyNumberOfMealServed);
+            recordOfMealAsJSON.put(JSON_VALUE, valueMealAsJSONString);
             recordOfMealAsJSON.put(JSON_TIMESTAMP, timestamp);
             recordOfMealAsJSON.put(JSON_TOPIC, topic);
             recordOfMealAsJSON.put(JSON_PARTITION, partition);
@@ -57,20 +57,20 @@ public class RecordOfMeal {
         return recordOfMealAsJSON;
     }
 
-    public long getKey() {
-        return key;
+    public long getKeyNumberOfMealServed() {
+        return keyNumberOfMealServed;
     }
 
-    public void setKey(long key) {
-        this.key = key;
+    public void setKeyNumberOfMealServed(long keyNumberOfMealServed) {
+        this.keyNumberOfMealServed = keyNumberOfMealServed;
     }
 
-    public String getValue() {
-        return value;
+    public String getValueMealAsJSONString() {
+        return valueMealAsJSONString;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValueMealAsJSONString(String valueMealAsJSONString) {
+        this.valueMealAsJSONString = valueMealAsJSONString;
     }
 
     public long getTimestamp() {
