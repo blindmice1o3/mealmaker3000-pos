@@ -4,15 +4,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UnknownMenuItem extends MenuItem {
-    public static final String NAME = "unknown-menu-item";
+    public static final String NAME = "class-unknown-menu-item";
 
     public UnknownMenuItem() {
+        super();
         name = NAME;
-        price = 0.42;
+        price = -0.002;
     }
 
     public UnknownMenuItem(JSONObject menuItemAsJSON)
             throws JSONException {
-        fromJSON(menuItemAsJSON);
+        super(menuItemAsJSON);
+        // TODO: insert new member variables
     }
 }
