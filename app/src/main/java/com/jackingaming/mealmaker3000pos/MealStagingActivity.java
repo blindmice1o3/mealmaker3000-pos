@@ -23,8 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 import com.jackingaming.mealmaker3000pos.recyclerview.MealAdapter;
 
 import org.json.JSONObject;
@@ -105,7 +106,12 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                meal.addMenuItem(new Water());
+                LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator = new LineTheCupWithCaramelCustomization(new Water());
+
+                Log.i(TAG, extraCaramelDrizzleDecorator.getName());
+
+                meal.addMenuItem(extraCaramelDrizzleDecorator);
+//                meal.addMenuItem(new Water());
                 // TODO: adapter.notifyItemInserted(int position)
                 adapter.notifyDataSetChanged();
             }

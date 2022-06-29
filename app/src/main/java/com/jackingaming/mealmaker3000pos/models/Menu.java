@@ -2,10 +2,10 @@ package com.jackingaming.mealmaker3000pos.models;
 
 import android.util.Log;
 
-import com.jackingaming.mealmaker3000pos.models.menuitems.Bread;
+import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.UnknownMenuItem;
-import com.jackingaming.mealmaker3000pos.models.menuitems.Water;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,15 +1,14 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems;
+package com.jackingaming.mealmaker3000pos.models.menuitems.foods;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Bread extends MenuItem {
+public class Bread extends Food {
     public static final String NAME = "bread";
+    public static final String DESCRIPTION = "Brought to you by multiplying yeast!";
 
     public Bread() {
-        super();
-        name = NAME;
-        price = 0.25;
+        super(NAME, DESCRIPTION, 0.25);
     }
 
     public Bread(JSONObject menuItemAsJSON)
