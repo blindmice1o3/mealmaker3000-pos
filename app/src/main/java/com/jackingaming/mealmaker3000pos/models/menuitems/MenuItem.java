@@ -5,19 +5,23 @@ import org.json.JSONObject;
 
 public abstract class MenuItem {
     public static final String JSON_NAME = "name";
+    public static final String JSON_DESCRIPTION = "description";
     public static final String JSON_PRICE = "price";
 
     protected String name;
+    protected String description;
     protected double price;
 
-    public MenuItem() {
-        name = "default-unknown-menu-item";
-        price = -0.001;
+    public MenuItem(String name, String description, double price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
     }
 
     public MenuItem(JSONObject menuItemAsJSON)
             throws JSONException {
         name = menuItemAsJSON.getString(JSON_NAME);
+        description = menuItemAsJSON.getString(JSON_DESCRIPTION);
         price = menuItemAsJSON.getDouble(JSON_PRICE);
     }
 
@@ -25,6 +29,7 @@ public abstract class MenuItem {
             throws JSONException {
         JSONObject json = new JSONObject();
         json.put(JSON_NAME, name);
+        json.put(JSON_DESCRIPTION, description);
         json.put(JSON_PRICE, price);
         return json;
     }
@@ -35,6 +40,14 @@ public abstract class MenuItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice() {
