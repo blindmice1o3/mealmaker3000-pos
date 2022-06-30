@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
+import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
@@ -37,14 +39,19 @@ public class MealStagingActivity extends AppCompatActivity {
     private final static String TAG = "MealStagingActivity";
     private final String URL_POST_MEAL_AS_JSON_STRING = "http://192.168.1.143:8080/kafka/publish_jsonmeal";
 
+    private TextView tvSelectedMenuItemViewer;
+
     private RecyclerView rvMealStaging;
     private MealAdapter adapter;
     private Button buttonPostMealToKafka;
+    private Button buttonRemoveMenuItem;
 
     private Button buttonBread;
     private Button buttonWater;
+    private Button buttonCustomization;
 
     private Meal meal;
+    private int selectedIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +59,11 @@ public class MealStagingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meal_staging);
         Log.i(TAG, "onCreate(Bundle)");
 
+        tvSelectedMenuItemViewer = findViewById(R.id.tv_selected_menu_item_index);
+
         meal = new Meal();
         meal.addMenuItem(new Bread());
+        setSelectedIndexToIndexOfLastElement();
 
         // Lookup the recyclerview in activity layout
         rvMealStaging = findViewById(R.id.rv_meal_staging);
@@ -63,8 +73,8 @@ public class MealStagingActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View itemView, int position) {
                         Log.i(TAG, "onItemClick(View, int)");
-                        meal.removeMenuItem(position);
-                        adapter.notifyItemRemoved(position);
+                        selectedIndex = position;
+                        updateTvSelectedMenuItemView();
                     }
                 });
         // Attach the adapter to the recyclerview to populate items
@@ -82,13 +92,28 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonPostMealToKafka.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "buttonPostMealToKafka -> onClick(View)");
                 JSONObject mealAsJSONObject = meal.toJSON();
                 String mealAsJSONString = mealAsJSONObject.toString();
 
                 postMealAsJSONString(mealAsJSONString);
 
-                meal.clearMenuItems();
-                adapter.notifyDataSetChanged();
+                clearMenuItems();
+            }
+        });
+
+        buttonRemoveMenuItem = findViewById(R.id.button_remove_selected_menu_item);
+        buttonRemoveMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "buttonRemoveMenuItem -> onClick(View)");
+                if (selectedIndex >= 0) {
+                    Log.i(TAG, "selectedIndex: " + selectedIndex);
+                    removeSelectedMenuItem();
+                } else {
+                    Log.i(TAG, "selectedIndex < 0");
+                    Toast.makeText(getApplicationContext(), "selectedIndex < 0", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -96,9 +121,8 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonBread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                meal.addMenuItem(new Bread());
-                // TODO: adapter.notifyItemInserted(int position)
-                adapter.notifyDataSetChanged();
+                Log.i(TAG, "buttonBread -> onClick(View)");
+                addMenuItem(new Bread());
             }
         });
 
@@ -106,16 +130,56 @@ public class MealStagingActivity extends AppCompatActivity {
         buttonWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator = new LineTheCupWithCaramelCustomization(new Water());
-
-                Log.i(TAG, extraCaramelDrizzleDecorator.getName());
-
-                meal.addMenuItem(extraCaramelDrizzleDecorator);
-//                meal.addMenuItem(new Water());
-                // TODO: adapter.notifyItemInserted(int position)
-                adapter.notifyDataSetChanged();
+                Log.i(TAG, "buttonWater -> onClick(View)");
+                LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator =
+                        new LineTheCupWithCaramelCustomization(new Water());
+                addMenuItem(extraCaramelDrizzleDecorator);
             }
         });
+
+        buttonCustomization = findViewById(R.id.button_customization);
+        buttonCustomization.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "buttonCustomization -> onClick(View)");
+                // TODO: open context menu to select caramel or mocha.
+            }
+        });
+    }
+
+    private void addMenuItem(MenuItem menuItem) {
+        meal.addMenuItem(menuItem);
+        // TODO: adapter.notifyItemInserted(int position)
+        adapter.notifyDataSetChanged();
+        setSelectedIndexToIndexOfLastElement();
+    }
+
+    private void removeSelectedMenuItem() {
+        meal.removeMenuItem(selectedIndex);
+        adapter.notifyItemRemoved(selectedIndex);
+        resetSelectedIndex();
+    }
+
+    private void clearMenuItems() {
+        meal.clearMenuItems();
+        adapter.notifyDataSetChanged();
+        resetSelectedIndex();
+    }
+
+    private static final String TV_SELECTED_MENU_ITEM_VIEWER_PREFIX = "selectedMenuItemIndex == ";
+
+    private void resetSelectedIndex() {
+        selectedIndex = -1;
+        updateTvSelectedMenuItemView();
+    }
+
+    private void setSelectedIndexToIndexOfLastElement() {
+        selectedIndex = meal.sizeOfMenuItems() - 1;
+        updateTvSelectedMenuItemView();
+    }
+
+    private void updateTvSelectedMenuItemView() {
+        tvSelectedMenuItemViewer.setText(TV_SELECTED_MENU_ITEM_VIEWER_PREFIX + selectedIndex);
     }
 
     @Override
