@@ -16,17 +16,39 @@
         app:layout_constraintRight_toLeftOf="@id/button_bread"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/tv_selected_menu_item_index"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/green"
+            android:text="selectedMenuItemIndex == " />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_meal_staging"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/button_post_meal_to_kafka"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="post to kafka" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_post_meal_to_kafka"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="post to kafka" />
+
+            <Button
+                android:id="@+id/button_remove_selected_menu_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="remove menu item" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -46,9 +68,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="water"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_customization"
         app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_bread" />
+
+    <Button
+        android:id="@+id/button_customization"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="customization"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_water" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
