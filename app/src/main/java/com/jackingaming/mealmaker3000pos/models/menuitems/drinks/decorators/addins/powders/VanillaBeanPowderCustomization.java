@@ -10,11 +10,8 @@ public class VanillaBeanPowderCustomization extends AddPowderCustomization {
     public static final String DESCRIPTION = "1 scoop of vanilla bean powder";
     public static final double PRICE = 0.10;
 
-    private Drink drink;
-
     public VanillaBeanPowderCustomization(Drink drink) {
-        super(NAME, DESCRIPTION, PRICE);
-        this.drink = drink;
+        super(drink, NAME, DESCRIPTION, PRICE);
     }
 
     public VanillaBeanPowderCustomization(JSONObject menuItemAsJSON) throws JSONException {
@@ -29,5 +26,11 @@ public class VanillaBeanPowderCustomization extends AddPowderCustomization {
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
+    }
+
+    @Override
+    public boolean isAlreadyWrapped() {
+        // TODO:
+        return false;
     }
 }

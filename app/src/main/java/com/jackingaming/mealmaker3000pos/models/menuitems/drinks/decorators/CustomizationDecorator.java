@@ -6,8 +6,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class CustomizationDecorator extends Drink {
-    public CustomizationDecorator(String name, String description, double price) {
+    protected Drink drink;
+
+    public CustomizationDecorator(Drink drink, String name, String description, double price) {
         super(name, description, price);
+        this.drink = drink;
     }
 
     public CustomizationDecorator(JSONObject menuItemAsJSON)
@@ -16,6 +19,13 @@ public abstract class CustomizationDecorator extends Drink {
         // TODO: insert new member variables
     }
 
+    public Drink getDrink() {
+        return drink;
+    }
+
     public abstract String getName();
+
     public abstract double getPrice();
+
+    public abstract boolean isAlreadyWrapped();
 }
