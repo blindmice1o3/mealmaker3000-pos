@@ -25,6 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
@@ -131,9 +133,7 @@ public class MealStagingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "buttonWater -> onClick(View)");
-                LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator =
-                        new LineTheCupWithCaramelCustomization(new Water());
-                addMenuItem(extraCaramelDrizzleDecorator);
+                addMenuItem(new Water());
             }
         });
 
@@ -142,9 +142,44 @@ public class MealStagingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "buttonCustomization -> onClick(View)");
-                // TODO: open context menu to select caramel or mocha.
+
+                // menu item selected
+                if (selectedIndex >= 0) {
+                    MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
+                    if (selectedMenuItem instanceof CustomizationDecorator) {
+                        Log.i(TAG, "selectedMenuItem is a CustomizationDecorator.");
+                        CustomizationDecorator selectedCustomizationDecorator = (CustomizationDecorator) selectedMenuItem;
+                        // TODO: open context menu to select caramel or mocha.
+                        if (!selectedCustomizationDecorator.isAlreadyWrapped()) {
+                            Log.i(TAG, "selectedCustomizationDecorator is NOT already wrapped.");
+                            LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator =
+                                    new LineTheCupWithCaramelCustomization(selectedCustomizationDecorator);
+                            setMenuItem(selectedIndex, extraCaramelDrizzleDecorator);
+                        } else {
+                            Log.i(TAG, "ALREADY CONTAINS THIS CustomizationDecorator: " + selectedCustomizationDecorator.getName());
+                        }
+                    } else {
+                        Log.i(TAG, "selectedMenuItem is NOT a CustomizationDecorator.");
+                        if (selectedMenuItem instanceof Drink) {
+                            Log.i(TAG, "selectedMenuItem is a Drink.");
+                            Drink selectedDrink = (Drink) selectedMenuItem;
+                            LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator =
+                                    new LineTheCupWithCaramelCustomization(selectedDrink);
+                            setMenuItem(selectedIndex, extraCaramelDrizzleDecorator);
+                        }
+                    }
+                }
+                // no menu item selected
+                else {
+                    Log.i(TAG, "selectedIndex < 0");
+                }
             }
         });
+    }
+
+    private void setMenuItem(int selectedIndex, MenuItem menuItem) {
+        meal.setMenuItem(selectedIndex, menuItem);
+        adapter.notifyItemChanged(selectedIndex);
     }
 
     private void addMenuItem(MenuItem menuItem) {

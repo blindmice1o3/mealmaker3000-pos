@@ -37,6 +37,10 @@ public class Meal {
         return menuItems.get(index);
     }
 
+    public void setMenuItem(int index, MenuItem menuItem) {
+        menuItems.set(index, menuItem);
+    }
+
     public void addMenuItem(MenuItem menuItem) {
         menuItems.add(menuItem);
     }

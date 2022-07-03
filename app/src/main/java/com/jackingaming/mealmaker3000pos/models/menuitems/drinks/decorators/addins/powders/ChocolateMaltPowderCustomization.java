@@ -10,11 +10,8 @@ public class ChocolateMaltPowderCustomization extends AddPowderCustomization {
     public static final String DESCRIPTION = "1 scoop of chocolate malt powder";
     public static final double PRICE = 0.15;
 
-    private Drink drink;
-
     public ChocolateMaltPowderCustomization(Drink drink) {
-        super(NAME, DESCRIPTION, PRICE);
-        this.drink = drink;
+        super(drink, NAME, DESCRIPTION, PRICE);
     }
 
     public ChocolateMaltPowderCustomization(JSONObject menuItemAsJSON) throws JSONException {
@@ -29,5 +26,11 @@ public class ChocolateMaltPowderCustomization extends AddPowderCustomization {
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
+    }
+
+    @Override
+    public boolean isAlreadyWrapped() {
+        // TODO:
+        return false;
     }
 }
