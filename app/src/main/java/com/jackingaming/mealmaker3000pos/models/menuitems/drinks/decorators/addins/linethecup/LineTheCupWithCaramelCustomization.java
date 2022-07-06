@@ -22,25 +22,11 @@ public class LineTheCupWithCaramelCustomization extends LineTheCupCustomization 
 
     @Override
     public String getName() {
-        return drink.getName() + " plus " + name;
+        return drink.getName() + " , " + name;
     }
 
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
-    }
-
-    @Override
-    public boolean isAlreadyWrapped() {
-        if (this instanceof LineTheCupWithCaramelCustomization) {
-            return true;
-        }
-
-        if (drink instanceof CustomizationDecorator) {
-            CustomizationDecorator customizationDecorator = (CustomizationDecorator) drink;
-            return customizationDecorator.isAlreadyWrapped();
-        }
-
-        return false;
     }
 }

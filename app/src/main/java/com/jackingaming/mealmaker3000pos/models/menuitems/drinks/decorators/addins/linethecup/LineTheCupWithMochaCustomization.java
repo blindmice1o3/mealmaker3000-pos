@@ -21,25 +21,11 @@ public class LineTheCupWithMochaCustomization extends LineTheCupCustomization {
 
     @Override
     public String getName() {
-        return drink.getName() + " plus " + name;
+        return drink.getName() + " , " + name;
     }
 
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
-    }
-
-    @Override
-    public boolean isAlreadyWrapped() {
-        if (this instanceof LineTheCupWithMochaCustomization) {
-            return true;
-        }
-
-        if (drink instanceof CustomizationDecorator) {
-            CustomizationDecorator customizationDecorator = (CustomizationDecorator) drink;
-            return customizationDecorator.isAlreadyWrapped();
-        }
-
-        return false;
     }
 }

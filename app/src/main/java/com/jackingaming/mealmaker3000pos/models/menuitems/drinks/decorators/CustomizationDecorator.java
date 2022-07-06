@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators;
 
+import android.util.Log;
+
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 
 import org.json.JSONException;
@@ -19,6 +21,20 @@ public abstract class CustomizationDecorator extends Drink {
         // TODO: insert new member variables
     }
 
+    public boolean isAlreadyWrapped(String targetName) {
+        String[] names = getName().split(",");
+        for (String name : names) {
+            String trimmedName = name.trim();
+            Log.i("CustomizationDecorator", "trimmedName: " + trimmedName + ", targetName: " + targetName);
+            if (trimmedName.equals(targetName)) {
+                Log.i("CustomizationDecorator", "TRUE trimmedName: " + trimmedName + ", targetName: " + targetName);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public Drink getDrink() {
         return drink;
     }
@@ -26,6 +42,4 @@ public abstract class CustomizationDecorator extends Drink {
     public abstract String getName();
 
     public abstract double getPrice();
-
-    public abstract boolean isAlreadyWrapped();
 }

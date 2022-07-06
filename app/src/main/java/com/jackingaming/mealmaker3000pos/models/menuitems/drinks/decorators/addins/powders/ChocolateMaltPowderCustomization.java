@@ -20,17 +20,11 @@ public class ChocolateMaltPowderCustomization extends AddPowderCustomization {
 
     @Override
     public String getName() {
-        return drink.getName() + " plus " + name;
+        return drink.getName() + " , " + name;
     }
 
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
-    }
-
-    @Override
-    public boolean isAlreadyWrapped() {
-        // TODO:
-        return false;
     }
 }

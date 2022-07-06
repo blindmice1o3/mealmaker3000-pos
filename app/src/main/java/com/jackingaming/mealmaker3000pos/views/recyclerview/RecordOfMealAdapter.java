@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.recyclerview;
+package com.jackingaming.mealmaker3000pos.views.recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;

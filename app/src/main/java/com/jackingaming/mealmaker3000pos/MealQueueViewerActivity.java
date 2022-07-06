@@ -22,7 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.jackingaming.mealmaker3000pos.models.RecordOfMeal;
-import com.jackingaming.mealmaker3000pos.recyclerview.RecordOfMealAdapter;
+import com.jackingaming.mealmaker3000pos.views.recyclerview.RecordOfMealAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

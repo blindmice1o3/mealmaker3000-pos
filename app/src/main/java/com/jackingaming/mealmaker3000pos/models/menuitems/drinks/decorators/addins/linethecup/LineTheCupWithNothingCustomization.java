@@ -21,25 +21,11 @@ public class LineTheCupWithNothingCustomization extends LineTheCupCustomization 
 
     @Override
     public String getName() {
-        return drink.getName();
+        return drink.getName() + " , " + name;
     }
 
     @Override
     public double getPrice() {
         return drink.getPrice() + price;
-    }
-
-    @Override
-    public boolean isAlreadyWrapped() {
-        if (this instanceof LineTheCupWithNothingCustomization) {
-            return true;
-        }
-
-        if (drink instanceof CustomizationDecorator) {
-            CustomizationDecorator customizationDecorator = (CustomizationDecorator) drink;
-            customizationDecorator.isAlreadyWrapped();
-        }
-
-        return false;
     }
 }
