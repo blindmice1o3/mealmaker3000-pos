@@ -21,11 +21,19 @@ public class LineTheCupWithMochaCustomization extends LineTheCupCustomization {
 
     @Override
     public String getName() {
-        return drink.getName() + " , " + name;
+        if (drink != null) {
+            return drink.getName() + " , " + name;
+        } else {
+            return name;
+        }
     }
 
     @Override
     public double getPrice() {
-        return drink.getPrice() + price;
+        if (drink != null) {
+            return drink.getPrice() + price;
+        } else {
+            return price;
+        }
     }
 }

@@ -61,6 +61,7 @@ public class MealStagingActivity extends AppCompatActivity
     private Button buttonWater;
     private Button buttonLineTheCup;
     private Button buttonAddPowder;
+    private Button buttonRemoveLineTheCupWithCaramel;
 
     private Meal meal;
     private int selectedIndex = -1;
@@ -197,6 +198,36 @@ public class MealStagingActivity extends AppCompatActivity
                 // no menu item selected
                 else {
                     Log.i(TAG, "selectedIndex < 0");
+                }
+            }
+        });
+
+        buttonRemoveLineTheCupWithCaramel = findViewById(R.id.button_remove_linethecupwithcaramel);
+        buttonRemoveLineTheCupWithCaramel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "buttonRemoveLineTheCupWithCaramel -> onClick(View)");
+
+                MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
+                if (selectedMenuItem instanceof CustomizationDecorator) {
+                    CustomizationDecorator customizationDecorator = (CustomizationDecorator) selectedMenuItem;
+
+                    int depthOfCaramelDrizzleDecorator = customizationDecorator.findDepthOfCustomizationDecorator(LineTheCupWithCaramelCustomization.NAME);
+
+                    if (depthOfCaramelDrizzleDecorator < 0) {
+                        Log.i(TAG, "depthOfCaramelDrizzleDecorator < 0 CANNOT FIND SPECIFIED TARGET");
+                        return;
+                    } else if (depthOfCaramelDrizzleDecorator == 0) {
+                        Log.i(TAG, "depthOfCaramelDrizzleDecorator == 0");
+                        Drink drinkOfDecoratorToBeRemoved = customizationDecorator.getDrink();
+                        meal.setMenuItem(selectedIndex, drinkOfDecoratorToBeRemoved);
+                    } else {
+                        Log.i(TAG, "depthOfCaramelDrizzleDecorator == " + depthOfCaramelDrizzleDecorator);
+                        // this method does not handle the case where depthOfCaramelDrizzleDecorator is 0.
+                        customizationDecorator.removeDecoratorViaDepth(depthOfCaramelDrizzleDecorator);
+                    }
+
+                    adapter.notifyDataSetChanged();
                 }
             }
         });

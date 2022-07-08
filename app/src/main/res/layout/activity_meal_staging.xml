@@ -88,9 +88,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="add powder"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_remove_linethecupwithcaramel"
         app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_linethecup" />
+
+    <Button
+        android:id="@+id/button_remove_linethecupwithcaramel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="remove line the cup with caramel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/linearLayout_left_container"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_addpowder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
