@@ -54,6 +54,7 @@ public class LineTheCupDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.i(TAG, "buttonCaramel -> onClick(View)");
                 listener.onLineTheCupItemSelected(CARAMEL);
+                dismiss();
             }
         });
 
@@ -63,6 +64,7 @@ public class LineTheCupDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.i(TAG, "buttonMocha -> onClick(View)");
                 listener.onLineTheCupItemSelected(MOCHA);
+                dismiss();
             }
         });
 
@@ -72,6 +74,7 @@ public class LineTheCupDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.i(TAG, "buttonNothing -> onClick(View)");
                 listener.onLineTheCupItemSelected(NOTHING);
+                dismiss();
             }
         });
     }
