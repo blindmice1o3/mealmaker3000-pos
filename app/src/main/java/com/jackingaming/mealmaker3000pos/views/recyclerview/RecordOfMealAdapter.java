@@ -1,16 +1,23 @@
 package com.jackingaming.mealmaker3000pos.views.recyclerview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.mealmaker3000pos.R;
+import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.RecordOfMeal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -24,6 +31,7 @@ public class RecordOfMealAdapter extends
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+
     private OnItemClickListener listener;
 
     // Provide a direct reference to each of the views within an itemView
@@ -32,7 +40,7 @@ public class RecordOfMealAdapter extends
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         private TextView keyTextView;
-        private TextView valueTextView;
+        private RecyclerView valueRecyclerView;
         private TextView timestampTextView;
         private TextView topicTextView;
         private TextView offsetTextView;
@@ -45,7 +53,7 @@ public class RecordOfMealAdapter extends
             // to access the context from any ViewHolder instance.
             super(itemView);
             keyTextView = (TextView) itemView.findViewById(R.id.tv_key);
-            valueTextView = (TextView) itemView.findViewById(R.id.tv_value);
+            valueRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_value);
             timestampTextView = (TextView) itemView.findViewById(R.id.tv_timestamp);
             topicTextView = (TextView) itemView.findViewById(R.id.tv_topic);
             offsetTextView = (TextView) itemView.findViewById(R.id.tv_offset);
@@ -67,7 +75,33 @@ public class RecordOfMealAdapter extends
 
         public void bindData(RecordOfMeal recordOfMeal) {
             keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKeyNumberOfMealServed()));
-            valueTextView.setText("VALUE: " + recordOfMeal.getValueMealAsJSONString());
+//            valueTextView.setText("VALUE: " + recordOfMeal.getValueMealAsJSONString());
+
+            // TODO: change from TextView to nested RecyclerView.
+            String mealAsJSONString = recordOfMeal.getValueMealAsJSONString();
+            try {
+                JSONObject mealAsJSON = new JSONObject(mealAsJSONString);
+                Meal meal = new Meal(mealAsJSON);
+
+                // TODO: create [Adapter] and [LayoutManager] for nested RecyclerView.
+                MenuItemAdapter menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
+                        new MenuItemAdapter.OnItemClickListener() {
+                            @Override
+                            public void onMenuItemClick(View itemView, int position) {
+                                Log.i("RecordOfMealAdapter", "onMenuItemClick(View, int)");
+                                // TODO:
+                            }
+                        });
+                valueRecyclerView.setAdapter(menuItemAdapter);
+                valueRecyclerView.setLayoutManager(new LinearLayoutManager(valueRecyclerView.getContext()));
+                RecyclerView.ItemDecoration itemDecoration =
+                        new DividerItemDecoration(valueRecyclerView.getContext(),
+                                DividerItemDecoration.VERTICAL);
+                valueRecyclerView.addItemDecoration(itemDecoration);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             timestampTextView.setText("TIMESTAMP: " + Long.toString(recordOfMeal.getTimestamp()));
             topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
             offsetTextView.setText("OFFSET: " + Long.toString(recordOfMeal.getOffset()));

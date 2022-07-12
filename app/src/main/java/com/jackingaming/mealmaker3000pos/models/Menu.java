@@ -2,6 +2,13 @@ package com.jackingaming.mealmaker3000pos.models;
 
 import android.util.Log;
 
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.UnknownCustomizationDecorator;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithMochaCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithNothingCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.ChocolateMaltPowderCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.VanillaBeanPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.UnknownMenuItem;
@@ -46,15 +53,37 @@ public class Menu {
             throws JSONException {
         String nameOfMenuItem = menuItemAsJSON.getString(MenuItem.JSON_NAME);
 
-        if (nameOfMenuItem.equals(Bread.NAME)) {
+        if (Bread.NAME.equals(nameOfMenuItem)) {
             return new Bread(menuItemAsJSON);
-        } else if (nameOfMenuItem.equals(Water.NAME)) {
+        } else if (Water.NAME.equals(nameOfMenuItem)) {
             return new Water(menuItemAsJSON);
         }
         // TODO: insert new menu item.
         else {
             Log.d(TAG, "parseToMenuItem(JSONObject) else-clause for UnknownMenuItem.");
             return new UnknownMenuItem(menuItemAsJSON);
+        }
+    }
+
+    public static CustomizationDecorator parseToCustomizationDecorator(JSONObject customizationDecoratorAsJSON)
+            throws JSONException {
+        String nameOfCustomizationDecorator = customizationDecoratorAsJSON.getString(CustomizationDecorator.JSON_NAME);
+
+        if (LineTheCupWithCaramelCustomization.NAME.equals(nameOfCustomizationDecorator)) {
+            return new LineTheCupWithCaramelCustomization(customizationDecoratorAsJSON);
+        } else if (LineTheCupWithMochaCustomization.NAME.equals(nameOfCustomizationDecorator)) {
+            return new LineTheCupWithMochaCustomization(customizationDecoratorAsJSON);
+        } else if (LineTheCupWithNothingCustomization.NAME.equals(nameOfCustomizationDecorator)) {
+            return new LineTheCupWithNothingCustomization(customizationDecoratorAsJSON);
+        } else if (ChocolateMaltPowderCustomization.NAME.equals(nameOfCustomizationDecorator)) {
+            return new ChocolateMaltPowderCustomization(customizationDecoratorAsJSON);
+        } else if (VanillaBeanPowderCustomization.NAME.equals(nameOfCustomizationDecorator)) {
+            return new VanillaBeanPowderCustomization(customizationDecoratorAsJSON);
+        }
+        // TODO: insert new customization decorator.
+        else {
+            Log.d(TAG, "parseToCustomizationDecorator(JSONObject) else-clause for UnknownCustomizationDecorator.");
+            return new UnknownCustomizationDecorator(customizationDecoratorAsJSON);
         }
     }
 }

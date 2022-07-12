@@ -33,6 +33,17 @@ public class Meal {
         }
     }
 
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put(JSON_ID, id);
+            json.put(JSON_MENU_ITEMS, Menu.convertToJSONArray(menuItems));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
     public MenuItem getMenuItem(int index) {
         return menuItems.get(index);
     }
@@ -55,17 +66,6 @@ public class Meal {
 
     public int sizeOfMenuItems() {
         return menuItems.size();
-    }
-
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        try {
-            json.put(JSON_ID, id);
-            json.put(JSON_MENU_ITEMS, Menu.convertToJSONArray(menuItems));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 
     public long getId() {

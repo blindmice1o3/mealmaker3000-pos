@@ -208,18 +208,26 @@ public class MealStagingActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "buttonRemoveLineTheCupWithCaramel -> onClick(View)");
-                MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
 
-                if (selectedMenuItem.hasCustomizationDecorators()) {
-                    Iterator<CustomizationDecorator> iterator = selectedMenuItem.getCustomizationDecorators().iterator();
-                    while (iterator.hasNext()) {
-                        CustomizationDecorator customizationDecorator = iterator.next();
-                        if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
-                            iterator.remove();
-                            adapter.notifyDataSetChanged();
-                            return;
+                // menu item selected
+                if (selectedIndex >= 0) {
+                    MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
+
+                    if (selectedMenuItem.hasCustomizationDecorators()) {
+                        Iterator<CustomizationDecorator> iterator = selectedMenuItem.getCustomizationDecorators().iterator();
+                        while (iterator.hasNext()) {
+                            CustomizationDecorator customizationDecorator = iterator.next();
+                            if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
+                                iterator.remove();
+                                adapter.notifyDataSetChanged();
+                                return;
+                            }
                         }
                     }
+                }
+                // no menu item selected
+                else {
+                    Log.i(TAG, "selectedIndex < 0");
                 }
             }
         });
