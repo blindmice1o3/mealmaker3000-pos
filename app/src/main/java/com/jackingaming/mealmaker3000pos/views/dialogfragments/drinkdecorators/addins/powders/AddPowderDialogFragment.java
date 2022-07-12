@@ -53,6 +53,7 @@ public class AddPowderDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.i(TAG, "buttonChocolateMalt -> onClick(View)");
                 listener.onAddPowderItemSelected(CHOCOLATE_MALT);
+                dismiss();
             }
         });
 
@@ -62,6 +63,7 @@ public class AddPowderDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.i(TAG, "buttonVanillaBean -> onClick(View)");
                 listener.onAddPowderItemSelected(VANILLA_BEAN);
+                dismiss();
             }
         });
     }

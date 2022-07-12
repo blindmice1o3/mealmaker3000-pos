@@ -30,18 +30,18 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithMochaCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.AddPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.ChocolateMaltPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.VanillaBeanPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.linethecup.LineTheCupDialogFragment;
 import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.powders.AddPowderDialogFragment;
-import com.jackingaming.mealmaker3000pos.views.recyclerview.MealAdapter;
+import com.jackingaming.mealmaker3000pos.views.recyclerview.MenuItemAdapter;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class MealStagingActivity extends AppCompatActivity
@@ -53,7 +53,7 @@ public class MealStagingActivity extends AppCompatActivity
     private TextView tvSelectedMenuItemViewer;
 
     private RecyclerView rvMealStaging;
-    private MealAdapter adapter;
+    private MenuItemAdapter adapter;
     private Button buttonPostMealToKafka;
     private Button buttonRemoveMenuItem;
 
@@ -81,11 +81,12 @@ public class MealStagingActivity extends AppCompatActivity
         // Lookup the recyclerview in activity layout
         rvMealStaging = findViewById(R.id.rv_meal_staging);
         // Create adapter passing in the meal as the rv's data source
-        adapter = new MealAdapter(meal,
-                new MealAdapter.OnItemClickListener() {
+        adapter = new MenuItemAdapter(meal.getMenuItems(),
+                new MenuItemAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(View itemView, int position) {
-                        Log.i(TAG, "onItemClick(View, int)");
+                    public void onMenuItemClick(View itemView, int position) {
+                        Log.i(TAG, "onMenuItemClick(View, int)");
+                        // TODO: update selectedIndex and its displayer.
                         selectedIndex = position;
                         updateTvSelectedMenuItemView();
                     }
@@ -207,27 +208,18 @@ public class MealStagingActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "buttonRemoveLineTheCupWithCaramel -> onClick(View)");
-
                 MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
-                if (selectedMenuItem instanceof CustomizationDecorator) {
-                    CustomizationDecorator customizationDecorator = (CustomizationDecorator) selectedMenuItem;
 
-                    int depthOfCaramelDrizzleDecorator = customizationDecorator.findDepthOfCustomizationDecorator(LineTheCupWithCaramelCustomization.NAME);
-
-                    if (depthOfCaramelDrizzleDecorator < 0) {
-                        Log.i(TAG, "depthOfCaramelDrizzleDecorator < 0 CANNOT FIND SPECIFIED TARGET");
-                        return;
-                    } else if (depthOfCaramelDrizzleDecorator == 0) {
-                        Log.i(TAG, "depthOfCaramelDrizzleDecorator == 0");
-                        Drink drinkOfDecoratorToBeRemoved = customizationDecorator.getDrink();
-                        meal.setMenuItem(selectedIndex, drinkOfDecoratorToBeRemoved);
-                    } else {
-                        Log.i(TAG, "depthOfCaramelDrizzleDecorator == " + depthOfCaramelDrizzleDecorator);
-                        // this method does not handle the case where depthOfCaramelDrizzleDecorator is 0.
-                        customizationDecorator.removeDecoratorViaDepth(depthOfCaramelDrizzleDecorator);
+                if (selectedMenuItem.hasCustomizationDecorators()) {
+                    Iterator<CustomizationDecorator> iterator = selectedMenuItem.getCustomizationDecorators().iterator();
+                    while (iterator.hasNext()) {
+                        CustomizationDecorator customizationDecorator = iterator.next();
+                        if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
+                            iterator.remove();
+                            adapter.notifyDataSetChanged();
+                            return;
+                        }
                     }
-
-                    adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -237,45 +229,36 @@ public class MealStagingActivity extends AppCompatActivity
     public void onLineTheCupItemSelected(String selectedItem) {
         Drink selectedDrink = (Drink) meal.getMenuItem(selectedIndex);
 
-        // Check if selectedDrink is already wrapped with selectedItem.
-        if (selectedDrink instanceof CustomizationDecorator) {
-            Log.i(TAG, "selectedDrink is a CustomizationDecorator.");
-            CustomizationDecorator selectedCustomizationDecorator = (CustomizationDecorator) selectedDrink;
-            switch (selectedItem) {
-                case LineTheCupDialogFragment.CARAMEL:
-                    if (selectedCustomizationDecorator.isAlreadyWrapped(LineTheCupWithCaramelCustomization.NAME)) {
-                        Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithCaramelCustomization.NAME);
-                        return;
-                    }
-                    Log.i(TAG, LineTheCupWithCaramelCustomization.NAME + " is NOT already wrapped.");
-                    break;
-                case LineTheCupDialogFragment.MOCHA:
-                    if (selectedCustomizationDecorator.isAlreadyWrapped(LineTheCupWithMochaCustomization.NAME)) {
-                        Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithMochaCustomization.NAME);
-                        return;
-                    }
-                    Log.i(TAG, LineTheCupWithMochaCustomization.NAME + " is NOT already wrapped.");
-                    break;
-                case LineTheCupDialogFragment.NOTHING:
-                default:
-                    break;
-            }
-        }
-
-        // selectedDrink is either not wrapped in any CustomizationDecorator
-        // (still in its base-state) or is wrapped but not by the selectedItem.
         switch (selectedItem) {
-            // Wrap selectedDrink with the CustomizationDecorator
-            // represented by selectedItem.
             case LineTheCupDialogFragment.CARAMEL:
-                LineTheCupWithCaramelCustomization extraCaramelDrizzleDecorator =
-                        new LineTheCupWithCaramelCustomization(selectedDrink);
-                setMenuItem(selectedIndex, extraCaramelDrizzleDecorator);
+                // Check if already contains this customization.
+                if (selectedDrink.hasCustomizationDecorators()) {
+                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
+                        if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
+                            Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithCaramelCustomization.NAME);
+                            return;
+                        }
+                    }
+                }
+
+                // Add this customization.
+                selectedDrink.getCustomizationDecorators().add(new LineTheCupWithCaramelCustomization());
+                adapter.notifyDataSetChanged();
                 break;
             case LineTheCupDialogFragment.MOCHA:
-                LineTheCupWithMochaCustomization extraMochaDrizzleDecorator =
-                        new LineTheCupWithMochaCustomization(selectedDrink);
-                setMenuItem(selectedIndex, extraMochaDrizzleDecorator);
+                // Check if already contains this customization.
+                if (selectedDrink.hasCustomizationDecorators()) {
+                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
+                        if (LineTheCupWithMochaCustomization.NAME.equals(customizationDecorator.getName())) {
+                            Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithMochaCustomization.NAME);
+                            return;
+                        }
+                    }
+                }
+
+                // Add this customization.
+                selectedDrink.getCustomizationDecorators().add(new LineTheCupWithMochaCustomization());
+                adapter.notifyDataSetChanged();
                 break;
             case LineTheCupDialogFragment.NOTHING:
             default:
@@ -287,53 +270,41 @@ public class MealStagingActivity extends AppCompatActivity
     public void onAddPowderItemSelected(String selectedItem) {
         Drink selectedDrink = (Drink) meal.getMenuItem(selectedIndex);
 
-        // Check if selectedDrink is already wrapped with selectedItem.
-        if (selectedDrink instanceof CustomizationDecorator) {
-            Log.i(TAG, "selectedDrink is a CustomizationDecorator.");
-            CustomizationDecorator selectedCustomizationDecorator = (CustomizationDecorator) selectedDrink;
-            switch (selectedItem) {
-                case AddPowderDialogFragment.CHOCOLATE_MALT:
-                    if (selectedCustomizationDecorator.isAlreadyWrapped(ChocolateMaltPowderCustomization.NAME)) {
-                        Log.i(TAG, "ALREADY CONTAINS: " + ChocolateMaltPowderCustomization.NAME);
-                        return;
-                    }
-                    Log.i(TAG, ChocolateMaltPowderCustomization.NAME + " is NOT already wrapped.");
-                    break;
-                case AddPowderDialogFragment.VANILLA_BEAN:
-                    if (selectedCustomizationDecorator.isAlreadyWrapped(VanillaBeanPowderCustomization.NAME)) {
-                        Log.i(TAG, "ALREADY CONTAINS: " + VanillaBeanPowderCustomization.NAME);
-                        return;
-                    }
-                    Log.i(TAG, VanillaBeanPowderCustomization.NAME + " is NOT already wrapped.");
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // selectedDrink is either not wrapped in any CustomizationDecorator
-        // (still in its base-state) or is wrapped but not by the selectedItem.
         switch (selectedItem) {
-            // Wrap selectedDrink with the CustomizationDecorator
-            // represented by selectedItem.
             case AddPowderDialogFragment.CHOCOLATE_MALT:
-                ChocolateMaltPowderCustomization chocolateMaltPowderDecorator =
-                        new ChocolateMaltPowderCustomization(selectedDrink);
-                setMenuItem(selectedIndex, chocolateMaltPowderDecorator);
+                // Check if already contains this customization.
+                if (selectedDrink.hasCustomizationDecorators()) {
+                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
+                        if (ChocolateMaltPowderCustomization.NAME.equals(customizationDecorator.getName())) {
+                            Log.i(TAG, "ALREADY CONTAINS: " + ChocolateMaltPowderCustomization.NAME);
+                            return;
+                        }
+                    }
+                }
+
+                // Add this customization.
+                selectedDrink.getCustomizationDecorators().add(new ChocolateMaltPowderCustomization());
+                adapter.notifyDataSetChanged();
                 break;
             case AddPowderDialogFragment.VANILLA_BEAN:
-                VanillaBeanPowderCustomization vanillaBeanPowderDecorator =
-                        new VanillaBeanPowderCustomization(selectedDrink);
-                setMenuItem(selectedIndex, vanillaBeanPowderDecorator);
+                // Check if already contains this customization.
+                if (selectedDrink.hasCustomizationDecorators()) {
+                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
+                        if (VanillaBeanPowderCustomization.NAME.equals(customizationDecorator.getName())) {
+                            Log.i(TAG, "ALREADY CONTAINS: " + VanillaBeanPowderCustomization.NAME);
+                            return;
+                        }
+                    }
+                }
+
+                // Add this customization.
+                selectedDrink.getCustomizationDecorators().add(new VanillaBeanPowderCustomization());
+                adapter.notifyDataSetChanged();
                 break;
+            case LineTheCupDialogFragment.NOTHING:
             default:
                 break;
         }
-    }
-
-    private void setMenuItem(int selectedIndex, MenuItem menuItem) {
-        meal.setMenuItem(selectedIndex, menuItem);
-        adapter.notifyItemChanged(selectedIndex);
     }
 
     private void addMenuItem(MenuItem menuItem) {
