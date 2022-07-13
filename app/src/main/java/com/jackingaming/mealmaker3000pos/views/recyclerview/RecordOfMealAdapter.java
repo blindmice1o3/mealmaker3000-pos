@@ -75,20 +75,24 @@ public class RecordOfMealAdapter extends
 
         public void bindData(RecordOfMeal recordOfMeal) {
             keyTextView.setText("KEY: " + Long.toString(recordOfMeal.getKeyNumberOfMealServed()));
-//            valueTextView.setText("VALUE: " + recordOfMeal.getValueMealAsJSONString());
 
-            // TODO: change from TextView to nested RecyclerView.
             String mealAsJSONString = recordOfMeal.getValueMealAsJSONString();
             try {
                 JSONObject mealAsJSON = new JSONObject(mealAsJSONString);
                 Meal meal = new Meal(mealAsJSON);
 
-                // TODO: create [Adapter] and [LayoutManager] for nested RecyclerView.
                 MenuItemAdapter menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
                         new MenuItemAdapter.OnItemClickListener() {
                             @Override
                             public void onMenuItemClick(View itemView, int position) {
                                 Log.i("RecordOfMealAdapter", "onMenuItemClick(View, int)");
+                                // TODO:
+                            }
+                        },
+                        new CustomizationDecoratorAdapter.OnItemClickListener() {
+                            @Override
+                            public void onCustomizationDecoratorClick(View itemView, int position) {
+                                Log.i("RecordOfMealAdapter", "onCustomizationDecoratorClick(View, int)");
                                 // TODO:
                             }
                         });

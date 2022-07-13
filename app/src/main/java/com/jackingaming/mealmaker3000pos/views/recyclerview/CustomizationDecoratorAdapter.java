@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.mealmaker3000pos.R;
+import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
 
 import java.util.List;

@@ -60,15 +60,7 @@ public class MenuItemAdapter
             if (menuItem.hasCustomizationDecorators()) {
                 CustomizationDecoratorAdapter customizationDecoratorAdapter
                         = new CustomizationDecoratorAdapter(menuItem.getCustomizationDecorators(),
-                        new CustomizationDecoratorAdapter.OnItemClickListener() {
-                            @Override
-                            public void onCustomizationDecoratorClick(View itemView, int position) {
-                                Log.i("MenuItemAdapter", "onCustomizationDecoratorClick(View, int)");
-                                // TODO: remove [CustomizationDecorator] specified by position.
-                                menuItem.getCustomizationDecorators().remove(position);
-                                notifyDataSetChanged();
-                            }
-                        });
+                        customizationDecoratorClickListener);
                 rvChildCustomizationDecorators.setAdapter(customizationDecoratorAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(rvChildCustomizationDecorators.getContext());
                 rvChildCustomizationDecorators.setLayoutManager(layoutManager);
@@ -77,10 +69,14 @@ public class MenuItemAdapter
     }
 
     private List<MenuItem> menuItems;
+    private CustomizationDecoratorAdapter.OnItemClickListener customizationDecoratorClickListener;
 
-    public MenuItemAdapter(List<MenuItem> menuItems, OnItemClickListener listener) {
+    public MenuItemAdapter(List<MenuItem> menuItems,
+                           OnItemClickListener listener,
+                           CustomizationDecoratorAdapter.OnItemClickListener customizationDecoratorClickListener) {
         this.menuItems = menuItems;
         this.listener = listener;
+        this.customizationDecoratorClickListener = customizationDecoratorClickListener;
     }
 
     @NonNull

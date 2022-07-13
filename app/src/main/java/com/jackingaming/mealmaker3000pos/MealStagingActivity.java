@@ -36,6 +36,7 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.linethecup.LineTheCupDialogFragment;
 import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.powders.AddPowderDialogFragment;
+import com.jackingaming.mealmaker3000pos.views.recyclerview.CustomizationDecoratorAdapter;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.MenuItemAdapter;
 
 import org.json.JSONObject;
@@ -89,6 +90,21 @@ public class MealStagingActivity extends AppCompatActivity
                         // TODO: update selectedIndex and its displayer.
                         selectedIndex = position;
                         updateTvSelectedMenuItemView();
+                    }
+                },
+                new CustomizationDecoratorAdapter.OnItemClickListener() {
+                    @Override
+                    public void onCustomizationDecoratorClick(View itemView, int position) {
+                        Log.i(TAG, "onCustomizationDecoratorClick(View, int)");
+                        // TODO: remove [CustomizationDecorator] specified by position.
+                        if (selectedIndex >= 0) {
+                            Log.i(TAG, "selectedIndex >= 0 removing customization decorator at position: " + position);
+                            MenuItem selectedMenuItem = meal.getMenuItems().get(selectedIndex);
+                            selectedMenuItem.getCustomizationDecorators().remove(position);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.i(TAG, "selectedIndex < 0");
+                        }
                     }
                 });
         // Attach the adapter to the recyclerview to populate items
