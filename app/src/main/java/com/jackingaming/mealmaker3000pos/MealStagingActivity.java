@@ -378,11 +378,18 @@ public class MealStagingActivity extends AppCompatActivity
         Log.i(TAG, "onOptionsItemSelected(android.view.MenuItem)");
         switch (item.getItemId()) {
             case R.id.menu_item_change_to_queue_viewer:
-                Toast.makeText(MealStagingActivity.this,
+                Toast.makeText(this,
                         "queue viewer options menu item selected.",
                         Toast.LENGTH_SHORT).show();
                 Intent intentMealQueueViewer = new Intent(this, MealQueueViewerActivity.class);
                 startActivity(intentMealQueueViewer);
+                return true;
+            case R.id.menu_item_change_to_tab_experiment:
+                Toast.makeText(this,
+                        "tab experiment options menu item selected.",
+                        Toast.LENGTH_SHORT).show();
+                Intent intentTabExperiment = new Intent(this, TabExperimentActivity.class);
+                startActivity(intentTabExperiment);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

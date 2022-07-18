@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MealMaker3000POS">
         <activity
+            android:name=".TabExperimentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MealMaker3000POS.TabExperiment" />
+        <activity
             android:name=".MealQueueViewerActivity"
             android:exported="false" />
         <activity
