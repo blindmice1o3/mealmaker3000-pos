@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MealMaker3000POS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tab1_label">Top Stories</string>
+    <string name="tab2_label">Tech News</string>
+    <string name="tab3_label">Cooking</string>
+</resources>
