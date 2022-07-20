@@ -12,16 +12,4 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.jackingaming.mealmaker3000pos.views.VerticalTextView
-        android:id="@+id/tv_verticaltextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="16dp"
-        android:background="@color/purple"
-        android:text="vertical text"
-        android:textColor="@color/purple_200"
-        android:textSize="24sp" />
-
 </RelativeLayout>

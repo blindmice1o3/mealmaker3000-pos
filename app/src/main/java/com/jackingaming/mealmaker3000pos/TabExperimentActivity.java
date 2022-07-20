@@ -7,9 +7,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.jackingaming.mealmaker3000pos.views.VerticalTextView;
 import com.jackingaming.mealmaker3000pos.views.tabfragments.PagerAdapter;
 
 public class TabExperimentActivity extends AppCompatActivity {
@@ -46,5 +49,12 @@ public class TabExperimentActivity extends AppCompatActivity {
         });
         tabLayoutMediator.attach();
 
+        VerticalTextView verticalTextView = findViewById(R.id.tv_verticaltextview);
+        verticalTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(TabExperimentActivity.this, "vertical text view clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

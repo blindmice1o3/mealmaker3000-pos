@@ -64,14 +64,6 @@ public class Tab1Fragment extends Fragment {
         TextView tvContent = view.findViewById(R.id.tv_content_tab1);
         tvContent.setText(content);
 
-        VerticalTextView verticalTextView = view.findViewById(R.id.tv_verticaltextview);
-        verticalTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "vertical text view clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         return view;
     }
 }
