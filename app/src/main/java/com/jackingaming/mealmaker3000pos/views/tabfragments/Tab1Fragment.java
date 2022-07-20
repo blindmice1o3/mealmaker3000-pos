@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
+import com.jackingaming.mealmaker3000pos.views.VerticalTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +63,14 @@ public class Tab1Fragment extends Fragment {
 
         TextView tvContent = view.findViewById(R.id.tv_content_tab1);
         tvContent.setText(content);
+
+        VerticalTextView verticalTextView = view.findViewById(R.id.tv_verticaltextview);
+        verticalTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "vertical text view clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
