@@ -6,8 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class LineTheCupCustomization extends CustomizationDecorator {
-    public LineTheCupCustomization(String name, String description, double price) {
-        super(name, description, price);
+    public LineTheCupCustomization(String name, double price) {
+        super(name, price);
     }
 
     public LineTheCupCustomization(JSONObject menuItemAsJSON) throws JSONException {

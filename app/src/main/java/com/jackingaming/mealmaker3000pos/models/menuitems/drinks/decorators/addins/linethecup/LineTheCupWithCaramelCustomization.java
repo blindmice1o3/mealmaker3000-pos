@@ -5,11 +5,10 @@ import org.json.JSONObject;
 
 public class LineTheCupWithCaramelCustomization extends LineTheCupCustomization {
     public static final String NAME = "line the cup with caramel drizzle";
-    public static final String DESCRIPTION = "3 rotations of caramel drizzle around the top of the cup.";
     public static final double PRICE = 0.60;
 
     public LineTheCupWithCaramelCustomization() {
-        super(NAME, DESCRIPTION, PRICE);
+        super(NAME, PRICE);
     }
 
     public LineTheCupWithCaramelCustomization(JSONObject menuItemAsJSON) throws JSONException {

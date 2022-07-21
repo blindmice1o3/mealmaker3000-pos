@@ -5,11 +5,10 @@ import org.json.JSONObject;
 
 public class VanillaBeanPowderCustomization extends AddPowderCustomization {
     public static final String NAME = "1 scoop of vanilla bean powder";
-    public static final String DESCRIPTION = "1 scoop of vanilla bean powder";
     public static final double PRICE = 0.10;
 
     public VanillaBeanPowderCustomization() {
-        super(NAME, DESCRIPTION, PRICE);
+        super(NAME, PRICE);
     }
 
     public VanillaBeanPowderCustomization(JSONObject menuItemAsJSON) throws JSONException {

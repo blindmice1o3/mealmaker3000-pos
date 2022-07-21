@@ -9,6 +9,16 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addi
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithNothingCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.ChocolateMaltPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.VanillaBeanPowderCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.CupOptionCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.Customization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.EspressoShotCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.FlavorCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.MilkCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.SweetenerCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.TeaCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.ToppingCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.UnknownCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.UnknownMenuItem;
@@ -62,6 +72,34 @@ public class Menu {
         else {
             Log.d(TAG, "parseToMenuItem(JSONObject) else-clause for UnknownMenuItem.");
             return new UnknownMenuItem(menuItemAsJSON);
+        }
+    }
+
+    public static Customization parseToCustomization(JSONObject customizationAsJSON)
+            throws JSONException {
+        String nameOfCustomization = customizationAsJSON.getString(Customization.JSON_NAME);
+
+        if (AddInCustomization.NAME.equals(nameOfCustomization)) {
+            return new AddInCustomization(customizationAsJSON);
+        } else if (CupOptionCustomization.NAME.equals(nameOfCustomization)) {
+            return new CupOptionCustomization(customizationAsJSON);
+        } else if (EspressoShotCustomization.NAME.equals(nameOfCustomization)) {
+            return new EspressoShotCustomization(customizationAsJSON);
+        } else if (FlavorCustomization.NAME.equals(nameOfCustomization)) {
+            return new FlavorCustomization(customizationAsJSON);
+        } else if (MilkCustomization.NAME.equals(nameOfCustomization)) {
+            return new MilkCustomization(customizationAsJSON);
+        } else if (SweetenerCustomization.NAME.equals(nameOfCustomization)) {
+            return new SweetenerCustomization(customizationAsJSON);
+        } else if (TeaCustomization.NAME.equals(nameOfCustomization)) {
+            return new TeaCustomization(customizationAsJSON);
+        } else if (ToppingCustomization.NAME.equals(nameOfCustomization)) {
+            return new ToppingCustomization(customizationAsJSON);
+        }
+        // TODO: insert new Customization subclasses.
+        else {
+            Log.d(TAG, "parseToCustomization(JSONObject) else-clause for UnknownCustomization.");
+            return new UnknownCustomization(customizationAsJSON);
         }
     }
 

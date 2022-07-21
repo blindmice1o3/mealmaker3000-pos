@@ -6,8 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class AddPowderCustomization extends CustomizationDecorator {
-    public AddPowderCustomization(String name, String description, double price) {
-        super(name, description, price);
+    public AddPowderCustomization(String name, double price) {
+        super(name, price);
     }
 
     public AddPowderCustomization(JSONObject menuItemAsJSON) throws JSONException {
