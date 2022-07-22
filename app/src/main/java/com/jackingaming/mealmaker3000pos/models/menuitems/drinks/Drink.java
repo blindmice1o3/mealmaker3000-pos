@@ -2,8 +2,7 @@ package com.jackingaming.mealmaker3000pos.models.menuitems.drinks;
 
 import com.jackingaming.mealmaker3000pos.models.Menu;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.Customization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.Customization;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,12 +52,9 @@ public abstract class Drink extends MenuItem {
         customizations.add(customization);
     }
 
-    @Override
-    public double getPrice() {
-        double priceOfCustomizationDecorators = 0.0;
-        for (CustomizationDecorator customizationDecorator : customizationDecorators) {
-            priceOfCustomizationDecorators = priceOfCustomizationDecorators + customizationDecorator.getPrice();
-        }
-        return price + priceOfCustomizationDecorators;
+    public List<Customization> getCustomizations() {
+        return customizations;
     }
+
+    // TODO: override getPrice() to include price of customizations.
 }

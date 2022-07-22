@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +33,14 @@ public class AddInCustomization extends Customization {
         addInCustomizationAsJSON.put(JSON_LINE_THE_CUP, lineTheCup);
         addInCustomizationAsJSON.put(JSON_POWDER, powder);
         return addInCustomizationAsJSON;
+    }
+
+    public LineTheCup getLineTheCup() {
+        return lineTheCup;
+    }
+
+    public Powder getPowder() {
+        return powder;
     }
 
     public static class Builder {

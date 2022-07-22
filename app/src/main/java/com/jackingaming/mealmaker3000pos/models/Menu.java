@@ -2,23 +2,16 @@ package com.jackingaming.mealmaker3000pos.models;
 
 import android.util.Log;
 
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.UnknownCustomizationDecorator;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithMochaCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithNothingCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.ChocolateMaltPowderCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.VanillaBeanPowderCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.AddInCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.CupOptionCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.Customization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.EspressoShotCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.FlavorCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.MilkCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.SweetenerCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.TeaCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.ToppingCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.UnknownCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.CupOptionCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.Customization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.EspressoShotCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.FlavorCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.MilkCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.SweetenerCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.TeaCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.ToppingCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.UnknownCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.UnknownMenuItem;
@@ -35,7 +28,6 @@ public class Menu {
     private final static String TAG = "Menu";
 
     private Menu() {
-
     }
 
     public static JSONArray convertToJSONArray(List<MenuItem> menuItems)
@@ -100,28 +92,6 @@ public class Menu {
         else {
             Log.d(TAG, "parseToCustomization(JSONObject) else-clause for UnknownCustomization.");
             return new UnknownCustomization(customizationAsJSON);
-        }
-    }
-
-    public static CustomizationDecorator parseToCustomizationDecorator(JSONObject customizationDecoratorAsJSON)
-            throws JSONException {
-        String nameOfCustomizationDecorator = customizationDecoratorAsJSON.getString(CustomizationDecorator.JSON_NAME);
-
-        if (LineTheCupWithCaramelCustomization.NAME.equals(nameOfCustomizationDecorator)) {
-            return new LineTheCupWithCaramelCustomization(customizationDecoratorAsJSON);
-        } else if (LineTheCupWithMochaCustomization.NAME.equals(nameOfCustomizationDecorator)) {
-            return new LineTheCupWithMochaCustomization(customizationDecoratorAsJSON);
-        } else if (LineTheCupWithNothingCustomization.NAME.equals(nameOfCustomizationDecorator)) {
-            return new LineTheCupWithNothingCustomization(customizationDecoratorAsJSON);
-        } else if (ChocolateMaltPowderCustomization.NAME.equals(nameOfCustomizationDecorator)) {
-            return new ChocolateMaltPowderCustomization(customizationDecoratorAsJSON);
-        } else if (VanillaBeanPowderCustomization.NAME.equals(nameOfCustomizationDecorator)) {
-            return new VanillaBeanPowderCustomization(customizationDecoratorAsJSON);
-        }
-        // TODO: insert new customization decorator.
-        else {
-            Log.d(TAG, "parseToCustomizationDecorator(JSONObject) else-clause for UnknownCustomizationDecorator.");
-            return new UnknownCustomizationDecorator(customizationDecoratorAsJSON);
         }
     }
 }

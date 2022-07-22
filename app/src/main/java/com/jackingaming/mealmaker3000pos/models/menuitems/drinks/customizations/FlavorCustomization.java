@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +34,14 @@ public class FlavorCustomization extends Customization {
         flavorCustomizationAsJSON.put(JSON_SAUCE, sauce);
         flavorCustomizationAsJSON.put(JSON_SYRUP, syrup);
         return flavorCustomizationAsJSON;
+    }
+
+    public Sauce getSauce() {
+        return sauce;
+    }
+
+    public Syrup getSyrup() {
+        return syrup;
     }
 
     public static class Builder {

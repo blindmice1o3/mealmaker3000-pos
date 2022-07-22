@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +27,10 @@ public class TeaCustomization extends Customization {
         JSONObject teaCustomizationAsJSON = super.toJSON();
         teaCustomizationAsJSON.put(JSON_ADD_CHAI, addChai);
         return teaCustomizationAsJSON;
+    }
+
+    public AddChai getAddChai() {
+        return addChai;
     }
 
     public static class Builder {

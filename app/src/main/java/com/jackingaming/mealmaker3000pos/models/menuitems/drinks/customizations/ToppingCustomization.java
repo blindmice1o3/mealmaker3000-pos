@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +51,26 @@ public class ToppingCustomization extends Customization {
         toppingCustomizationAsJSON.put(JSON_CINNAMON_DOLCE_SPRINKLES, cinnamonDolceSprinkles);
         toppingCustomizationAsJSON.put(JSON_WHIPPED_CREAM, whippedCream);
         return toppingCustomizationAsJSON;
+    }
+
+    public ColdFoam getColdFoam() {
+        return coldFoam;
+    }
+
+    public CinnamonPowder getCinnamonPowder() {
+        return cinnamonPowder;
+    }
+
+    public Drizzle getDrizzle() {
+        return drizzle;
+    }
+
+    public CinnamonDolceSprinkles getCinnamonDolceSprinkles() {
+        return cinnamonDolceSprinkles;
+    }
+
+    public WhippedCream getWhippedCream() {
+        return whippedCream;
     }
 
     public static class Builder {

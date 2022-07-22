@@ -1,7 +1,8 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks;
 
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.FlavorCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.ToppingCustomization;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,12 +14,23 @@ public class Water extends Drink {
 
     public Water() {
         super(NAME, DESCRIPTION, 0.05);
-        customizationDecorators.add(new LineTheCupWithCaramelCustomization());
-        customizationDecorators.add(new LineTheCupWithCaramelCustomization());
         customizations.add(
                 new AddInCustomization.Builder()
                         .powder(AddInCustomization.Powder.VANILLA_BEAN)
                         .lineTheCup(AddInCustomization.LineTheCup.MOCHA)
+                        .build());
+        customizations.add(
+                new FlavorCustomization.Builder()
+                        .sauce(FlavorCustomization.Sauce.WHITE_CHOCOLATE_MOCHA)
+                        .syrup(FlavorCustomization.Syrup.TOFFEE_NUT)
+                        .build());
+        customizations.add(
+                new ToppingCustomization.Builder()
+                        .coldFoam(ToppingCustomization.ColdFoam.SALTED_CARAMEL_CREAM)
+                        .cinnamonPowder(ToppingCustomization.CinnamonPowder.LIGHT)
+                        .drizzle(ToppingCustomization.Drizzle.CARAMEL)
+                        .cinnamonDolceSprinkles(ToppingCustomization.CinnamonDolceSprinkles.MEDIUM)
+                        .whippedCream(ToppingCustomization.WhippedCream.EXTRA)
                         .build());
     }
 

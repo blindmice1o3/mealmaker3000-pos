@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jackingaming.mealmaker3000pos.R;
 import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.RecordOfMeal;
+import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,11 +64,12 @@ public class RecordOfMealAdapter extends
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Triggers click upwards to the adapter on click
+                    Log.i("RecordOfMealAdapter", "ViewHolder onClick(View)");
                     if (listener != null) {
-                        int position = getBindingAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, position);
+                        int positionAbsoluteAdapter = getAbsoluteAdapterPosition();
+                        Log.i("RecordOfMealAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, positionAbsoluteAdapter);
                         }
                     }
                 }
@@ -84,15 +87,15 @@ public class RecordOfMealAdapter extends
                 MenuItemAdapter menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
                         new MenuItemAdapter.OnItemClickListener() {
                             @Override
-                            public void onMenuItemClick(View itemView, int position) {
-                                Log.i("RecordOfMealAdapter", "onMenuItemClick(View, int)");
+                            public void onMenuItemClick(int positionAbsoluteAdapter) {
+                                Log.i("RecordOfMealAdapter", "onMenuItemClick(int)");
                                 // TODO:
                             }
                         },
-                        new CustomizationDecoratorAdapter.OnItemClickListener() {
+                        new CustomizationsAdapter.OnItemClickListener() {
                             @Override
-                            public void onCustomizationDecoratorClick(View itemView, int position) {
-                                Log.i("RecordOfMealAdapter", "onCustomizationDecoratorClick(View, int)");
+                            public void onCustomizationClick(Drink drink, int positionAbsoluteAdapter) {
+                                Log.i("RecordOfMealAdapter", "onCustomizationClick(Drink, int)");
                                 // TODO:
                             }
                         });

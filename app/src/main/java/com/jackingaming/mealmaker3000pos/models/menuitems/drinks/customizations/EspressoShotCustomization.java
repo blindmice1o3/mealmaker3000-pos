@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +45,22 @@ public class EspressoShotCustomization extends Customization {
         espressoShotCustomizationAsJSON.put(JSON_TYPE, type);
         espressoShotCustomizationAsJSON.put(JSON_PREP, prep);
         return espressoShotCustomizationAsJSON;
+    }
+
+    public Roast getRoast() {
+        return roast;
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Prep getPrep() {
+        return prep;
     }
 
     public static class Builder {

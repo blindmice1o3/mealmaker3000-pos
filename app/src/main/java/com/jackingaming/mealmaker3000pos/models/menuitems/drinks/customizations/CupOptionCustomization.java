@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.latte;
+package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +27,10 @@ public class CupOptionCustomization extends Customization {
         JSONObject cupOptionCustomizationAsJSON = super.toJSON();
         cupOptionCustomizationAsJSON.put(JSON_CUP_SIZE, cupSize);
         return cupOptionCustomizationAsJSON;
+    }
+
+    public CupSize getCupSize() {
+        return cupSize;
     }
 
     public static class Builder {
