@@ -13,91 +13,143 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.mealmaker3000pos.R;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 
 import java.util.List;
 
 public class MenuItemAdapter
-        extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
+        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int VIEW_TYPE_DRINK = 0;
+    private static final int VIEW_TYPE_NOT_DRINK = 1;
 
     public interface OnItemClickListener {
-        void onMenuItemClick(View itemView, int position);
+        void onMenuItemClick(int positionAbsoluteAdapter);
     }
+    private OnItemClickListener menuItemClickListener;
 
-    private OnItemClickListener listener;
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolderNotDrink extends RecyclerView.ViewHolder {
         private TextView tvMenuItemPosition;
         private TextView tvMenuItemPrice;
         private TextView tvMenuItemName;
-        private RecyclerView rvChildCustomizationDecorators;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolderNotDrink(@NonNull View itemView) {
             super(itemView);
             tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
             tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
             tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
-            rvChildCustomizationDecorators = (RecyclerView) itemView.findViewById(R.id.rv_child_customizationdecorators);
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+        public void bindData(RecyclerView.ViewHolder viewHolderNotDrink, int position) {
+            MenuItem menuItem = menuItems.get(position);
+
+            tvMenuItemPosition.setText(Integer.toString(position));
+            tvMenuItemPrice.setText(Double.toString(menuItem.getPrice()));
+            tvMenuItemName.setText(menuItem.getName());
+
+            viewHolderNotDrink.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("MenuItemAdapter", "ViewHolder onClick(View)");
-                    if (listener != null) {
-                        int position = getBindingAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onMenuItemClick(itemView, position);
+                    Log.i("MenuItemAdapter", "ViewHolderNotDrink onClick(View)");
+                    if (menuItemClickListener != null) {
+                        int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
+                        Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                            menuItemClickListener.onMenuItemClick(positionAbsoluteAdapter);
                         }
                     }
                 }
             });
         }
+    }
 
-        public void bindData(int position, MenuItem menuItem) {
+    public class ViewHolderDrink extends RecyclerView.ViewHolder {
+        private TextView tvMenuItemPosition;
+        private TextView tvMenuItemPrice;
+        private TextView tvMenuItemName;
+        private RecyclerView rvChildCustomizations;
+
+        public ViewHolderDrink(@NonNull View itemView) {
+            super(itemView);
+            tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
+            tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
+            tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
+            rvChildCustomizations = (RecyclerView) itemView.findViewById(R.id.rv_child_customizations);
+        }
+
+        public void bindData(RecyclerView.ViewHolder viewHolderDrink, int position) {
+            // ViewHolderDrink means menuItem is a Drink (checked in [getItemViewType]).
+            Drink drink = (Drink) menuItems.get(position);
+
             tvMenuItemPosition.setText(Integer.toString(position));
-            tvMenuItemPrice.setText(Double.toString(menuItem.getPrice()));
-            tvMenuItemName.setText(menuItem.getName());
+            tvMenuItemPrice.setText(Double.toString(drink.getPrice()));
+            tvMenuItemName.setText(drink.getName());
 
-            if (menuItem.hasCustomizationDecorators()) {
-                CustomizationDecoratorAdapter customizationDecoratorAdapter
-                        = new CustomizationDecoratorAdapter(menuItem.getCustomizationDecorators(),
-                        customizationDecoratorClickListener);
-                rvChildCustomizationDecorators.setAdapter(customizationDecoratorAdapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(rvChildCustomizationDecorators.getContext());
-                rvChildCustomizationDecorators.setLayoutManager(layoutManager);
-            }
+            CustomizationsAdapter customizationsAdapter = new CustomizationsAdapter(drink, customizationClickListener);
+            rvChildCustomizations.setAdapter(customizationsAdapter);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(rvChildCustomizations.getContext());
+            rvChildCustomizations.setLayoutManager(layoutManager);
+
+            viewHolderDrink.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("MenuItemAdapter", "ViewHolderDrink onClick(View)");
+                    if (menuItemClickListener != null) {
+                        int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
+                        Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                            menuItemClickListener.onMenuItemClick(positionAbsoluteAdapter);
+                        }
+                    }
+                }
+            });
         }
     }
 
     private List<MenuItem> menuItems;
-    private CustomizationDecoratorAdapter.OnItemClickListener customizationDecoratorClickListener;
+    private CustomizationsAdapter.OnItemClickListener customizationClickListener;
 
     public MenuItemAdapter(List<MenuItem> menuItems,
-                           OnItemClickListener listener,
-                           CustomizationDecoratorAdapter.OnItemClickListener customizationDecoratorClickListener) {
+                           OnItemClickListener menuItemClickListener,
+                           CustomizationsAdapter.OnItemClickListener customizationClickListener) {
         this.menuItems = menuItems;
-        this.listener = listener;
-        this.customizationDecoratorClickListener = customizationDecoratorClickListener;
+        this.menuItemClickListener = menuItemClickListener;
+        this.customizationClickListener = customizationClickListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        MenuItem menuItem = menuItems.get(position);
+        return (menuItem instanceof Drink) ? VIEW_TYPE_DRINK : VIEW_TYPE_NOT_DRINK;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // Inflate the custom layout
-        View itemView = inflater.inflate(R.layout.rv_item_parent_menuitem, parent, false);
+        View itemView = null;
+        RecyclerView.ViewHolder viewHolder = null;
+        if (viewType == VIEW_TYPE_DRINK) {
+            itemView = inflater.inflate(R.layout.rv_menuitem_drink, parent, false);
+            viewHolder = new ViewHolderDrink(itemView);
+        } else {
+            itemView = inflater.inflate(R.layout.rv_menuitem_notdrink, parent, false);
+            viewHolder = new ViewHolderNotDrink(itemView);
+        }
 
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Populate data into the item through holder
-        MenuItem menuItem = menuItems.get(position);
-        holder.bindData(position, menuItem);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == VIEW_TYPE_DRINK) {
+            ViewHolderDrink viewHolderDrink = (ViewHolderDrink) holder;
+            viewHolderDrink.bindData(viewHolderDrink, position);
+        } else {
+            ViewHolderNotDrink viewHolderNotDrink = (ViewHolderNotDrink) holder;
+            viewHolderNotDrink.bindData(viewHolderNotDrink, position);
+        }
     }
 
     @Override

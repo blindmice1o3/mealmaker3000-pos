@@ -3,7 +3,6 @@ package com.jackingaming.mealmaker3000pos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,42 +26,29 @@ import com.android.volley.toolbox.StringRequest;
 import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.CustomizationDecorator;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithCaramelCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.linethecup.LineTheCupWithMochaCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.ChocolateMaltPowderCustomization;
-import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.decorators.addins.powders.VanillaBeanPowderCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
-import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.linethecup.LineTheCupDialogFragment;
-import com.jackingaming.mealmaker3000pos.views.dialogfragments.drinkdecorators.addins.powders.AddPowderDialogFragment;
-import com.jackingaming.mealmaker3000pos.views.recyclerview.CustomizationDecoratorAdapter;
+import com.jackingaming.mealmaker3000pos.views.recyclerview.CustomizationsAdapter;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.MenuItemAdapter;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-public class MealStagingActivity extends AppCompatActivity
-        implements LineTheCupDialogFragment.OnItemSelectedListener,
-        AddPowderDialogFragment.OnItemSelectedListener {
+public class MealStagingActivity extends AppCompatActivity {
     private final static String TAG = "MealStagingActivity";
     private final String URL_POST_MEAL_AS_JSON_STRING = "http://192.168.1.143:8080/kafka/publish_jsonmeal";
 
     private TextView tvSelectedMenuItemViewer;
 
     private RecyclerView rvMealStaging;
-    private MenuItemAdapter adapter;
+    private MenuItemAdapter menuItemAdapter;
     private Button buttonPostMealToKafka;
     private Button buttonRemoveMenuItem;
 
     private Button buttonBread;
     private Button buttonWater;
-    private Button buttonLineTheCup;
-    private Button buttonAddPowder;
-    private Button buttonRemoveLineTheCupWithCaramel;
 
     private Meal meal;
     private int selectedIndex = -1;
@@ -82,33 +68,34 @@ public class MealStagingActivity extends AppCompatActivity
         // Lookup the recyclerview in activity layout
         rvMealStaging = findViewById(R.id.rv_meal_staging);
         // Create adapter passing in the meal as the rv's data source
-        adapter = new MenuItemAdapter(meal.getMenuItems(),
+        menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
                 new MenuItemAdapter.OnItemClickListener() {
                     @Override
-                    public void onMenuItemClick(View itemView, int position) {
-                        Log.i(TAG, "onMenuItemClick(View, int)");
+                    public void onMenuItemClick(int positionAbsoluteAdapter) {
+                        Log.i(TAG, "onMenuItemClick(int)");
                         // TODO: update selectedIndex and its displayer.
-                        selectedIndex = position;
+                        selectedIndex = positionAbsoluteAdapter;
                         updateTvSelectedMenuItemView();
                     }
                 },
-                new CustomizationDecoratorAdapter.OnItemClickListener() {
+                new CustomizationsAdapter.OnItemClickListener() {
                     @Override
-                    public void onCustomizationDecoratorClick(View itemView, int position) {
-                        Log.i(TAG, "onCustomizationDecoratorClick(View, int)");
-                        // TODO: remove [CustomizationDecorator] specified by position.
-                        if (selectedIndex >= 0) {
-                            Log.i(TAG, "selectedIndex >= 0 removing customization decorator at position: " + position);
-                            MenuItem selectedMenuItem = meal.getMenuItems().get(selectedIndex);
-                            selectedMenuItem.getCustomizationDecorators().remove(position);
-                            adapter.notifyDataSetChanged();
+                    public void onCustomizationClick(Drink drink, int positionAbsoluteAdapter) {
+                        Log.i(TAG, "onCustomizationClick(Drink, int)");
+
+                        Log.i(TAG, "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        if (!drink.getCustomizations().isEmpty()) {
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is NOT empty");
+                            drink.getCustomizations().remove(positionAbsoluteAdapter);
+                            menuItemAdapter.notifyDataSetChanged();
+                            resetSelectedIndex();
                         } else {
-                            Log.i(TAG, "selectedIndex < 0");
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is empty");
                         }
                     }
                 });
         // Attach the adapter to the recyclerview to populate items
-        rvMealStaging.setAdapter(adapter);
+        rvMealStaging.setAdapter(menuItemAdapter);
         // Set layout manager to position the items
         rvMealStaging.setLayoutManager(new LinearLayoutManager(this));
         // Set decorator to display dividers between each item within the list
@@ -164,189 +151,24 @@ public class MealStagingActivity extends AppCompatActivity
                 addMenuItem(new Water());
             }
         });
-
-        buttonLineTheCup = findViewById(R.id.button_linethecup);
-        buttonLineTheCup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "buttonLineTheCup -> onClick(View)");
-
-                // menu item selected
-                if (selectedIndex >= 0) {
-                    MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
-                    if (selectedMenuItem instanceof Drink) {
-                        Log.i(TAG, "selectedMenuItem is a Drink.");
-
-                        FragmentManager fm = getSupportFragmentManager();
-                        LineTheCupDialogFragment lineTheCupDialogFragment = new LineTheCupDialogFragment();
-                        lineTheCupDialogFragment.show(fm, "dialogfragment_linethecup");
-
-                    } else {
-                        Log.i(TAG, "selectedMenuItem is NOT a Drink.");
-                    }
-                }
-                // no menu item selected
-                else {
-                    Log.i(TAG, "selectedIndex < 0");
-                }
-            }
-        });
-
-        buttonAddPowder = findViewById(R.id.button_addpowder);
-        buttonAddPowder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "buttonAddPowder -> onClick(View)");
-
-                // menu item selected
-                if (selectedIndex >= 0) {
-                    MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
-                    if (selectedMenuItem instanceof Drink) {
-                        Log.i(TAG, "selectedMenuItem is a Drink.");
-
-                        FragmentManager fm = getSupportFragmentManager();
-                        AddPowderDialogFragment addPowderDialogFragment = new AddPowderDialogFragment();
-                        addPowderDialogFragment.show(fm, "dialogfragment_addpowder");
-
-                    } else {
-                        Log.i(TAG, "selectedMenuItem is NOT a Drink.");
-                    }
-                }
-                // no menu item selected
-                else {
-                    Log.i(TAG, "selectedIndex < 0");
-                }
-            }
-        });
-
-        buttonRemoveLineTheCupWithCaramel = findViewById(R.id.button_remove_linethecupwithcaramel);
-        buttonRemoveLineTheCupWithCaramel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "buttonRemoveLineTheCupWithCaramel -> onClick(View)");
-
-                // menu item selected
-                if (selectedIndex >= 0) {
-                    MenuItem selectedMenuItem = meal.getMenuItem(selectedIndex);
-
-                    if (selectedMenuItem.hasCustomizationDecorators()) {
-                        Iterator<CustomizationDecorator> iterator = selectedMenuItem.getCustomizationDecorators().iterator();
-                        while (iterator.hasNext()) {
-                            CustomizationDecorator customizationDecorator = iterator.next();
-                            if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
-                                iterator.remove();
-                                adapter.notifyDataSetChanged();
-                                return;
-                            }
-                        }
-                    }
-                }
-                // no menu item selected
-                else {
-                    Log.i(TAG, "selectedIndex < 0");
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onLineTheCupItemSelected(String selectedItem) {
-        Drink selectedDrink = (Drink) meal.getMenuItem(selectedIndex);
-
-        switch (selectedItem) {
-            case LineTheCupDialogFragment.CARAMEL:
-                // Check if already contains this customization.
-                if (selectedDrink.hasCustomizationDecorators()) {
-                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
-                        if (LineTheCupWithCaramelCustomization.NAME.equals(customizationDecorator.getName())) {
-                            Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithCaramelCustomization.NAME);
-                            return;
-                        }
-                    }
-                }
-
-                // Add this customization.
-                selectedDrink.getCustomizationDecorators().add(new LineTheCupWithCaramelCustomization());
-                adapter.notifyDataSetChanged();
-                break;
-            case LineTheCupDialogFragment.MOCHA:
-                // Check if already contains this customization.
-                if (selectedDrink.hasCustomizationDecorators()) {
-                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
-                        if (LineTheCupWithMochaCustomization.NAME.equals(customizationDecorator.getName())) {
-                            Log.i(TAG, "ALREADY CONTAINS: " + LineTheCupWithMochaCustomization.NAME);
-                            return;
-                        }
-                    }
-                }
-
-                // Add this customization.
-                selectedDrink.getCustomizationDecorators().add(new LineTheCupWithMochaCustomization());
-                adapter.notifyDataSetChanged();
-                break;
-            case LineTheCupDialogFragment.NOTHING:
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onAddPowderItemSelected(String selectedItem) {
-        Drink selectedDrink = (Drink) meal.getMenuItem(selectedIndex);
-
-        switch (selectedItem) {
-            case AddPowderDialogFragment.CHOCOLATE_MALT:
-                // Check if already contains this customization.
-                if (selectedDrink.hasCustomizationDecorators()) {
-                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
-                        if (ChocolateMaltPowderCustomization.NAME.equals(customizationDecorator.getName())) {
-                            Log.i(TAG, "ALREADY CONTAINS: " + ChocolateMaltPowderCustomization.NAME);
-                            return;
-                        }
-                    }
-                }
-
-                // Add this customization.
-                selectedDrink.getCustomizationDecorators().add(new ChocolateMaltPowderCustomization());
-                adapter.notifyDataSetChanged();
-                break;
-            case AddPowderDialogFragment.VANILLA_BEAN:
-                // Check if already contains this customization.
-                if (selectedDrink.hasCustomizationDecorators()) {
-                    for (CustomizationDecorator customizationDecorator : selectedDrink.getCustomizationDecorators()) {
-                        if (VanillaBeanPowderCustomization.NAME.equals(customizationDecorator.getName())) {
-                            Log.i(TAG, "ALREADY CONTAINS: " + VanillaBeanPowderCustomization.NAME);
-                            return;
-                        }
-                    }
-                }
-
-                // Add this customization.
-                selectedDrink.getCustomizationDecorators().add(new VanillaBeanPowderCustomization());
-                adapter.notifyDataSetChanged();
-                break;
-            case LineTheCupDialogFragment.NOTHING:
-            default:
-                break;
-        }
     }
 
     private void addMenuItem(MenuItem menuItem) {
         meal.addMenuItem(menuItem);
         // TODO: adapter.notifyItemInserted(int position)
-        adapter.notifyDataSetChanged();
+        menuItemAdapter.notifyDataSetChanged();
         setSelectedIndexToIndexOfLastElement();
     }
 
     private void removeSelectedMenuItem() {
         meal.removeMenuItem(selectedIndex);
-        adapter.notifyItemRemoved(selectedIndex);
+        menuItemAdapter.notifyItemRemoved(selectedIndex);
         resetSelectedIndex();
     }
 
     private void clearMenuItems() {
         meal.clearMenuItems();
-        adapter.notifyDataSetChanged();
+        menuItemAdapter.notifyDataSetChanged();
         resetSelectedIndex();
     }
 

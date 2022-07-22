@@ -9,7 +9,7 @@
         android:id="@+id/tv_menuitem_position"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/rv_child_customizationdecorators"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/tv_menuitem_price"
         app:layout_constraintTop_toTopOf="parent" />
@@ -18,7 +18,7 @@
         android:id="@+id/tv_menuitem_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/rv_child_customizationdecorators"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/tv_menuitem_position"
         app:layout_constraintRight_toLeftOf="@id/tv_menuitem_name"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,18 +27,11 @@
         android:id="@+id/tv_menuitem_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/rv_child_customizationdecorators"
+        android:background="@color/orange"
+        android:textColor="@color/amber"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/tv_menuitem_price"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_child_customizationdecorators"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_menuitem_position" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
