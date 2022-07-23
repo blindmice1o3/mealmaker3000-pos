@@ -53,7 +53,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
 
         // Initialize recordsOfMeal
         recordsOfMeal = new ArrayList<RecordOfMeal>();
-        loadRecordsOfMeal();
+//        loadRecordsOfMeal();
 
         swipeRefreshLayout = findViewById(R.id.swiperefresh);
         // Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
