@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,7 +20,15 @@ public class TeaCustomization extends Customization {
 
     public TeaCustomization(JSONObject teaCustomizationAsJSON) throws JSONException {
         super(teaCustomizationAsJSON);
-        addChai = (AddChai) teaCustomizationAsJSON.get(JSON_ADD_CHAI);
+
+        String addChaiAsString = teaCustomizationAsJSON.get(JSON_ADD_CHAI).toString();
+        for (int i = 0; i < AddChai.values().length; i++) {
+            if (AddChai.values()[i].toString().equals(addChaiAsString)) {
+                Log.i("TeaCustomization", "TeaCustomization(JSONObject) AddChai." + AddChai.values()[i].toString());
+                addChai = AddChai.values()[i];
+                break;
+            }
+        }
     }
 
     @Override

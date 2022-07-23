@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,7 +20,15 @@ public class CupOptionCustomization extends Customization {
 
     public CupOptionCustomization(JSONObject cupOptionCustomizationAsJSON) throws JSONException {
         super(cupOptionCustomizationAsJSON);
-        cupSize = (CupSize) cupOptionCustomizationAsJSON.get(JSON_CUP_SIZE);
+
+        String cupSizeAsString = cupOptionCustomizationAsJSON.get(JSON_CUP_SIZE).toString();
+        for (int i = 0; i < CupSize.values().length; i++) {
+            if (CupSize.values()[i].toString().equals(cupSizeAsString)) {
+                Log.i("CupOptionCustomization", "CupOptionCustomization(JSONObject) CupSize." + CupSize.values()[i].toString());
+                cupSize = CupSize.values()[i];
+                break;
+            }
+        }
     }
 
     @Override

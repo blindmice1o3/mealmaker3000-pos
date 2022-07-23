@@ -1,5 +1,8 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,12 +31,45 @@ public class EspressoShotCustomization extends Customization {
         this.prep = builder.prep;
     }
 
+    @SuppressLint("LongLogTag")
     public EspressoShotCustomization(JSONObject espressoShotCustomizationAsJSON) throws JSONException {
         super(espressoShotCustomizationAsJSON);
-        roast = (Roast) espressoShotCustomizationAsJSON.get(JSON_ROAST);
-        quantity = (Quantity) espressoShotCustomizationAsJSON.get(JSON_QUANTITY);
-        type = (Type) espressoShotCustomizationAsJSON.get(JSON_TYPE);
-        prep = (Prep) espressoShotCustomizationAsJSON.get(JSON_PREP);
+
+        String roastAsString = espressoShotCustomizationAsJSON.get(JSON_ROAST).toString();
+        for (int i = 0; i < Roast.values().length; i++) {
+            if (Roast.values()[i].toString().equals(roastAsString)) {
+                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Roast." + Roast.values()[i].toString());
+                roast = Roast.values()[i];
+                break;
+            }
+        }
+
+        String quantityAsString = espressoShotCustomizationAsJSON.get(JSON_QUANTITY).toString();
+        for (int i = 0; i < Quantity.values().length; i++) {
+            if (Quantity.values()[i].toString().equals(quantityAsString)) {
+                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Quantity." + Quantity.values()[i].toString());
+                quantity = Quantity.values()[i];
+                break;
+            }
+        }
+
+        String typeAsString = espressoShotCustomizationAsJSON.get(JSON_TYPE).toString();
+        for (int i = 0; i < Type.values().length; i++) {
+            if (Type.values()[i].toString().equals(typeAsString)) {
+                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Type." + Type.values()[i].toString());
+                type = Type.values()[i];
+                break;
+            }
+        }
+
+        String prepAsString = espressoShotCustomizationAsJSON.get(JSON_PREP).toString();
+        for (int i = 0; i < Prep.values().length; i++) {
+            if (Prep.values()[i].toString().equals(prepAsString)) {
+                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Prep." + Prep.values()[i].toString());
+                prep = Prep.values()[i];
+                break;
+            }
+        }
     }
 
     @Override
