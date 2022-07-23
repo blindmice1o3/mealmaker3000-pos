@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,8 +24,24 @@ public class AddInCustomization extends Customization {
 
     public AddInCustomization(JSONObject addInCustomizationAsJSON) throws JSONException {
         super(addInCustomizationAsJSON);
-        lineTheCup = (LineTheCup) addInCustomizationAsJSON.get(JSON_LINE_THE_CUP);
-        powder = (Powder) addInCustomizationAsJSON.get(JSON_POWDER);
+
+        String lineTheCupAsString = addInCustomizationAsJSON.get(JSON_LINE_THE_CUP).toString();
+        for (int i = 0; i < LineTheCup.values().length; i++) {
+            if (LineTheCup.values()[i].toString().equals(lineTheCupAsString)) {
+                Log.i("AddInCustomization", "AddInCustomization(JSONObject) LineTheCup." + LineTheCup.values()[i].toString());
+                lineTheCup = LineTheCup.values()[i];
+                break;
+            }
+        }
+
+        String powderAsString = addInCustomizationAsJSON.get(JSON_POWDER).toString();
+        for (int i = 0; i < Powder.values().length; i++) {
+            if (Powder.values()[i].toString().equals(powderAsString)) {
+                Log.i("AddInCustomization", "AddInCustomization(JSONObject) Powder." + Powder.values()[i].toString());
+                powder = Powder.values()[i];
+                break;
+            }
+        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,8 +24,24 @@ public class SweetenerCustomization extends Customization {
 
     public SweetenerCustomization(JSONObject sweetenerCustomizationAsJSON) throws JSONException {
         super(sweetenerCustomizationAsJSON);
-        liquid = (Liquid) sweetenerCustomizationAsJSON.get(JSON_LIQUID);
-        packet = (Packet) sweetenerCustomizationAsJSON.get(JSON_PACKET);
+
+        String liquidAsString = sweetenerCustomizationAsJSON.get(JSON_LIQUID).toString();
+        for (int i = 0; i < Liquid.values().length; i++) {
+            if (Liquid.values()[i].toString().equals(liquidAsString)) {
+                Log.i("SweetenerCustomization", "SweetenerCustomization(JSONObject) Liquid." + Liquid.values()[i].toString());
+                liquid = Liquid.values()[i];
+                break;
+            }
+        }
+
+        String packetAsString = sweetenerCustomizationAsJSON.get(JSON_PACKET).toString();
+        for (int i = 0; i < Packet.values().length; i++) {
+            if (Packet.values()[i].toString().equals(packetAsString)) {
+                Log.i("SweetenerCustomization", "SweetenerCustomization(JSONObject) Packet." + Packet.values()[i].toString());
+                packet = Packet.values()[i];
+                break;
+            }
+        }
     }
 
     @Override

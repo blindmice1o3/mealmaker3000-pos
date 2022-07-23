@@ -1,5 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,8 +25,24 @@ public class FlavorCustomization extends Customization {
 
     public FlavorCustomization(JSONObject flavorCustomizationAsJSON) throws JSONException {
         super(flavorCustomizationAsJSON);
-        sauce = (Sauce) flavorCustomizationAsJSON.get(JSON_SAUCE);
-        syrup = (Syrup) flavorCustomizationAsJSON.get(JSON_SYRUP);
+
+        String sauceAsString = flavorCustomizationAsJSON.get(JSON_SAUCE).toString();
+        for (int i = 0; i < Sauce.values().length; i++) {
+            if (Sauce.values()[i].toString().equals(sauceAsString)) {
+                Log.i("FlavorCustomization", "FlavorCustomization(JSONObject) Sauce." + Sauce.values()[i].toString());
+                sauce = Sauce.values()[i];
+                break;
+            }
+        }
+
+        String syrupAsString = flavorCustomizationAsJSON.get(JSON_SYRUP).toString();
+        for (int i = 0; i < Syrup.values().length; i++) {
+            if (Syrup.values()[i].toString().equals(syrupAsString)) {
+                Log.i("FlavorCustomization", "FlavorCustomization(JSONObject) Syrup." + Syrup.values()[i].toString());
+                syrup = Syrup.values()[i];
+                break;
+            }
+        }
     }
 
     @Override
