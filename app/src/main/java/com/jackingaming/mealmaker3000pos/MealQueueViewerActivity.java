@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealQueueViewerActivity extends AppCompatActivity {
-    private final static String TAG = "MealQueueViewerActivity";
+    private static final String TAG = "MealQueueViewerActivity";
     private final String URL_GET_NEW_MEALS_AS_JSON_ARRAY = "http://192.168.1.143:8080/kafka/receive_new_meals_as_jsonarray";
     private final String PREFERENCE_CONTENT_OF_SB = "preferenceContentOfSB";
     private final String KEY_RECORDS_OF_MEAL = "keyRecordsOfMeal";
@@ -49,7 +49,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meal_queue_viewer);
         Log.i(TAG, "onCreate(Bundle)");
 
-        setTitle("MealMaker3000QueueViewer");
+//        setTitle("MealMaker3000QueueViewer");
 
         // Initialize recordsOfMeal
         recordsOfMeal = new ArrayList<RecordOfMeal>();

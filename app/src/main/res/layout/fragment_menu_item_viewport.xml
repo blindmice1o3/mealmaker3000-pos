@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.fragments.staging_two.MenuItemViewportFragment">
+
+    <TextView
+        android:id="@+id/tv_index_selected_menu_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:text="selectedMenuItemIndex == "
+        app:layout_constraintBottom_toTopOf="@id/rv_menu_item_viewport"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_menu_item_viewport"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/button_post_meal_to_kafka"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_index_selected_menu_item" />
+
+    <Button
+        android:id="@+id/button_post_meal_to_kafka"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="post to kafka"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/button_remove_selected_menu_item"
+        app:layout_constraintTop_toBottomOf="@id/rv_menu_item_viewport" />
+
+    <Button
+        android:id="@+id/button_remove_selected_menu_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="remove menu item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/button_post_meal_to_kafka"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_menu_item_viewport" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.views.tabfragments;
+package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.os.Bundle;
 
@@ -13,17 +13,17 @@ import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Tab2Fragment#newInstance} factory method to
+ * Use the {@link Tab1Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Tab2Fragment extends Fragment {
+public class Tab1Fragment extends Fragment {
     private static final String TAB_TITLE = "tab_title";
     private static final String CONTENT = "content";
 
     private String tabTitle;
     private String content;
 
-    public Tab2Fragment() {
+    public Tab1Fragment() {
         // Required empty public constructor
     }
 
@@ -32,11 +32,11 @@ public class Tab2Fragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param tabTitle Parameter 1.
-     * @param content Parameter 2.
-     * @return A new instance of fragment Tab2Fragment.
+     * @param content  Parameter 2.
+     * @return A new instance of fragment Tab1Fragment.
      */
-    public static Tab2Fragment newInstance(String tabTitle, String content) {
-        Tab2Fragment fragment = new Tab2Fragment();
+    public static Tab1Fragment newInstance(String tabTitle, String content) {
+        Tab1Fragment fragment = new Tab1Fragment();
         Bundle args = new Bundle();
         args.putString(TAB_TITLE, tabTitle);
         args.putString(CONTENT, content);
@@ -57,9 +57,9 @@ public class Tab2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab2, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab1, container, false);
 
-        TextView tvContent = view.findViewById(R.id.tv_content_tab2);
+        TextView tvContent = view.findViewById(R.id.tv_content_tab1);
         tvContent.setText(content);
 
         return view;

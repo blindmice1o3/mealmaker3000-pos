@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.views.tabfragments;
+package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.util.Log;
 

@@ -14,13 +14,18 @@
         <activity
             android:name=".TabExperimentActivity"
             android:exported="false"
+            android:label="MealMaker3000TabLayout"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.MealMaker3000POS.TabExperiment" />
         <activity
             android:name=".MealQueueViewerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="MealMaker3000QueueViewer"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MealStagingActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

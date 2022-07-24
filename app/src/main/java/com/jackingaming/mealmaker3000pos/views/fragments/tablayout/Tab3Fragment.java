@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.views.tabfragments;
+package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.os.Bundle;
 
@@ -8,24 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
-import com.jackingaming.mealmaker3000pos.views.VerticalTextView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Tab1Fragment#newInstance} factory method to
+ * Use the {@link Tab3Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Tab1Fragment extends Fragment {
+public class Tab3Fragment extends Fragment {
     private static final String TAB_TITLE = "tab_title";
     private static final String CONTENT = "content";
 
     private String tabTitle;
     private String content;
 
-    public Tab1Fragment() {
+    public Tab3Fragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +32,11 @@ public class Tab1Fragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param tabTitle Parameter 1.
-     * @param content  Parameter 2.
-     * @return A new instance of fragment Tab1Fragment.
+     * @param content Parameter 2.
+     * @return A new instance of fragment Tab3Fragment.
      */
-    public static Tab1Fragment newInstance(String tabTitle, String content) {
-        Tab1Fragment fragment = new Tab1Fragment();
+    public static Tab3Fragment newInstance(String tabTitle, String content) {
+        Tab3Fragment fragment = new Tab3Fragment();
         Bundle args = new Bundle();
         args.putString(TAB_TITLE, tabTitle);
         args.putString(CONTENT, content);
@@ -59,10 +57,10 @@ public class Tab1Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab1, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab3, container, false);
 
-        TextView tvContent = view.findViewById(R.id.tv_content_tab1);
-        tvContent.setText(content);
+        TextView tv_content = view.findViewById(R.id.tv_content_tab3);
+        tv_content.setText(content);
 
         return view;
     }

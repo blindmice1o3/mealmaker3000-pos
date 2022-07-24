@@ -40,6 +40,7 @@ public class CustomizationsAdapter
     public interface OnItemClickListener {
         void onCustomizationClick(Drink drink, int positionAbsoluteAdapter);
     }
+
     private OnItemClickListener listener;
 
     private Drink drink;
@@ -167,8 +168,20 @@ public class CustomizationsAdapter
 
         public void bindData(RecyclerView.ViewHolder addInViewHolder, int position) {
             AddInCustomization addInCustomization = (AddInCustomization) customizations.get(position);
-            tvLineTheCup.setText("line the cup: " + addInCustomization.getLineTheCup().toString());
-            tvPowder.setText("powder: " + addInCustomization.getPowder().toString());
+
+            if (addInCustomization.getLineTheCup() != null) {
+                tvLineTheCup.setText("line the cup: " + addInCustomization.getLineTheCup().toString());
+            } else {
+                Log.d("CustomizationsAdapter", "AddInViewHolder.bindData() addInCustomization.getLineTheCup() == null");
+                tvLineTheCup.setText("line the cup: null");
+            }
+
+            if (addInCustomization.getPowder() != null) {
+                tvPowder.setText("powder: " + addInCustomization.getPowder().toString());
+            } else {
+                Log.d("CustomizationsAdapter", "AddInViewHolder.bindData() addInCustomization.getPowder() == null");
+                tvPowder.setText("powder: null");
+            }
 
             addInViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

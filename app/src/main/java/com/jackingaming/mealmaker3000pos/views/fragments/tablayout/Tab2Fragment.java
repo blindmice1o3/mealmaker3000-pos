@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.views.tabfragments;
+package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.os.Bundle;
 
@@ -13,17 +13,17 @@ import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Tab3Fragment#newInstance} factory method to
+ * Use the {@link Tab2Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Tab3Fragment extends Fragment {
+public class Tab2Fragment extends Fragment {
     private static final String TAB_TITLE = "tab_title";
     private static final String CONTENT = "content";
 
     private String tabTitle;
     private String content;
 
-    public Tab3Fragment() {
+    public Tab2Fragment() {
         // Required empty public constructor
     }
 
@@ -33,10 +33,10 @@ public class Tab3Fragment extends Fragment {
      *
      * @param tabTitle Parameter 1.
      * @param content Parameter 2.
-     * @return A new instance of fragment Tab3Fragment.
+     * @return A new instance of fragment Tab2Fragment.
      */
-    public static Tab3Fragment newInstance(String tabTitle, String content) {
-        Tab3Fragment fragment = new Tab3Fragment();
+    public static Tab2Fragment newInstance(String tabTitle, String content) {
+        Tab2Fragment fragment = new Tab2Fragment();
         Bundle args = new Bundle();
         args.putString(TAB_TITLE, tabTitle);
         args.putString(CONTENT, content);
@@ -57,10 +57,10 @@ public class Tab3Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab3, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab2, container, false);
 
-        TextView tv_content = view.findViewById(R.id.tv_content_tab3);
-        tv_content.setText(content);
+        TextView tvContent = view.findViewById(R.id.tv_content_tab2);
+        tvContent.setText(content);
 
         return view;
     }

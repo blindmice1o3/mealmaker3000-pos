@@ -6,14 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.jackingaming.mealmaker3000pos.views.VerticalTextView;
-import com.jackingaming.mealmaker3000pos.views.tabfragments.PagerAdapter;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 
 public class TabExperimentActivity extends AppCompatActivity {
     private static final String TAG = "TabExperimentActivity";

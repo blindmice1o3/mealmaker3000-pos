@@ -1,4 +1,4 @@
-package com.jackingaming.mealmaker3000pos.views;
+package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.content.Context;
 import android.graphics.Canvas;
