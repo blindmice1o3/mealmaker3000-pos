@@ -6,14 +6,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.mealmaker3000pos.R;
+import com.jackingaming.mealmaker3000pos.TabExperimentActivity;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,13 +28,6 @@ import com.jackingaming.mealmaker3000pos.R;
  */
 public class MenuItemInputFragment extends Fragment {
     private static final String TAG = "MenuItemInputFragment";
-
-    public interface OnButtonClickListener {
-        void onBreadButtonClicked();
-        void onWaterButtonClicked();
-        void onCustomizationButtonClicked();
-    }
-    private OnButtonClickListener listener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,9 +38,13 @@ public class MenuItemInputFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button buttonBread;
-    private Button buttonWater;
-    private Button buttonCustomization;
+    private String[] tabTitles;
+    private String[] contents;
+    private PagerAdapter pagerAdapter;
+    private TabLayoutMediator tabLayoutMediator;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager2;
+    private VerticalTextView verticalTextView;
 
     public MenuItemInputFragment() {
         // Required empty public constructor
@@ -68,33 +71,23 @@ public class MenuItemInputFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnButtonClickListener) {
-            listener = (OnButtonClickListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implemenet MenuItemInputFragment.OnButtonClickListener");
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        tabTitles = getResources().getStringArray(R.array.tab_titles);
+        contents = getResources().getStringArray(R.array.contents);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_item_input, container, false);
-        buttonBread = view.findViewById(R.id.button_bread);
-        buttonWater = view.findViewById(R.id.button_water);
-        buttonCustomization = view.findViewById(R.id.button_customization);
+        tabLayout = view.findViewById(R.id.tablayout);
+        viewPager2 = view.findViewById(R.id.viewpager2);
+        verticalTextView = view.findViewById(R.id.tv_verticaltextview);
         return view;
     }
 
@@ -102,34 +95,30 @@ public class MenuItemInputFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        buttonBread.setOnClickListener(new View.OnClickListener() {
+        // Create an instance of the tab layout from the view.
+        for (int i = 0; i < tabTitles.length; i++) {
+            tabLayout.addTab(tabLayout.newTab());
+        }
+        // Set the tabs to fill the entire layout.
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        // Use PagerAdapter to manage page views in fragments.
+        // Each page is represented by its own fragment.
+        pagerAdapter = new PagerAdapter(getActivity(), tabTitles, contents);
+        viewPager2.setAdapter(pagerAdapter);
+
+        tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
-            public void onClick(View view) {
-                Log.i(TAG, "buttonBread onClick(View)");
-                listener.onBreadButtonClicked();
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(tabTitles[position]);
             }
         });
+        tabLayoutMediator.attach();
 
-        buttonWater.setOnClickListener(new View.OnClickListener() {
+        verticalTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "buttonWater onClick(View)");
-                listener.onWaterButtonClicked();
+                Toast.makeText(getContext(), "vertical text view clicked", Toast.LENGTH_SHORT).show();
             }
         });
-
-        buttonCustomization.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "buttonCustomization onClick(View)");
-                listener.onCustomizationButtonClicked();
-            }
-        });
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
     }
 }

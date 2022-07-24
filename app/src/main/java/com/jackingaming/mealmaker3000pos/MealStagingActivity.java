@@ -14,9 +14,14 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemInputFragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemViewportFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab1Fragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab2Fragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab3Fragment;
 
 public class MealStagingActivity extends AppCompatActivity
-        implements MenuItemInputFragment.OnButtonClickListener {
+        implements Tab1Fragment.ClickListener,
+        Tab2Fragment.ClickListener,
+        Tab3Fragment.ClickListener {
     private final static String TAG = "MealStagingActivity";
 
     private MenuItemViewportFragment menuItemViewportFragment;

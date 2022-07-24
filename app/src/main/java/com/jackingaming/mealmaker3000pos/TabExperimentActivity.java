@@ -6,15 +6,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab1Fragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab2Fragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab3Fragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 
-public class TabExperimentActivity extends AppCompatActivity {
+public class TabExperimentActivity extends AppCompatActivity
+        implements Tab1Fragment.ClickListener,
+        Tab2Fragment.ClickListener,
+        Tab3Fragment.ClickListener {
     private static final String TAG = "TabExperimentActivity";
 
     @Override
@@ -55,5 +62,20 @@ public class TabExperimentActivity extends AppCompatActivity {
                 Toast.makeText(TabExperimentActivity.this, "vertical text view clicked", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBreadButtonClicked() {
+        Log.i(TAG, "onBreadButtonClicked()");
+    }
+
+    @Override
+    public void onWaterButtonClicked() {
+        Log.i(TAG, "onWaterButtonClicked()");
+    }
+
+    @Override
+    public void onCustomizationButtonClicked() {
+        Log.i(TAG, "onCustomizationButtonClicked()");
     }
 }
