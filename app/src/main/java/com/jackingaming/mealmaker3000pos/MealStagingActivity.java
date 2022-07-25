@@ -14,14 +14,14 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
 import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemInputFragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemViewportFragment;
-import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab1Fragment;
-import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab2Fragment;
-import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.Tab3Fragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.FoodInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.DrinkInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.CustomizationInputFragment;
 
 public class MealStagingActivity extends AppCompatActivity
-        implements Tab1Fragment.ClickListener,
-        Tab2Fragment.ClickListener,
-        Tab3Fragment.ClickListener {
+        implements FoodInputFragment.ClickListener,
+        DrinkInputFragment.ClickListener,
+        CustomizationInputFragment.ClickListener {
     private final static String TAG = "MealStagingActivity";
 
     private MenuItemViewportFragment menuItemViewportFragment;
@@ -66,13 +66,6 @@ public class MealStagingActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
                 Intent intentMealQueueViewer = new Intent(this, MealQueueViewerActivity.class);
                 startActivity(intentMealQueueViewer);
-                return true;
-            case R.id.menu_item_change_to_tab_experiment:
-                Toast.makeText(this,
-                        "tab experiment options menu item selected.",
-                        Toast.LENGTH_SHORT).show();
-                Intent intentTabExperiment = new Intent(this, TabExperimentActivity.class);
-                startActivity(intentTabExperiment);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

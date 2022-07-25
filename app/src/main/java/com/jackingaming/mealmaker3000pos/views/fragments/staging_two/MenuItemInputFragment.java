@@ -1,6 +1,5 @@
 package com.jackingaming.mealmaker3000pos.views.fragments.staging_two;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.mealmaker3000pos.R;
-import com.jackingaming.mealmaker3000pos.TabExperimentActivity;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
 
@@ -39,7 +37,6 @@ public class MenuItemInputFragment extends Fragment {
     private String mParam2;
 
     private String[] tabTitles;
-    private String[] contents;
     private PagerAdapter pagerAdapter;
     private TabLayoutMediator tabLayoutMediator;
     private TabLayout tabLayout;
@@ -77,8 +74,7 @@ public class MenuItemInputFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        tabTitles = getResources().getStringArray(R.array.tab_titles);
-        contents = getResources().getStringArray(R.array.contents);
+        tabTitles = getResources().getStringArray(R.array.tab_meal_staging);
     }
 
     @Override
@@ -103,7 +99,7 @@ public class MenuItemInputFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         // Use PagerAdapter to manage page views in fragments.
         // Each page is represented by its own fragment.
-        pagerAdapter = new PagerAdapter(getActivity(), tabTitles, contents);
+        pagerAdapter = new PagerAdapter(getActivity(), tabTitles.length);
         viewPager2.setAdapter(pagerAdapter);
 
         tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {

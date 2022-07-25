@@ -12,50 +12,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Tab3Fragment#newInstance} factory method to
+ * Use the {@link FoodInputFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Tab3Fragment extends Fragment {
-    private static final String TAG = "Tab3Fragment";
-    private static final String TAB_TITLE = "tab_title";
-    private static final String CONTENT = "content";
+public class FoodInputFragment extends Fragment {
+    private static final String TAG = "Tab1Fragment";
 
     public interface ClickListener {
-        void onCustomizationButtonClicked();
+        void onBreadButtonClicked();
     }
     private ClickListener clickListener;
 
-    private String tabTitle;
-    private String content;
+    private Button buttonBread;
 
-    private TextView tvContent;
-    private Button buttonCustomization;
-
-    public Tab3Fragment() {
+    public FoodInputFragment() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param tabTitle Parameter 1.
-     * @param content Parameter 2.
-     * @return A new instance of fragment Tab3Fragment.
+     * this fragment.
+     * @return A new instance of fragment Tab1Fragment.
      */
-    public static Tab3Fragment newInstance(String tabTitle, String content) {
-        Tab3Fragment fragment = new Tab3Fragment();
-        Bundle args = new Bundle();
-        args.putString(TAB_TITLE, tabTitle);
-        args.putString(CONTENT, content);
-        fragment.setArguments(args);
-        return fragment;
+    public static FoodInputFragment newInstance() {
+        return new FoodInputFragment();
     }
 
     @Override
@@ -72,32 +57,24 @@ public class Tab3Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            tabTitle = getArguments().getString(TAB_TITLE);
-            content = getArguments().getString(CONTENT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab3, container, false);
-        tvContent = view.findViewById(R.id.tv_content_tab3);
-        buttonCustomization = view.findViewById(R.id.button_customization);
+        View view = inflater.inflate(R.layout.fragment_food_input, container, false);
+        buttonBread = view.findViewById(R.id.button_bread);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        tvContent.setText(content);
-
-        buttonCustomization.setOnClickListener(new View.OnClickListener() {
+        buttonBread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "buttonCustomization onClick(View)");
-                clickListener.onCustomizationButtonClicked();
+                Log.i(TAG, "buttonBread onClick(View)");
+                clickListener.onBreadButtonClicked();
             }
         });
     }
