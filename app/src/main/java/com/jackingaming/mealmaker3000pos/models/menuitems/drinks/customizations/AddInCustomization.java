@@ -11,6 +11,7 @@ public class AddInCustomization extends Customization {
     public static final String JSON_POWDER = "powder";
 
     public enum LineTheCup {STANDARD_NO, CARAMEL, MOCHA;}
+
     public enum Powder {CHOCOLATE_MALT, VANILLA_BEAN;}
 
     private LineTheCup lineTheCup;
@@ -25,22 +26,30 @@ public class AddInCustomization extends Customization {
     public AddInCustomization(JSONObject addInCustomizationAsJSON) throws JSONException {
         super(addInCustomizationAsJSON);
 
-        String lineTheCupAsString = addInCustomizationAsJSON.get(JSON_LINE_THE_CUP).toString();
-        for (int i = 0; i < LineTheCup.values().length; i++) {
-            if (LineTheCup.values()[i].toString().equals(lineTheCupAsString)) {
-                Log.i("AddInCustomization", "AddInCustomization(JSONObject) LineTheCup." + LineTheCup.values()[i].toString());
-                lineTheCup = LineTheCup.values()[i];
-                break;
+        if (addInCustomizationAsJSON.has(JSON_LINE_THE_CUP)) {
+            String lineTheCupAsString = addInCustomizationAsJSON.get(JSON_LINE_THE_CUP).toString();
+            for (int i = 0; i < LineTheCup.values().length; i++) {
+                if (LineTheCup.values()[i].toString().equals(lineTheCupAsString)) {
+                    Log.d("AddInCustomization", "AddInCustomization(JSONObject) LineTheCup." + LineTheCup.values()[i].toString());
+                    lineTheCup = LineTheCup.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("AddInCustomization", "AddInCustomization(JSONObject) addInCustomizationAsJSON does NOT has(JSON_LINE_THE_CUP)");
         }
 
-        String powderAsString = addInCustomizationAsJSON.get(JSON_POWDER).toString();
-        for (int i = 0; i < Powder.values().length; i++) {
-            if (Powder.values()[i].toString().equals(powderAsString)) {
-                Log.i("AddInCustomization", "AddInCustomization(JSONObject) Powder." + Powder.values()[i].toString());
-                powder = Powder.values()[i];
-                break;
+        if (addInCustomizationAsJSON.has(JSON_POWDER)) {
+            String powderAsString = addInCustomizationAsJSON.get(JSON_POWDER).toString();
+            for (int i = 0; i < Powder.values().length; i++) {
+                if (Powder.values()[i].toString().equals(powderAsString)) {
+                    Log.d("AddInCustomization", "AddInCustomization(JSONObject) Powder." + Powder.values()[i].toString());
+                    powder = Powder.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("AddInCustomization", "AddInCustomization(JSONObject) addInCustomizationAsJSON does NOT has(JSON_POWDER)");
         }
     }
 

@@ -21,13 +21,17 @@ public class TeaCustomization extends Customization {
     public TeaCustomization(JSONObject teaCustomizationAsJSON) throws JSONException {
         super(teaCustomizationAsJSON);
 
-        String addChaiAsString = teaCustomizationAsJSON.get(JSON_ADD_CHAI).toString();
-        for (int i = 0; i < AddChai.values().length; i++) {
-            if (AddChai.values()[i].toString().equals(addChaiAsString)) {
-                Log.i("TeaCustomization", "TeaCustomization(JSONObject) AddChai." + AddChai.values()[i].toString());
-                addChai = AddChai.values()[i];
-                break;
+        if (teaCustomizationAsJSON.has(JSON_ADD_CHAI)) {
+            String addChaiAsString = teaCustomizationAsJSON.get(JSON_ADD_CHAI).toString();
+            for (int i = 0; i < AddChai.values().length; i++) {
+                if (AddChai.values()[i].toString().equals(addChaiAsString)) {
+                    Log.d("TeaCustomization", "TeaCustomization(JSONObject) AddChai." + AddChai.values()[i].toString());
+                    addChai = AddChai.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("TeaCustomization", "TeaCustomization(JSONObject) teaCustomizationAsJSON does NOT has(JSON_ADD_CHAI)");
         }
     }
 

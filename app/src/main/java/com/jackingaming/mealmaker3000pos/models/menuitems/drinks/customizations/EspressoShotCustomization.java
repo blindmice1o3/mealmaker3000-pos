@@ -35,40 +35,56 @@ public class EspressoShotCustomization extends Customization {
     public EspressoShotCustomization(JSONObject espressoShotCustomizationAsJSON) throws JSONException {
         super(espressoShotCustomizationAsJSON);
 
-        String roastAsString = espressoShotCustomizationAsJSON.get(JSON_ROAST).toString();
-        for (int i = 0; i < Roast.values().length; i++) {
-            if (Roast.values()[i].toString().equals(roastAsString)) {
-                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Roast." + Roast.values()[i].toString());
-                roast = Roast.values()[i];
-                break;
+        if (espressoShotCustomizationAsJSON.has(JSON_ROAST)) {
+            String roastAsString = espressoShotCustomizationAsJSON.get(JSON_ROAST).toString();
+            for (int i = 0; i < Roast.values().length; i++) {
+                if (Roast.values()[i].toString().equals(roastAsString)) {
+                    Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Roast." + Roast.values()[i].toString());
+                    roast = Roast.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) espressoShotCustomizationAsJSON does NOT has(JSON_ROAST)");
         }
 
-        String quantityAsString = espressoShotCustomizationAsJSON.get(JSON_QUANTITY).toString();
-        for (int i = 0; i < Quantity.values().length; i++) {
-            if (Quantity.values()[i].toString().equals(quantityAsString)) {
-                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Quantity." + Quantity.values()[i].toString());
-                quantity = Quantity.values()[i];
-                break;
+        if (espressoShotCustomizationAsJSON.has(JSON_QUANTITY)) {
+            String quantityAsString = espressoShotCustomizationAsJSON.get(JSON_QUANTITY).toString();
+            for (int i = 0; i < Quantity.values().length; i++) {
+                if (Quantity.values()[i].toString().equals(quantityAsString)) {
+                    Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Quantity." + Quantity.values()[i].toString());
+                    quantity = Quantity.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) espressoShotCustomizationAsJSON does NOT has(JSON_QUANTITY)");
         }
 
-        String typeAsString = espressoShotCustomizationAsJSON.get(JSON_TYPE).toString();
-        for (int i = 0; i < Type.values().length; i++) {
-            if (Type.values()[i].toString().equals(typeAsString)) {
-                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Type." + Type.values()[i].toString());
-                type = Type.values()[i];
-                break;
+        if (espressoShotCustomizationAsJSON.has(JSON_TYPE)) {
+            String typeAsString = espressoShotCustomizationAsJSON.get(JSON_TYPE).toString();
+            for (int i = 0; i < Type.values().length; i++) {
+                if (Type.values()[i].toString().equals(typeAsString)) {
+                    Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Type." + Type.values()[i].toString());
+                    type = Type.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) espressoShotCustomizationAsJSON does NOT has(JSON_TYPE)");
         }
 
-        String prepAsString = espressoShotCustomizationAsJSON.get(JSON_PREP).toString();
-        for (int i = 0; i < Prep.values().length; i++) {
-            if (Prep.values()[i].toString().equals(prepAsString)) {
-                Log.i("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Prep." + Prep.values()[i].toString());
-                prep = Prep.values()[i];
-                break;
+        if (espressoShotCustomizationAsJSON.has(JSON_PREP)) {
+            String prepAsString = espressoShotCustomizationAsJSON.get(JSON_PREP).toString();
+            for (int i = 0; i < Prep.values().length; i++) {
+                if (Prep.values()[i].toString().equals(prepAsString)) {
+                    Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) Prep." + Prep.values()[i].toString());
+                    prep = Prep.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("EspressoShotCustomization", "EspressoShotCustomization(JSONObject) espressoShotCustomizationAsJSON does NOT has(JSON_PREP)");
         }
     }
 

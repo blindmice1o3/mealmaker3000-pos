@@ -25,22 +25,30 @@ public class SweetenerCustomization extends Customization {
     public SweetenerCustomization(JSONObject sweetenerCustomizationAsJSON) throws JSONException {
         super(sweetenerCustomizationAsJSON);
 
-        String liquidAsString = sweetenerCustomizationAsJSON.get(JSON_LIQUID).toString();
-        for (int i = 0; i < Liquid.values().length; i++) {
-            if (Liquid.values()[i].toString().equals(liquidAsString)) {
-                Log.i("SweetenerCustomization", "SweetenerCustomization(JSONObject) Liquid." + Liquid.values()[i].toString());
-                liquid = Liquid.values()[i];
-                break;
+        if (sweetenerCustomizationAsJSON.has(JSON_LIQUID)) {
+            String liquidAsString = sweetenerCustomizationAsJSON.get(JSON_LIQUID).toString();
+            for (int i = 0; i < Liquid.values().length; i++) {
+                if (Liquid.values()[i].toString().equals(liquidAsString)) {
+                    Log.d("SweetenerCustomization", "SweetenerCustomization(JSONObject) Liquid." + Liquid.values()[i].toString());
+                    liquid = Liquid.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("SweetenerCustomization", "SweetenerCustomization(JSONObject) sweetenerCustomizationAsJSON does NOT has(JSON_LIQUID)");
         }
 
-        String packetAsString = sweetenerCustomizationAsJSON.get(JSON_PACKET).toString();
-        for (int i = 0; i < Packet.values().length; i++) {
-            if (Packet.values()[i].toString().equals(packetAsString)) {
-                Log.i("SweetenerCustomization", "SweetenerCustomization(JSONObject) Packet." + Packet.values()[i].toString());
-                packet = Packet.values()[i];
-                break;
+        if (sweetenerCustomizationAsJSON.has(JSON_PACKET)) {
+            String packetAsString = sweetenerCustomizationAsJSON.get(JSON_PACKET).toString();
+            for (int i = 0; i < Packet.values().length; i++) {
+                if (Packet.values()[i].toString().equals(packetAsString)) {
+                    Log.d("SweetenerCustomization", "SweetenerCustomization(JSONObject) Packet." + Packet.values()[i].toString());
+                    packet = Packet.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("SweetenerCustomization", "SweetenerCustomization(JSONObject) sweetenerCustomizationAsJSON does NOT has(JSON_PACKET)");
         }
     }
 
