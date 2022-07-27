@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".views.fragments.staging_two.MenuItemInputFragment">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_verticaltextview"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="0dp"
@@ -14,19 +23,10 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintBottom_toTopOf="@id/viewpager2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_verticaltextview"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/tv_verticaltextview"
-        app:layout_constraintTop_toBottomOf="@id/tablayout" />
+        app:layout_constraintTop_toBottomOf="@id/viewpager2" />
 
     <com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView
         android:id="@+id/tv_verticaltextview"
@@ -38,6 +38,6 @@
         android:textSize="24sp"
         app:layout_constraintLeft_toRightOf="@id/tablayout"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tablayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

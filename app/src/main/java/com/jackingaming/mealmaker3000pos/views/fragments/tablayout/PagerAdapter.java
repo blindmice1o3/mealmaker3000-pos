@@ -16,6 +16,9 @@ public class PagerAdapter extends FragmentStateAdapter {
         this.numberOfTabs = numberOfTabs;
     }
 
+    private int NUMBER_OF_ROWS_DEFAULT = 5;
+    private int NUMBER_OF_COLUMNS_DEFAULT = 4;
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
@@ -23,7 +26,7 @@ public class PagerAdapter extends FragmentStateAdapter {
 
         switch (position) {
             case 0:
-                return FoodInputFragment.newInstance();
+                return FoodInputFragment.newInstance(NUMBER_OF_ROWS_DEFAULT, NUMBER_OF_COLUMNS_DEFAULT);
             case 1:
                 return DrinkInputFragment.newInstance();
             case 2:
