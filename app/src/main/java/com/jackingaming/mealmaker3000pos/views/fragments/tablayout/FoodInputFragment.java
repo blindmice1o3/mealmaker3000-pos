@@ -1,6 +1,7 @@
 package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
 
@@ -24,19 +26,21 @@ import com.jackingaming.mealmaker3000pos.R;
  * create an instance of this fragment.
  */
 public class FoodInputFragment extends Fragment {
-    private static final String TAG = "Tab1Fragment";
+    public static final String TAG = "FoodInputFragment";
 
     private static final String ARG_NUMBER_OF_ROWS = "number of rows";
     private static final String ARG_NUMBER_OF_COLUMNS = "number of columns";
 
     private int numberOfRows;
     private int numberOfColumns;
+    private ConstraintLayout constraintLayout;
+    private Button[][] buttons;
 
-    public interface ClickListener {
-        void onBreadButtonClicked();
+    public interface FoodClickListener {
+        void onBreadButtonClicked(View view);
+        void onEmptyButtonClicked(View view);
     }
-
-    private ClickListener clickListener;
+    private FoodClickListener foodClickListener;
 
     public FoodInputFragment() {
         // Required empty public constructor
@@ -48,7 +52,7 @@ public class FoodInputFragment extends Fragment {
      *
      * @param numberOfRows    Parameter 1.
      * @param numberOfColumns Parameter 2.
-     * @return A new instance of fragment Tab1Fragment.
+     * @return A new instance of fragment FoodInputFragment.
      */
     public static FoodInputFragment newInstance(int numberOfRows, int numberOfColumns) {
         FoodInputFragment fragment = new FoodInputFragment();
@@ -62,11 +66,11 @@ public class FoodInputFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof ClickListener) {
-            clickListener = (ClickListener) context;
+        if (context instanceof FoodClickListener) {
+            foodClickListener = (FoodClickListener) context;
         } else {
             throw new ClassCastException(context.toString()
-                    + " must implement ClickListener");
+                    + " must implement FoodClickListener");
         }
     }
 
@@ -76,6 +80,7 @@ public class FoodInputFragment extends Fragment {
         if (getArguments() != null) {
             numberOfRows = getArguments().getInt(ARG_NUMBER_OF_ROWS);
             numberOfColumns = getArguments().getInt(ARG_NUMBER_OF_COLUMNS);
+            buttons = new Button[numberOfRows][numberOfColumns];
         }
     }
 
@@ -83,18 +88,51 @@ public class FoodInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food_input, container, false);
-        ConstraintLayout constraintLayout = view.findViewById(R.id.constraintlayout_food_input);
-        Button[][] buttons = new Button[numberOfRows][numberOfColumns];
+        constraintLayout = view.findViewById(R.id.constraintlayout_food_input);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initButtons();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        foodClickListener = null;
+    }
+
+    private void initButtons() {
         View buttonPrevious = null;
         for (int row = 0; row < numberOfRows; row++) {
             for (int column = 0; column < numberOfColumns; column++) {
                 // Define the new Button and add it to the ConstraintLayout.
                 // Without constraints, this view will be positioned at (0,0).
                 Button buttonNew = new Button(getContext());
-                buttonNew.setId(View.generateViewId());
-                buttonNew.setText("(row:" + row + "|\ncolumn: " + column + ")");
-                buttonNew.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12.0f);
                 buttons[row][column] = buttonNew;
+                buttonNew.setId(View.generateViewId());
+                buttonNew.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12.0f);
+                buttonNew.setText("(row:" + row + "|\ncolumn: " + column + ")");
+                buttonNew.setTag(row + "," + column + "," + TAG);
+
+                if (row == 0 && column == 0) {
+                    buttonNew.setText("Bread");
+                    buttonNew.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            foodClickListener.onBreadButtonClicked(view);
+                        }
+                    });
+                } else {
+                    buttonNew.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            foodClickListener.onEmptyButtonClicked(view);
+                        }
+                    });
+                }
 
                 float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
                 float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
@@ -161,18 +199,5 @@ public class FoodInputFragment extends Fragment {
                 }
             }
         }
-
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        clickListener = null;
     }
 }

@@ -1,6 +1,7 @@
 package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,8 +17,12 @@ public class PagerAdapter extends FragmentStateAdapter {
         this.numberOfTabs = numberOfTabs;
     }
 
-    private int NUMBER_OF_ROWS_DEFAULT = 5;
-    private int NUMBER_OF_COLUMNS_DEFAULT = 4;
+    private int NUMBER_OF_ROWS_FOOD_DEFAULT = 4;
+    private int NUMBER_OF_COLUMNS_FOOD_DEFAULT = 3;
+    private int NUMBER_OF_ROWS_DRINK_DEFAULT = 5;
+    private int NUMBER_OF_COLUMNS_DRINK_DEFAULT = 4;
+    private int NUMBER_OF_ROWS_CUSTOMIZATION_DEFAULT = 6;
+    private int NUMBER_OF_COLUMNS_CUSTOMIZATION_DEFAULT = 5;
 
     @NonNull
     @Override
@@ -26,11 +31,11 @@ public class PagerAdapter extends FragmentStateAdapter {
 
         switch (position) {
             case 0:
-                return FoodInputFragment.newInstance(NUMBER_OF_ROWS_DEFAULT, NUMBER_OF_COLUMNS_DEFAULT);
+                return FoodInputFragment.newInstance(NUMBER_OF_ROWS_FOOD_DEFAULT, NUMBER_OF_COLUMNS_FOOD_DEFAULT);
             case 1:
-                return DrinkInputFragment.newInstance();
+                return DrinkInputFragment.newInstance(NUMBER_OF_ROWS_DRINK_DEFAULT, NUMBER_OF_COLUMNS_DRINK_DEFAULT);
             case 2:
-                return CustomizationInputFragment.newInstance();
+                return CustomizationInputFragment.newInstance(NUMBER_OF_ROWS_CUSTOMIZATION_DEFAULT, NUMBER_OF_COLUMNS_CUSTOMIZATION_DEFAULT);
             default:
                 return null;
         }

@@ -22,10 +22,10 @@ public class MenuItemAdapter
     private static final int VIEW_TYPE_DRINK = 0;
     private static final int VIEW_TYPE_NOT_DRINK = 1;
 
-    public interface OnItemClickListener {
-        void onMenuItemClick(int positionAbsoluteAdapter);
+    public interface MenuItemClickListener {
+        void onItemClick(View view, int positionAbsoluteAdapter);
     }
-    private OnItemClickListener menuItemClickListener;
+    private MenuItemClickListener menuItemClickListener;
 
     public class ViewHolderNotDrink extends RecyclerView.ViewHolder {
         private TextView tvMenuItemPosition;
@@ -54,7 +54,7 @@ public class MenuItemAdapter
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
                         Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
                         if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                            menuItemClickListener.onMenuItemClick(positionAbsoluteAdapter);
+                            menuItemClickListener.onItemClick(view, positionAbsoluteAdapter);
                         }
                     }
                 }
@@ -97,7 +97,7 @@ public class MenuItemAdapter
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
                         Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
                         if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                            menuItemClickListener.onMenuItemClick(positionAbsoluteAdapter);
+                            menuItemClickListener.onItemClick(view, positionAbsoluteAdapter);
                         }
                     }
                 }
@@ -109,7 +109,7 @@ public class MenuItemAdapter
     private CustomizationsAdapter.OnItemClickListener customizationClickListener;
 
     public MenuItemAdapter(List<MenuItem> menuItems,
-                           OnItemClickListener menuItemClickListener,
+                           MenuItemClickListener menuItemClickListener,
                            CustomizationsAdapter.OnItemClickListener customizationClickListener) {
         this.menuItems = menuItems;
         this.menuItemClickListener = menuItemClickListener;

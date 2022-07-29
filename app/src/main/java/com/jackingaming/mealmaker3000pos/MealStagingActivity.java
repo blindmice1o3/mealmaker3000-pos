@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
@@ -19,9 +20,9 @@ import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.DrinkInputFra
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.CustomizationInputFragment;
 
 public class MealStagingActivity extends AppCompatActivity
-        implements FoodInputFragment.ClickListener,
-        DrinkInputFragment.ClickListener,
-        CustomizationInputFragment.ClickListener {
+        implements FoodInputFragment.FoodClickListener,
+        DrinkInputFragment.DrinkClickListener,
+        CustomizationInputFragment.CustomizationClickListener {
     private final static String TAG = "MealStagingActivity";
 
     private MenuItemViewportFragment menuItemViewportFragment;
@@ -73,17 +74,28 @@ public class MealStagingActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBreadButtonClicked() {
+    public void onBreadButtonClicked(View view) {
         menuItemViewportFragment.addMenuItem(new Bread());
     }
 
     @Override
-    public void onWaterButtonClicked() {
+    public void onEmptyButtonClicked(View view) {
+        Log.d(TAG, "onEmptyButtonClicked()");
+        String tagOfButtonClicked = (String) view.getTag();
+        String[] rowAndColumnAsStringArray = tagOfButtonClicked.split(",");
+        String rowAsString = rowAndColumnAsStringArray[0];
+        String columnAsString = rowAndColumnAsStringArray[1];
+        String tagAsString = rowAndColumnAsStringArray[2];
+        Toast.makeText(this, rowAsString + ", " + columnAsString + ", " + tagAsString, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onWaterButtonClicked(View view) {
         menuItemViewportFragment.addMenuItem(new Water());
     }
 
     @Override
-    public void onCustomizationButtonClicked() {
+    public void onCustomizationButtonClicked(View view) {
         menuItemViewportFragment.customizeSelectedMenuItem();
     }
 }
