@@ -1,5 +1,6 @@
 package com.jackingaming.mealmaker3000pos.views.fragments.staging_two;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.mealmaker3000pos.R;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.FoodInputFragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
 
@@ -36,6 +39,7 @@ public class MenuItemInputFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private boolean swipeable;
     private String[] tabTitles;
     private PagerAdapter pagerAdapter;
     private TabLayoutMediator tabLayoutMediator;
@@ -74,6 +78,7 @@ public class MenuItemInputFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        swipeable = true;
         tabTitles = getResources().getStringArray(R.array.tab_meal_staging);
     }
 
@@ -101,6 +106,7 @@ public class MenuItemInputFragment extends Fragment {
         // Each page is represented by its own fragment.
         pagerAdapter = new PagerAdapter(getActivity(), tabTitles.length);
         viewPager2.setAdapter(pagerAdapter);
+        viewPager2.setUserInputEnabled(false);
 
         tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -116,5 +122,15 @@ public class MenuItemInputFragment extends Fragment {
                 Toast.makeText(getContext(), "vertical text view clicked", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public boolean isSwipeable() {
+        return swipeable;
+    }
+
+    public void setSwipeable(boolean swipeable) {
+        this.swipeable = swipeable;
+
+        viewPager2.setUserInputEnabled(swipeable);
     }
 }

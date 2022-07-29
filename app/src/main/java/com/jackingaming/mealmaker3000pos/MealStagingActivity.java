@@ -68,9 +68,17 @@ public class MealStagingActivity extends AppCompatActivity
                 Intent intentMealQueueViewer = new Intent(this, MealQueueViewerActivity.class);
                 startActivity(intentMealQueueViewer);
                 return true;
+            case R.id.menu_item_toggle_swipeable:
+                toggleSwipeable();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void toggleSwipeable() {
+        boolean toggledValue = (menuItemInputFragment.isSwipeable()) ? false : true;
+        menuItemInputFragment.setSwipeable(toggledValue);
     }
 
     @Override
