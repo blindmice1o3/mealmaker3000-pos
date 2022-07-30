@@ -6,7 +6,7 @@
         android:title="queue viewer"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_item_change_to_tab_experiment"
-        android:title="tab experiment"
+        android:id="@+id/menu_item_toggle_swipeable"
+        android:title="toggle swipeable"
         app:showAsAction="never" />
 </menu>

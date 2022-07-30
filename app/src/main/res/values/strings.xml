@@ -1,17 +1,11 @@
 <resources>
     <string name="app_name">MealMaker3000POS</string>
+
+    <string-array name="tab_meal_staging">
+        <item>Foods</item>
+        <item>Drinks</item>
+        <item>Sides</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string-array name="tab_titles">
-        <item>Top Stories</item>
-        <item>Tech News</item>
-        <item>Cooking</item>
-    </string-array>
-
-    <string-array name="contents">
-        <item>These are the top stories: </item>
-        <item>Tech news you can use: </item>
-        <item>Cooking tips: </item>
-    </string-array>
 </resources>

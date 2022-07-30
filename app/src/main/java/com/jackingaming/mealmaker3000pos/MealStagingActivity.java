@@ -8,15 +8,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Water;
-import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemInputFragment;
-import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.MenuItemViewportFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.input.MenuItemInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.staging_two.viewport.MenuItemViewportFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.FoodsInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.DrinksInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.CustomizationInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.MilkInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.SidesInputFragment;
+import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.SyrupInputFragment;
 
 public class MealStagingActivity extends AppCompatActivity
-        implements MenuItemInputFragment.OnButtonClickListener {
+        implements FoodsInputFragment.FoodsClickListener,
+        DrinksInputFragment.DrinksClickListener,
+        SidesInputFragment.SidesClickListener,
+        SyrupInputFragment.SyrupClickListener,
+        MilkInputFragment.MilkClickListener,
+        CustomizationInputFragment.CustomizationClickListener {
     private final static String TAG = "MealStagingActivity";
 
     private MenuItemViewportFragment menuItemViewportFragment;
@@ -62,30 +74,57 @@ public class MealStagingActivity extends AppCompatActivity
                 Intent intentMealQueueViewer = new Intent(this, MealQueueViewerActivity.class);
                 startActivity(intentMealQueueViewer);
                 return true;
-            case R.id.menu_item_change_to_tab_experiment:
-                Toast.makeText(this,
-                        "tab experiment options menu item selected.",
-                        Toast.LENGTH_SHORT).show();
-                Intent intentTabExperiment = new Intent(this, TabExperimentActivity.class);
-                startActivity(intentTabExperiment);
+            case R.id.menu_item_toggle_swipeable:
+                toggleSwipeable();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void toggleSwipeable() {
+        boolean toggledValue = (menuItemInputFragment.isSwipeable()) ? false : true;
+        menuItemInputFragment.setSwipeable(toggledValue);
+    }
+
     @Override
-    public void onBreadButtonClicked() {
+    public void onBreadButtonClicked(View view) {
         menuItemViewportFragment.addMenuItem(new Bread());
     }
 
     @Override
-    public void onWaterButtonClicked() {
+    public void onEmptyButtonClicked(View view) {
+        Log.d(TAG, "onEmptyButtonClicked()");
+        String tagOfButtonClicked = (String) view.getTag();
+        String[] rowAndColumnAsStringArray = tagOfButtonClicked.split(",");
+        String rowAsString = rowAndColumnAsStringArray[0];
+        String columnAsString = rowAndColumnAsStringArray[1];
+        String tagAsString = rowAndColumnAsStringArray[2];
+        Toast.makeText(this, rowAsString + ", " + columnAsString + ", " + tagAsString, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onWaterButtonClicked(View view) {
         menuItemViewportFragment.addMenuItem(new Water());
     }
 
     @Override
-    public void onCustomizationButtonClicked() {
+    public void onCustomizationButtonClicked(View view) {
         menuItemViewportFragment.customizeSelectedMenuItem();
+    }
+
+    @Override
+    public void onTwoPercentMilkButtonClicked(View view) {
+        Toast.makeText(this, "onTwoPercentMilkButtonCliked(View)", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSteamedVegetableButtonClicked(View view) {
+        Toast.makeText(this, "onSteamedVegetableButtonCliked(View)", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onToffeeNutButtonClicked(View view) {
+        Toast.makeText(this, "onToffeeNutButtonCliked(View)", Toast.LENGTH_SHORT).show();
     }
 }

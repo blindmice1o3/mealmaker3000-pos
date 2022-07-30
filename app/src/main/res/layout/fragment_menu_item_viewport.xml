@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.staging_two.MenuItemViewportFragment">
+    tools:context=".views.fragments.staging_two.viewport.MenuItemViewportFragment">
 
     <TextView
         android:id="@+id/tv_index_selected_menu_item"

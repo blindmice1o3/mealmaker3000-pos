@@ -9,7 +9,7 @@ public class CupOptionCustomization extends Customization {
     public static final String NAME = "CupOptionCustomization";
     public static final String JSON_CUP_SIZE = "cup size";
 
-    public enum CupSize { STANDARD_NO, TALL, GRANDE, VENTI; }
+    public enum CupSize {STANDARD_NO, TALL, GRANDE, VENTI;}
 
     private CupSize cupSize;
 
@@ -21,13 +21,17 @@ public class CupOptionCustomization extends Customization {
     public CupOptionCustomization(JSONObject cupOptionCustomizationAsJSON) throws JSONException {
         super(cupOptionCustomizationAsJSON);
 
-        String cupSizeAsString = cupOptionCustomizationAsJSON.get(JSON_CUP_SIZE).toString();
-        for (int i = 0; i < CupSize.values().length; i++) {
-            if (CupSize.values()[i].toString().equals(cupSizeAsString)) {
-                Log.i("CupOptionCustomization", "CupOptionCustomization(JSONObject) CupSize." + CupSize.values()[i].toString());
-                cupSize = CupSize.values()[i];
-                break;
+        if (cupOptionCustomizationAsJSON.has(JSON_CUP_SIZE)) {
+            String cupSizeAsString = cupOptionCustomizationAsJSON.get(JSON_CUP_SIZE).toString();
+            for (int i = 0; i < CupSize.values().length; i++) {
+                if (CupSize.values()[i].toString().equals(cupSizeAsString)) {
+                    Log.d("CupOptionCustomization", "CupOptionCustomization(JSONObject) CupSize." + CupSize.values()[i].toString());
+                    cupSize = CupSize.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("CupOptionCustomization", "CupOptionCustomization(JSONObject) cupOptionCustomizationAsJSON does NOT has(JSON_CUP_SIZE)");
         }
     }
 

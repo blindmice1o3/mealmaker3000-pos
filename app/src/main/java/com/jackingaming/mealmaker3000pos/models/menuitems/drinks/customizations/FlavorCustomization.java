@@ -10,9 +10,12 @@ public class FlavorCustomization extends Customization {
     public static final String JSON_SAUCE = "sauce";
     public static final String JSON_SYRUP = "syrup";
 
-    public enum Sauce { DARK_CARAMEL, MOCHA, WHITE_CHOCOLATE_MOCHA; }
-    public enum Syrup { BROWN_SUGAR, CARAMEL, CINNAMON_DOLCE, HAZELNUT, PEPPERMINT, RASPBERRY,
-        SF_VANILLA, TOASTED_VANILLA, TOFFEE_NUT, VANILLA; }
+    public enum Sauce {DARK_CARAMEL, MOCHA, WHITE_CHOCOLATE_MOCHA;}
+
+    public enum Syrup {
+        BROWN_SUGAR, CARAMEL, CINNAMON_DOLCE, HAZELNUT, PEPPERMINT, RASPBERRY,
+        SF_VANILLA, TOASTED_VANILLA, TOFFEE_NUT, VANILLA;
+    }
 
     private Sauce sauce;
     private Syrup syrup;
@@ -26,22 +29,30 @@ public class FlavorCustomization extends Customization {
     public FlavorCustomization(JSONObject flavorCustomizationAsJSON) throws JSONException {
         super(flavorCustomizationAsJSON);
 
-        String sauceAsString = flavorCustomizationAsJSON.get(JSON_SAUCE).toString();
-        for (int i = 0; i < Sauce.values().length; i++) {
-            if (Sauce.values()[i].toString().equals(sauceAsString)) {
-                Log.i("FlavorCustomization", "FlavorCustomization(JSONObject) Sauce." + Sauce.values()[i].toString());
-                sauce = Sauce.values()[i];
-                break;
+        if (flavorCustomizationAsJSON.has(JSON_SAUCE)) {
+            String sauceAsString = flavorCustomizationAsJSON.get(JSON_SAUCE).toString();
+            for (int i = 0; i < Sauce.values().length; i++) {
+                if (Sauce.values()[i].toString().equals(sauceAsString)) {
+                    Log.d("FlavorCustomization", "FlavorCustomization(JSONObject) Sauce." + Sauce.values()[i].toString());
+                    sauce = Sauce.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("FlavorCustomization", "FlavorCustomization(JSONObject) flavorCustomizationAsJSON does NOT has(JSON_SAUCE)");
         }
 
-        String syrupAsString = flavorCustomizationAsJSON.get(JSON_SYRUP).toString();
-        for (int i = 0; i < Syrup.values().length; i++) {
-            if (Syrup.values()[i].toString().equals(syrupAsString)) {
-                Log.i("FlavorCustomization", "FlavorCustomization(JSONObject) Syrup." + Syrup.values()[i].toString());
-                syrup = Syrup.values()[i];
-                break;
+        if (flavorCustomizationAsJSON.has(JSON_SYRUP)) {
+            String syrupAsString = flavorCustomizationAsJSON.get(JSON_SYRUP).toString();
+            for (int i = 0; i < Syrup.values().length; i++) {
+                if (Syrup.values()[i].toString().equals(syrupAsString)) {
+                    Log.d("FlavorCustomization", "FlavorCustomization(JSONObject) Syrup." + Syrup.values()[i].toString());
+                    syrup = Syrup.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("FlavorCustomization", "FlavorCustomization(JSONObject) flavorCustomizationAsJSON does NOT has(JSON_SYRUP)");
         }
     }
 

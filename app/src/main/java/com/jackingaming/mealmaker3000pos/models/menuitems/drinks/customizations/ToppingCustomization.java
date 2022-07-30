@@ -37,49 +37,69 @@ public class ToppingCustomization extends Customization {
     public ToppingCustomization(JSONObject toppingCustomizationAsJSON) throws JSONException {
         super(toppingCustomizationAsJSON);
 
-        String coldFoamAsString = toppingCustomizationAsJSON.get(JSON_COLD_FOAM).toString();
-        for (int i = 0; i < ColdFoam.values().length; i++) {
-            if (ColdFoam.values()[i].toString().equals(coldFoamAsString)) {
-                Log.i("ToppingCustomization", "ToppingCustomization(JSONObject) ColdFoam." + ColdFoam.values()[i].toString());
-                coldFoam = ColdFoam.values()[i];
-                break;
+        if (toppingCustomizationAsJSON.has(JSON_COLD_FOAM)) {
+            String coldFoamAsString = toppingCustomizationAsJSON.get(JSON_COLD_FOAM).toString();
+            for (int i = 0; i < ColdFoam.values().length; i++) {
+                if (ColdFoam.values()[i].toString().equals(coldFoamAsString)) {
+                    Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) ColdFoam." + ColdFoam.values()[i].toString());
+                    coldFoam = ColdFoam.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) toppingCustomizationAsJSON does NOT has(JSON_COLD_FOAM)");
         }
 
-        String cinnamonPowderAsString = toppingCustomizationAsJSON.get(JSON_CINNAMON_POWDER).toString();
-        for (int i = 0; i < CinnamonPowder.values().length; i++) {
-            if (CinnamonPowder.values()[i].toString().equals(cinnamonPowderAsString)) {
-                Log.i("ToppingCustomization", "ToppingCustomization(JSONObject) CinnamonPowder." + CinnamonPowder.values()[i].toString());
-                cinnamonPowder = CinnamonPowder.values()[i];
-                break;
+        if (toppingCustomizationAsJSON.has(JSON_CINNAMON_POWDER)) {
+            String cinnamonPowderAsString = toppingCustomizationAsJSON.get(JSON_CINNAMON_POWDER).toString();
+            for (int i = 0; i < CinnamonPowder.values().length; i++) {
+                if (CinnamonPowder.values()[i].toString().equals(cinnamonPowderAsString)) {
+                    Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) CinnamonPowder." + CinnamonPowder.values()[i].toString());
+                    cinnamonPowder = CinnamonPowder.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) toppingCustomizationAsJSON does NOT has(JSON_CINNAMON_POWDER)");
         }
 
-        String drizzleAsString = toppingCustomizationAsJSON.get(JSON_DRIZZLE).toString();
-        for (int i = 0; i < Drizzle.values().length; i++) {
-            if (Drizzle.values()[i].toString().equals(drizzleAsString)) {
-                Log.i("ToppingCustomization", "ToppingCustomization(JSONObject) Drizzle." + Drizzle.values()[i].toString());
-                drizzle = Drizzle.values()[i];
-                break;
+        if (toppingCustomizationAsJSON.has(JSON_DRIZZLE)) {
+            String drizzleAsString = toppingCustomizationAsJSON.get(JSON_DRIZZLE).toString();
+            for (int i = 0; i < Drizzle.values().length; i++) {
+                if (Drizzle.values()[i].toString().equals(drizzleAsString)) {
+                    Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) Drizzle." + Drizzle.values()[i].toString());
+                    drizzle = Drizzle.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) toppingCustomizationAsJSON does NOT has(JSON_DRIZZLE)");
         }
 
-        String cinnamonDolceSprinklesAsString = toppingCustomizationAsJSON.get(JSON_CINNAMON_DOLCE_SPRINKLES).toString();
-        for (int i = 0; i < CinnamonDolceSprinkles.values().length; i++) {
-            if (CinnamonDolceSprinkles.values()[i].toString().equals(cinnamonDolceSprinklesAsString)) {
-                Log.i("ToppingCustomization", "ToppingCustomization(JSONObject) CinnamonDolceSprinkles." + CinnamonDolceSprinkles.values()[i].toString());
-                cinnamonDolceSprinkles = CinnamonDolceSprinkles.values()[i];
-                break;
+        if (toppingCustomizationAsJSON.has(JSON_CINNAMON_DOLCE_SPRINKLES)) {
+            String cinnamonDolceSprinklesAsString = toppingCustomizationAsJSON.get(JSON_CINNAMON_DOLCE_SPRINKLES).toString();
+            for (int i = 0; i < CinnamonDolceSprinkles.values().length; i++) {
+                if (CinnamonDolceSprinkles.values()[i].toString().equals(cinnamonDolceSprinklesAsString)) {
+                    Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) CinnamonDolceSprinkles." + CinnamonDolceSprinkles.values()[i].toString());
+                    cinnamonDolceSprinkles = CinnamonDolceSprinkles.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) toppingCustomizationAsJSON does NOT has(JSON_CINNAMON_DOLCE_SPRINKLES)");
         }
 
-        String whippedCreamAsString = toppingCustomizationAsJSON.get(JSON_WHIPPED_CREAM).toString();
-        for (int i = 0; i < WhippedCream.values().length; i++) {
-            if (WhippedCream.values()[i].toString().equals(whippedCreamAsString)) {
-                Log.i("ToppingCustomization", "ToppingCustomization(JSONObject) WhippedCream." + WhippedCream.values()[i].toString());
-                whippedCream = WhippedCream.values()[i];
-                break;
+        if (toppingCustomizationAsJSON.has(JSON_WHIPPED_CREAM)) {
+            String whippedCreamAsString = toppingCustomizationAsJSON.get(JSON_WHIPPED_CREAM).toString();
+            for (int i = 0; i < WhippedCream.values().length; i++) {
+                if (WhippedCream.values()[i].toString().equals(whippedCreamAsString)) {
+                    Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) WhippedCream." + WhippedCream.values()[i].toString());
+                    whippedCream = WhippedCream.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("ToppingCustomization", "ToppingCustomization(JSONObject) toppingCustomizationAsJSON does NOT has(JSON_WHIPPED_CREAM)");
         }
     }
 

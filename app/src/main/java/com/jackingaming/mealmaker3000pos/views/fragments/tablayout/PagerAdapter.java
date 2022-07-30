@@ -9,14 +9,19 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class PagerAdapter extends FragmentStateAdapter {
     private static final String TAG = "PagerAdapter";
-    private String[] tabTitles;
-    private String[] contents;
+    private int numberOfTabs;
 
-    public PagerAdapter(@NonNull FragmentActivity fragmentActivity, String[] tabTitles, String[] contents) {
+    public PagerAdapter(@NonNull FragmentActivity fragmentActivity, int numberOfTabs) {
         super(fragmentActivity);
-        this.tabTitles = tabTitles;
-        this.contents = contents;
+        this.numberOfTabs = numberOfTabs;
     }
+
+    private int NUMBER_OF_ROWS_FOODS_DEFAULT = 4;
+    private int NUMBER_OF_COLUMNS_FOODS_DEFAULT = 3;
+    private int NUMBER_OF_ROWS_DRINKS_DEFAULT = 5;
+    private int NUMBER_OF_COLUMNS_DRINKS_DEFAULT = 5;
+    private int NUMBER_OF_ROWS_SIDES_DEFAULT = 2;
+    private int NUMBER_OF_COLUMNS_SIDES_DEFAULT = 3;
 
     @NonNull
     @Override
@@ -25,11 +30,11 @@ public class PagerAdapter extends FragmentStateAdapter {
 
         switch (position) {
             case 0:
-                return Tab1Fragment.newInstance(tabTitles[position], contents[position]);
+                return FoodsInputFragment.newInstance(NUMBER_OF_ROWS_FOODS_DEFAULT, NUMBER_OF_COLUMNS_FOODS_DEFAULT);
             case 1:
-                return Tab2Fragment.newInstance(tabTitles[position], contents[position]);
+                return DrinksInputFragment.newInstance(NUMBER_OF_ROWS_DRINKS_DEFAULT, NUMBER_OF_COLUMNS_DRINKS_DEFAULT);
             case 2:
-                return Tab3Fragment.newInstance(tabTitles[position], contents[position]);
+                return SidesInputFragment.newInstance(NUMBER_OF_ROWS_SIDES_DEFAULT, NUMBER_OF_COLUMNS_SIDES_DEFAULT);
             default:
                 return null;
         }
@@ -37,6 +42,6 @@ public class PagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return contents.length;
+        return numberOfTabs;
     }
 }

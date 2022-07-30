@@ -34,31 +34,43 @@ public class MilkCustomization extends Customization {
     public MilkCustomization(JSONObject milkCustomizationAsJSON) throws JSONException {
         super(milkCustomizationAsJSON);
 
-        String foamAsString = milkCustomizationAsJSON.get(JSON_FOAM).toString();
-        for (int i = 0; i < Foam.values().length; i++) {
-            if (Foam.values()[i].toString().equals(foamAsString)) {
-                Log.i("MilkCustomization", "MilkCustomization(JSONObject) Foam." + Foam.values()[i].toString());
-                foam = Foam.values()[i];
-                break;
+        if (milkCustomizationAsJSON.has(JSON_FOAM)) {
+            String foamAsString = milkCustomizationAsJSON.get(JSON_FOAM).toString();
+            for (int i = 0; i < Foam.values().length; i++) {
+                if (Foam.values()[i].toString().equals(foamAsString)) {
+                    Log.d("MilkCustomization", "MilkCustomization(JSONObject) Foam." + Foam.values()[i].toString());
+                    foam = Foam.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("MilkCustomization", "MilkCustomization(JSONObject) does NOT has(JSON_FOAM)");
         }
 
-        String typeAsString = milkCustomizationAsJSON.get(JSON_TYPE).toString();
-        for (int i = 0; i < Type.values().length; i++) {
-            if (Type.values()[i].toString().equals(typeAsString)) {
-                Log.i("MilkCustomization", "MilkCustomization(JSONObject) Type." + Type.values()[i].toString());
-                type = Type.values()[i];
-                break;
+        if (milkCustomizationAsJSON.has(JSON_TYPE)) {
+            String typeAsString = milkCustomizationAsJSON.get(JSON_TYPE).toString();
+            for (int i = 0; i < Type.values().length; i++) {
+                if (Type.values()[i].toString().equals(typeAsString)) {
+                    Log.d("MilkCustomization", "MilkCustomization(JSONObject) Type." + Type.values()[i].toString());
+                    type = Type.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("MilkCustomization", "MilkCustomization(JSONObject) milkCustomizationAsJSON does NOT has(JSON_TYPE)");
         }
 
-        String temperatureAsString = milkCustomizationAsJSON.get(JSON_TEMPERATURE).toString();
-        for (int i = 0; i < Temperature.values().length; i++) {
-            if (Temperature.values()[i].toString().equals(temperatureAsString)) {
-                Log.i("MilkCustomization", "MilkCustomization(JSONObject) Temperature." + Temperature.values()[i].toString());
-                temperature = Temperature.values()[i];
-                break;
+        if (milkCustomizationAsJSON.has(JSON_TEMPERATURE)) {
+            String temperatureAsString = milkCustomizationAsJSON.get(JSON_TEMPERATURE).toString();
+            for (int i = 0; i < Temperature.values().length; i++) {
+                if (Temperature.values()[i].toString().equals(temperatureAsString)) {
+                    Log.d("MilkCustomization", "MilkCustomization(JSONObject) Temperature." + Temperature.values()[i].toString());
+                    temperature = Temperature.values()[i];
+                    break;
+                }
             }
+        } else {
+            Log.d("MilkCustomization", "MilkCustomization(JSONObject) milkCustomizationAsJSON does NOT has(JSON_TEMPERATURE)");
         }
     }
 

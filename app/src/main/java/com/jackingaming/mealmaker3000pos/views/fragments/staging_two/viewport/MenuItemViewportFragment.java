@@ -1,6 +1,7 @@
-package com.jackingaming.mealmaker3000pos.views.fragments.staging_two;
+package com.jackingaming.mealmaker3000pos.views.fragments.staging_two.viewport;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ import java.util.Map;
 public class MenuItemViewportFragment extends Fragment {
     private static final String TAG = "MenuItemViewportFragment";
     private final String URL_POST_MEAL_AS_JSON_STRING = "http://192.168.1.143:8080/kafka/publish_jsonmeal";
+    private final int COLOR_BACKGROUND_SELECTED = Color.YELLOW;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +61,7 @@ public class MenuItemViewportFragment extends Fragment {
 
     private Meal meal;
     private int indexSelectedMenuItem;
+    private View viewPrevious;
     private TextView tvIndexSelectedMenuItem;
     private MenuItemAdapter menuItemAdapter;
     private RecyclerView rvMenuItemViewport;
@@ -101,17 +104,28 @@ public class MenuItemViewportFragment extends Fragment {
         meal = new Meal();
         meal.addMenuItem(new Bread());
         indexSelectedMenuItem = -1;
+        if (viewPrevious != null) {
+            viewPrevious.setAlpha(1.0f);
+            viewPrevious = null;
+        }
 
         // Create adapter passing in the meal as the rv's data source
         menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
-                new MenuItemAdapter.OnItemClickListener() {
+                new MenuItemAdapter.MenuItemClickListener() {
                     @SuppressLint("LongLogTag")
                     @Override
-                    public void onMenuItemClick(int positionAbsoluteAdapter) {
-                        Log.i(TAG, "onMenuItemClick(int)");
+                    public void onItemClick(View view, int positionAbsoluteAdapter) {
+                        Log.i(TAG, "onItemClick(View, int)");
+                        if (viewPrevious != null) {
+                            viewPrevious.setAlpha(1.0f);
+                            viewPrevious = null;
+                        }
+
                         // Update indexSelectedMenuItem and its displayer.
                         indexSelectedMenuItem = positionAbsoluteAdapter;
                         tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+                        viewPrevious = view;
+                        viewPrevious.setAlpha(0.5f);
                     }
                 },
                 new CustomizationsAdapter.OnItemClickListener() {
@@ -127,6 +141,10 @@ public class MenuItemViewportFragment extends Fragment {
                             menuItemAdapter.notifyDataSetChanged();
                             indexSelectedMenuItem = -1;
                             tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+                            if (viewPrevious != null) {
+                                viewPrevious.setAlpha(1.0f);
+                                viewPrevious = null;
+                            }
                         } else {
                             Log.i(TAG, "onCustomizationClick(Drink, int) customizations is empty");
                         }
@@ -175,6 +193,10 @@ public class MenuItemViewportFragment extends Fragment {
                 menuItemAdapter.notifyDataSetChanged();
                 indexSelectedMenuItem = -1;
                 tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+                if (viewPrevious != null) {
+                    viewPrevious.setAlpha(1.0f);
+                    viewPrevious = null;
+                }
             }
         });
 
@@ -189,6 +211,10 @@ public class MenuItemViewportFragment extends Fragment {
                     menuItemAdapter.notifyItemRemoved(indexSelectedMenuItem);
                     indexSelectedMenuItem = -1;
                     tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+                    if (viewPrevious != null) {
+                        viewPrevious.setAlpha(1.0f);
+                        viewPrevious = null;
+                    }
                 } else {
                     Log.i(TAG, "indexSelectedMenuItem < 0");
                     Toast.makeText(getContext(), "indexSelectedMenuItem < 0", Toast.LENGTH_SHORT).show();
@@ -200,8 +226,12 @@ public class MenuItemViewportFragment extends Fragment {
     public void addMenuItem(MenuItem menuItem) {
         meal.addMenuItem(menuItem);
         menuItemAdapter.notifyDataSetChanged();
-        indexSelectedMenuItem = meal.sizeOfMenuItems() - 1;
+        indexSelectedMenuItem = -1;
         tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+        if (viewPrevious != null) {
+            viewPrevious.setAlpha(1.0f);
+            viewPrevious = null;
+        }
     }
 
     @SuppressLint("LongLogTag")
@@ -222,6 +252,10 @@ public class MenuItemViewportFragment extends Fragment {
                 menuItemAdapter.notifyDataSetChanged();
                 indexSelectedMenuItem = -1;
                 tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+                if (viewPrevious != null) {
+                    viewPrevious.setAlpha(1.0f);
+                    viewPrevious = null;
+                }
             } else {
                 Log.i(TAG, "selectedMenuItem is NOT a Drink");
             }

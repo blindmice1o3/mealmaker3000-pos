@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jackingaming.mealmaker3000pos.R;
 import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.RecordOfMeal;
-import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 
 import org.json.JSONException;
@@ -85,10 +84,10 @@ public class RecordOfMealAdapter extends
                 Meal meal = new Meal(mealAsJSON);
 
                 MenuItemAdapter menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
-                        new MenuItemAdapter.OnItemClickListener() {
+                        new MenuItemAdapter.MenuItemClickListener() {
                             @Override
-                            public void onMenuItemClick(int positionAbsoluteAdapter) {
-                                Log.i("RecordOfMealAdapter", "onMenuItemClick(int)");
+                            public void onItemClick(View view, int positionAbsoluteAdapter) {
+                                Log.i("RecordOfMealAdapter", "onItemClick(View, int)");
                                 // TODO:
                             }
                         },
