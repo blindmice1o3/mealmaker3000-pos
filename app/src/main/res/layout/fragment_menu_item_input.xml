@@ -5,15 +5,15 @@
     android:id="@+id/constraintlayout_menu_item_input"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.staging_two.MenuItemInputFragment">
+    tools:context=".views.fragments.staging_two.input.MenuItemInputFragment">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager2"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_verticaltextview"
+        app:layout_constraintRight_toLeftOf="@id/vtv_syrup"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
@@ -25,19 +25,49 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_verticaltextview"
-        app:layout_constraintTop_toBottomOf="@id/viewpager2" />
+        app:layout_constraintRight_toLeftOf="@id/vtv_syrup"
+        app:layout_constraintTop_toBottomOf="@id/fcv_content" />
 
     <com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView
-        android:id="@+id/tv_verticaltextview"
+        android:id="@+id/vtv_syrup"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/purple"
-        android:text="vertical text"
+        android:gravity="center_vertical"
+        android:text="syrup"
         android:textColor="@color/purple_200"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/vtv_milk"
         app:layout_constraintLeft_toRightOf="@id/tablayout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView
+        android:id="@+id/vtv_milk"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/purple"
+        android:gravity="center_vertical"
+        android:text="milk"
+        android:textColor="@color/purple_200"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/vtv_customization"
+        app:layout_constraintLeft_toRightOf="@id/tablayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vtv_syrup" />
+
+    <com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView
+        android:id="@+id/vtv_customization"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/purple"
+        android:gravity="center_vertical"
+        android:text="customization"
+        android:textColor="@color/purple_200"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tablayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vtv_milk" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

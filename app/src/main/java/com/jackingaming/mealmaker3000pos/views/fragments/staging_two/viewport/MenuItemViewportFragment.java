@@ -1,8 +1,7 @@
-package com.jackingaming.mealmaker3000pos.views.fragments.staging_two;
+package com.jackingaming.mealmaker3000pos.views.fragments.staging_two.viewport;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

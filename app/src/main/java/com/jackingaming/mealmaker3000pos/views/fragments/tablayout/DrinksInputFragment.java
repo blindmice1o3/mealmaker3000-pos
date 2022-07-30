@@ -1,6 +1,7 @@
 package com.jackingaming.mealmaker3000pos.views.fragments.tablayout;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,16 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DrinkInputFragment#newInstance} factory method to
+ * Use the {@link DrinksInputFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrinkInputFragment extends Fragment {
+public class DrinksInputFragment extends Fragment {
     public static final String TAG = "DrinkInputFragment";
 
     private static final String ARG_NUMBER_OF_ROWS = "number of rows";
@@ -35,14 +35,14 @@ public class DrinkInputFragment extends Fragment {
     private ConstraintLayout constraintLayout;
     private Button[][] buttons;
 
-    public interface DrinkClickListener {
+    public interface DrinksClickListener {
         void onWaterButtonClicked(View view);
         void onEmptyButtonClicked(View view);
     }
 
-    private DrinkClickListener drinkClickListener;
+    private DrinksClickListener drinksClickListener;
 
-    public DrinkInputFragment() {
+    public DrinksInputFragment() {
         // Required empty public constructor
     }
 
@@ -54,8 +54,8 @@ public class DrinkInputFragment extends Fragment {
      * @param numberOfColumns Parameter 2.
      * @return A new instance of fragment DrinkInputFragment.
      */
-    public static DrinkInputFragment newInstance(int numberOfRows, int numberOfColumns) {
-        DrinkInputFragment fragment = new DrinkInputFragment();
+    public static DrinksInputFragment newInstance(int numberOfRows, int numberOfColumns) {
+        DrinksInputFragment fragment = new DrinksInputFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_NUMBER_OF_ROWS, numberOfRows);
         args.putInt(ARG_NUMBER_OF_COLUMNS, numberOfColumns);
@@ -66,8 +66,8 @@ public class DrinkInputFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof DrinkClickListener) {
-            drinkClickListener = (DrinkClickListener) context;
+        if (context instanceof DrinksClickListener) {
+            drinksClickListener = (DrinksClickListener) context;
         } else {
             throw new ClassCastException(context.toString()
                     + " must implement DrinkClickListener");
@@ -87,8 +87,8 @@ public class DrinkInputFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_drink_input, container, false);
-        constraintLayout = view.findViewById(R.id.constraintlayout_drink_input);
+        View view = inflater.inflate(R.layout.fragment_drinks_input, container, false);
+        constraintLayout = view.findViewById(R.id.constraintlayout_drinks_input);
         return view;
     }
 
@@ -101,7 +101,7 @@ public class DrinkInputFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        drinkClickListener = null;
+        drinksClickListener = null;
     }
 
     private void initButtons() {
@@ -119,17 +119,18 @@ public class DrinkInputFragment extends Fragment {
 
                 if (row == 0 && column == 0) {
                     buttonNew.setText("Water");
+                    buttonNew.setBackgroundColor(Color.MAGENTA);
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            drinkClickListener.onWaterButtonClicked(view);
+                            drinksClickListener.onWaterButtonClicked(view);
                         }
                     });
                 } else {
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            drinkClickListener.onEmptyButtonClicked(view);
+                            drinksClickListener.onEmptyButtonClicked(view);
                         }
                     });
                 }

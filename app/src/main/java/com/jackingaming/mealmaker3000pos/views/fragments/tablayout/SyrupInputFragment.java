@@ -4,6 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,23 +17,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CustomizationInputFragment#newInstance} factory method to
+ * Use the {@link SyrupInputFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CustomizationInputFragment extends Fragment {
-    public static final String TAG = "CustomizationInputFragment";
+public class SyrupInputFragment extends Fragment {
+    public static final String TAG = "SyrupInputFragment";
 
     private static final String ARG_NUMBER_OF_ROWS = "number of rows";
     private static final String ARG_NUMBER_OF_COLUMNS = "number of columns";
@@ -37,14 +35,13 @@ public class CustomizationInputFragment extends Fragment {
     private ConstraintLayout constraintLayout;
     private Button[][] buttons;
 
-    public interface CustomizationClickListener {
-        void onCustomizationButtonClicked(View view);
+    public interface SyrupClickListener {
+        void onToffeeNutButtonClicked(View view);
         void onEmptyButtonClicked(View view);
     }
+    private SyrupClickListener syrupClickListener;
 
-    private CustomizationClickListener customizationClickListener;
-
-    public CustomizationInputFragment() {
+    public SyrupInputFragment() {
         // Required empty public constructor
     }
 
@@ -54,10 +51,10 @@ public class CustomizationInputFragment extends Fragment {
      *
      * @param numberOfRows    Parameter 1.
      * @param numberOfColumns Parameter 2.
-     * @return A new instance of fragment CustomizationInputFragment.
+     * @return A new instance of fragment MilkInputFragment.
      */
-    public static CustomizationInputFragment newInstance(int numberOfRows, int numberOfColumns) {
-        CustomizationInputFragment fragment = new CustomizationInputFragment();
+    public static SyrupInputFragment newInstance(int numberOfRows, int numberOfColumns) {
+        SyrupInputFragment fragment = new SyrupInputFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_NUMBER_OF_ROWS, numberOfRows);
         args.putInt(ARG_NUMBER_OF_COLUMNS, numberOfColumns);
@@ -68,11 +65,11 @@ public class CustomizationInputFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof CustomizationClickListener) {
-            customizationClickListener = (CustomizationClickListener) context;
+        if (context instanceof SyrupClickListener) {
+            syrupClickListener = (SyrupClickListener) context;
         } else {
             throw new ClassCastException(context.toString()
-                    + " must implement CustomizationClickListener");
+                    + " must implement SyrupInputFragment");
         }
     }
 
@@ -89,8 +86,8 @@ public class CustomizationInputFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_customization_input, container, false);
-        constraintLayout = view.findViewById(R.id.constraintlayout_customization_input);
+        View view = inflater.inflate(R.layout.fragment_syrup_input, container, false);
+        constraintLayout = view.findViewById(R.id.constraintlayout_syrup_input);
         return view;
     }
 
@@ -103,7 +100,7 @@ public class CustomizationInputFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        customizationClickListener = null;
+        syrupClickListener = null;
     }
 
     @SuppressLint("LongLogTag")
@@ -121,19 +118,19 @@ public class CustomizationInputFragment extends Fragment {
                 buttonNew.setTag(row + "," + column + "," + TAG);
 
                 if (row == 0 && column == 0) {
-                    buttonNew.setText("line the cup -CARAMEL");
+                    buttonNew.setText("toffee nut");
                     buttonNew.setBackgroundColor(Color.MAGENTA);
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customizationClickListener.onCustomizationButtonClicked(view);
+                            syrupClickListener.onToffeeNutButtonClicked(view);
                         }
                     });
                 } else {
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customizationClickListener.onEmptyButtonClicked(view);
+                            syrupClickListener.onEmptyButtonClicked(view);
                         }
                     });
                 }

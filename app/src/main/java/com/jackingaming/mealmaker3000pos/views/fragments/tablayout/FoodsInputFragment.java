@@ -16,16 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FoodInputFragment#newInstance} factory method to
+ * Use the {@link FoodsInputFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoodInputFragment extends Fragment {
+public class FoodsInputFragment extends Fragment {
     public static final String TAG = "FoodInputFragment";
 
     private static final String ARG_NUMBER_OF_ROWS = "number of rows";
@@ -36,13 +35,14 @@ public class FoodInputFragment extends Fragment {
     private ConstraintLayout constraintLayout;
     private Button[][] buttons;
 
-    public interface FoodClickListener {
+    public interface FoodsClickListener {
         void onBreadButtonClicked(View view);
         void onEmptyButtonClicked(View view);
     }
-    private FoodClickListener foodClickListener;
 
-    public FoodInputFragment() {
+    private FoodsClickListener foodsClickListener;
+
+    public FoodsInputFragment() {
         // Required empty public constructor
     }
 
@@ -54,8 +54,8 @@ public class FoodInputFragment extends Fragment {
      * @param numberOfColumns Parameter 2.
      * @return A new instance of fragment FoodInputFragment.
      */
-    public static FoodInputFragment newInstance(int numberOfRows, int numberOfColumns) {
-        FoodInputFragment fragment = new FoodInputFragment();
+    public static FoodsInputFragment newInstance(int numberOfRows, int numberOfColumns) {
+        FoodsInputFragment fragment = new FoodsInputFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_NUMBER_OF_ROWS, numberOfRows);
         args.putInt(ARG_NUMBER_OF_COLUMNS, numberOfColumns);
@@ -66,8 +66,8 @@ public class FoodInputFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof FoodClickListener) {
-            foodClickListener = (FoodClickListener) context;
+        if (context instanceof FoodsClickListener) {
+            foodsClickListener = (FoodsClickListener) context;
         } else {
             throw new ClassCastException(context.toString()
                     + " must implement FoodClickListener");
@@ -87,8 +87,8 @@ public class FoodInputFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_food_input, container, false);
-        constraintLayout = view.findViewById(R.id.constraintlayout_food_input);
+        View view = inflater.inflate(R.layout.fragment_foods_input, container, false);
+        constraintLayout = view.findViewById(R.id.constraintlayout_foods_input);
         return view;
     }
 
@@ -101,7 +101,7 @@ public class FoodInputFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        foodClickListener = null;
+        foodsClickListener = null;
     }
 
     private void initButtons() {
@@ -119,17 +119,18 @@ public class FoodInputFragment extends Fragment {
 
                 if (row == 0 && column == 0) {
                     buttonNew.setText("Bread");
+                    buttonNew.setBackgroundColor(Color.MAGENTA);
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            foodClickListener.onBreadButtonClicked(view);
+                            foodsClickListener.onBreadButtonClicked(view);
                         }
                     });
                 } else {
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            foodClickListener.onEmptyButtonClicked(view);
+                            foodsClickListener.onEmptyButtonClicked(view);
                         }
                     });
                 }
