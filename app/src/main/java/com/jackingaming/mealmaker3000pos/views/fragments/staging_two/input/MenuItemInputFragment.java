@@ -23,6 +23,8 @@ import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.SyrupInputFragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
 
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MenuItemInputFragment#newInstance} factory method to
@@ -125,20 +127,22 @@ public class MenuItemInputFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (!(getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof ViewPager2Fragment)) {
+                Log.d(TAG, "tabLayout onTabSelected(Tab)");
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (!(fragmentInsideContainer instanceof ViewPager2Fragment)) {
                     Log.d(TAG, "fragment inside R.id.fcv_content is NOT instanceof ViewPager2Fragment");
-                    if (getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof SyrupInputFragment) {
-                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment");
+                    if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment... removing SyrupInputFragment.");
                         getChildFragmentManager().beginTransaction()
                                 .remove(syrupInputFragment)
                                 .commitNow();
-                    } else if (getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof MilkInputFragment) {
-                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment");
+                    } else if (fragmentInsideContainer instanceof MilkInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment... removing MilkInputFragment.");
                         getChildFragmentManager().beginTransaction()
                                 .remove(milkInputFragment)
                                 .commitNow();
-                    } else if (getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof CustomizationInputFragment) {
-                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment");
+                    } else if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment... removing CustomizationInputFragment.");
                         getChildFragmentManager().beginTransaction()
                                 .remove(customizationInputFragment)
                                 .commitNow();
@@ -151,11 +155,55 @@ public class MenuItemInputFragment extends Fragment {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 Log.d(TAG, "tabLayout onTabUnselected(Tab)");
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (!(fragmentInsideContainer instanceof ViewPager2Fragment)) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is NOT instanceof ViewPager2Fragment");
+                    if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment... removing SyrupInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(syrupInputFragment)
+                                .commitNow();
+                    } else if (fragmentInsideContainer instanceof MilkInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment... removing MilkInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(milkInputFragment)
+                                .commitNow();
+                    } else if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment... removing CustomizationInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(customizationInputFragment)
+                                .commitNow();
+                    }
+                } else {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof ViewPager2Fragment");
+                }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 Log.d(TAG, "tabLayout onTabReselected(Tab)");
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (!(fragmentInsideContainer instanceof ViewPager2Fragment)) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is NOT instanceof ViewPager2Fragment");
+                    if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment... removing SyrupInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(syrupInputFragment)
+                                .commitNow();
+                    } else if (fragmentInsideContainer instanceof MilkInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment... removing MilkInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(milkInputFragment)
+                                .commitNow();
+                    } else if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                        Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment... removing CustomizationInputFragment.");
+                        getChildFragmentManager().beginTransaction()
+                                .remove(customizationInputFragment)
+                                .commitNow();
+                    }
+                } else {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof ViewPager2Fragment");
+                }
             }
         });
 
@@ -163,11 +211,30 @@ public class MenuItemInputFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "syrup vertical text view clicked", Toast.LENGTH_SHORT).show();
-                if (!(getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof SyrupInputFragment)) {
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                    Log.d(TAG, "fragmentInsideContainer is already an instanceof SyrupInputFragment... returning.");
+                    return;
+                } else if (fragmentInsideContainer instanceof MilkInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment... removing MilkInputFragment.");
                     getChildFragmentManager().beginTransaction()
-                            .add(R.id.fcv_content, syrupInputFragment)
+                            .remove(milkInputFragment)
                             .commitNow();
+                } else if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment... removing CustomizationInputFragment.");
+                    getChildFragmentManager().beginTransaction()
+                            .remove(customizationInputFragment)
+                            .commitNow();
+                } else if (fragmentInsideContainer instanceof ViewPager2Fragment) {
+                    Log.d(TAG, "fragmentInsideContainer instanceof ViewPager2Fragment... continuing.");
+                } else {
+                    Log.d(TAG, "fragmentInsideContainer instanceof unknown (else-clause)... continuing.");
                 }
+
+                Log.d(TAG, "adding syrupInputFragment into fragmentInsideContainer");
+                getChildFragmentManager().beginTransaction()
+                        .add(R.id.fcv_content, syrupInputFragment)
+                        .commitNow();
             }
         });
 
@@ -175,11 +242,30 @@ public class MenuItemInputFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "milk vertical text view clicked", Toast.LENGTH_SHORT).show();
-                if (!(getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof MilkInputFragment)) {
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (fragmentInsideContainer instanceof MilkInputFragment) {
+                    Log.d(TAG, "fragmentInsideContainer is already an instanceof MilkInputFragment... returning.");
+                    return;
+                } else if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment.. removing SyrupInputFragment.");
                     getChildFragmentManager().beginTransaction()
-                            .add(R.id.fcv_content, milkInputFragment)
+                            .remove(syrupInputFragment)
                             .commitNow();
+                } else if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof CustomizationInputFragment... removing CustomizationInputFragment.");
+                    getChildFragmentManager().beginTransaction()
+                            .remove(customizationInputFragment)
+                            .commitNow();
+                } else if (fragmentInsideContainer instanceof ViewPager2Fragment) {
+                    Log.d(TAG, "fragmentInsideContainer instanceof ViewPager2Fragment... continuing.");
+                } else {
+                    Log.d(TAG, "fragmentInsideContainer instanceof unknown (else-clause)... continuing.");
                 }
+
+                Log.d(TAG, "adding milkInputFragment into fragmentInsideContainer");
+                getChildFragmentManager().beginTransaction()
+                        .add(R.id.fcv_content, milkInputFragment)
+                        .commitNow();
             }
         });
 
@@ -187,11 +273,30 @@ public class MenuItemInputFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "customization vertical text view clicked", Toast.LENGTH_SHORT).show();
-                if (!(getChildFragmentManager().findFragmentById(R.id.fcv_content) instanceof CustomizationInputFragment)) {
+                Fragment fragmentInsideContainer = getChildFragmentManager().findFragmentById(R.id.fcv_content);
+                if (fragmentInsideContainer instanceof CustomizationInputFragment) {
+                    Log.d(TAG, "fragmentInsideContainer is already an instanceof CustomizationInputFragment... returning.");
+                    return;
+                } else if (fragmentInsideContainer instanceof SyrupInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof SyrupInputFragment.. removing SyrupInputFragment.");
                     getChildFragmentManager().beginTransaction()
-                            .add(R.id.fcv_content, customizationInputFragment)
+                            .remove(syrupInputFragment)
                             .commitNow();
+                } else if (fragmentInsideContainer instanceof MilkInputFragment) {
+                    Log.d(TAG, "fragment inside R.id.fcv_content is instanceof MilkInputFragment... removing MilkInputFragment.");
+                    getChildFragmentManager().beginTransaction()
+                            .remove(milkInputFragment)
+                            .commitNow();
+                } else if (fragmentInsideContainer instanceof ViewPager2Fragment) {
+                    Log.d(TAG, "fragmentInsideContainer instanceof ViewPager2Fragment... continuing.");
+                } else {
+                    Log.d(TAG, "fragmentInsideContainer instanceof unknown (else-clause)... continuing.");
                 }
+
+                Log.d(TAG, "adding customizationInputFragment into fragmentInsideContainer");
+                getChildFragmentManager().beginTransaction()
+                        .add(R.id.fcv_content, customizationInputFragment)
+                        .commitNow();
             }
         });
     }
