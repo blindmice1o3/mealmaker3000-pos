@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.R;
 
@@ -38,7 +37,14 @@ public class CustomizationInputFragment extends Fragment {
     private Button[][] buttons;
 
     public interface CustomizationClickListener {
-        void onCustomizationButtonClicked(View view);
+        void onLineTheCupButtonClickedCaramel(View view);
+
+        void onLineTheCupButtonClickedMocha(View view);
+
+        void onPowderButtonClickedChocolateMalt(View view);
+
+        void onPowderButtonClickedVanillaBean(View view);
+
         void onEmptyButtonClicked(View view);
     }
 
@@ -126,7 +132,34 @@ public class CustomizationInputFragment extends Fragment {
                     buttonNew.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customizationClickListener.onCustomizationButtonClicked(view);
+                            customizationClickListener.onLineTheCupButtonClickedCaramel(view);
+                        }
+                    });
+                } else if (row == 0 && column == 1) {
+                    buttonNew.setText("line the cup -MOCHA");
+                    buttonNew.setBackgroundColor(Color.MAGENTA);
+                    buttonNew.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customizationClickListener.onLineTheCupButtonClickedMocha(view);
+                        }
+                    });
+                } else if (row == 1 && column == 0) {
+                    buttonNew.setText("powder -CHOCOLATE_MALT");
+                    buttonNew.setBackgroundColor(Color.MAGENTA);
+                    buttonNew.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customizationClickListener.onPowderButtonClickedChocolateMalt(view);
+                        }
+                    });
+                } else if (row == 1 && column == 1) {
+                    buttonNew.setText("powder -VANILLA_BEAN");
+                    buttonNew.setBackgroundColor(Color.MAGENTA);
+                    buttonNew.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customizationClickListener.onPowderButtonClickedVanillaBean(view);
                         }
                     });
                 } else {

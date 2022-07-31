@@ -109,8 +109,23 @@ public class MealStagingActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCustomizationButtonClicked(View view) {
-        menuItemViewportFragment.customizeSelectedMenuItem();
+    public void onLineTheCupButtonClickedCaramel(View view) {
+        menuItemViewportFragment.customizeSelectedMenuItemWithLineTheCupCaramel();
+    }
+
+    @Override
+    public void onLineTheCupButtonClickedMocha(View view) {
+        menuItemViewportFragment.customizeSelectedMenuItemWithLineTheCupMocha();
+    }
+
+    @Override
+    public void onPowderButtonClickedChocolateMalt(View view) {
+        menuItemViewportFragment.customizeSelectedMenuItemWithPowderChocolateMalt();
+    }
+
+    @Override
+    public void onPowderButtonClickedVanillaBean(View view) {
+        menuItemViewportFragment.customizeSelectedMenuItemWithPowderVanillaBean();
     }
 
     @Override

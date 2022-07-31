@@ -31,6 +31,7 @@ import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.Customization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.CustomizationsAdapter;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.MenuItemAdapter;
@@ -235,7 +236,7 @@ public class MenuItemViewportFragment extends Fragment {
     }
 
     @SuppressLint("LongLogTag")
-    public void customizeSelectedMenuItem() {
+    private void addCustomizationToSelectedDrink(Customization customization) {
         if (indexSelectedMenuItem >= 0) {
             Log.i(TAG, "indexSelectedMenuItem >= 0");
             Log.i(TAG, "indexSelectedMenuItem: " + indexSelectedMenuItem);
@@ -243,12 +244,13 @@ public class MenuItemViewportFragment extends Fragment {
             if (selectedMenuItem instanceof Drink) {
                 Log.i(TAG, "selectedMenuItem is a Drink");
                 Drink selectedDrink = (Drink) selectedMenuItem;
+
                 // TODO: Check if already contains CARAMEL (also, it may
                 //  already have MOCHA... DON'T OVERWRITE IT WITHOUT MOCHA)
                 selectedDrink.addToCustomizations(
-                        new AddInCustomization.Builder()
-                                .lineTheCup(AddInCustomization.LineTheCup.CARAMEL)
-                                .build());
+                        customization
+                );
+
                 menuItemAdapter.notifyDataSetChanged();
                 indexSelectedMenuItem = -1;
                 tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
@@ -263,6 +265,38 @@ public class MenuItemViewportFragment extends Fragment {
             Log.i(TAG, "indexSelectedMenuItem < 0");
             Toast.makeText(getContext(), "indexSelectedMenuItem < 0", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void customizeSelectedMenuItemWithLineTheCupCaramel() {
+        addCustomizationToSelectedDrink(
+                new AddInCustomization.Builder()
+                        .lineTheCup(AddInCustomization.LineTheCup.CARAMEL)
+                        .build()
+        );
+    }
+
+    public void customizeSelectedMenuItemWithLineTheCupMocha() {
+        addCustomizationToSelectedDrink(
+                new AddInCustomization.Builder()
+                        .lineTheCup(AddInCustomization.LineTheCup.MOCHA)
+                        .build()
+        );
+    }
+
+    public void customizeSelectedMenuItemWithPowderChocolateMalt() {
+        addCustomizationToSelectedDrink(
+                new AddInCustomization.Builder()
+                        .powder(AddInCustomization.Powder.CHOCOLATE_MALT)
+                        .build()
+        );
+    }
+
+    public void customizeSelectedMenuItemWithPowderVanillaBean() {
+        addCustomizationToSelectedDrink(
+                new AddInCustomization.Builder()
+                        .powder(AddInCustomization.Powder.VANILLA_BEAN)
+                        .build()
+        );
     }
 
     @SuppressLint("LongLogTag")
