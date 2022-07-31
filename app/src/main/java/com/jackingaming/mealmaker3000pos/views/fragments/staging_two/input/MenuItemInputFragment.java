@@ -305,16 +305,21 @@ public class MenuItemInputFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        viewPager2 = getView().findViewById(R.id.viewpager2);
-        viewPager2.setAdapter(pagerAdapter);
+        if (viewPager2 == null) {
+            Log.i(TAG, "onStart() (viewPager2 == null) setting adapter and attaching new TabLayoutMediator.");
+            viewPager2 = getView().findViewById(R.id.viewpager2);
+            viewPager2.setAdapter(pagerAdapter);
 
-        tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText(tabTitles[position]);
-            }
-        });
-        tabLayoutMediator.attach();
+            tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+                @Override
+                public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                    tab.setText(tabTitles[position]);
+                }
+            });
+            tabLayoutMediator.attach();
+        } else {
+            Log.i(TAG, "onStart() (viewPager2 != null) continuing on.");
+        }
     }
 
     public boolean isSwipeable() {
