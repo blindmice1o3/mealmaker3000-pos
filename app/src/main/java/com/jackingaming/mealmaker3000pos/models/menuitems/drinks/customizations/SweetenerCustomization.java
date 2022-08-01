@@ -61,6 +61,12 @@ public class SweetenerCustomization extends Customization {
         return sweetenerCustomizationAsJSON;
     }
 
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
+    }
+
     public Liquid getLiquid() {
         return liquid;
     }

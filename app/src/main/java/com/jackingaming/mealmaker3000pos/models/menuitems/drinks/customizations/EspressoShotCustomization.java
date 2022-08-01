@@ -14,7 +14,14 @@ public class EspressoShotCustomization extends Customization {
     public static final String JSON_PREP = "prep";
 
     public enum Roast { BLONDE, STANDARD_SIGNATURE, DECAF, THIRD_DECAF, HALF_DECAF, TWO_THIRD_DECAF; }
-    public enum Quantity { STANDARD_TWO; }
+    public enum Quantity {
+        STANDARD_TWO(0.00);
+        private double price;
+        Quantity(double price) {
+            this.price = price;
+        }
+        double getPrice() { return price; }
+    }
     public enum Type { STANDARD_NONE, LONG_SHOT, RISTRETTO; }
     public enum Prep { STANDARD_NONE, UPSIDE_DOWN; }
 
@@ -97,6 +104,15 @@ public class EspressoShotCustomization extends Customization {
         espressoShotCustomizationAsJSON.put(JSON_TYPE, type);
         espressoShotCustomizationAsJSON.put(JSON_PREP, prep);
         return espressoShotCustomizationAsJSON;
+    }
+
+    @Override
+    public double getPrice() {
+        // TODO:
+        if (quantity != null) {
+            return quantity.getPrice();
+        }
+        return 0;
     }
 
     public Roast getRoast() {

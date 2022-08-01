@@ -84,6 +84,12 @@ public class MilkCustomization extends Customization {
         return milkCustomizationAsJSON;
     }
 
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
+    }
+
     public Foam getFoam() {
         return foam;
     }
