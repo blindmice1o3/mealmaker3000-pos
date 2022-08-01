@@ -21,6 +21,12 @@ public class UnknownCustomization extends Customization {
         return unknownCustomizationAsJSON;
     }
 
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
+    }
+
     public static class Builder {
         public Builder() {
         }

@@ -13,7 +13,16 @@ public class ToppingCustomization extends Customization {
     public static final String JSON_CINNAMON_DOLCE_SPRINKLES = "cinnamon dolce sprinkles";
     public static final String JSON_WHIPPED_CREAM = "whipped cream";
 
-    public enum ColdFoam { CHOCOLATE_CREAM, SALTED_CARAMEL_CREAM, VANILLA_SWEET_CREAM; }
+    public enum ColdFoam {
+        CHOCOLATE_CREAM(0.75),
+        SALTED_CARAMEL_CREAM(1.00),
+        VANILLA_SWEET_CREAM(0.50);
+        private double price;
+        ColdFoam(double price) {
+            this.price = price;
+        }
+        double getPrice() { return price; }
+    }
     public enum CinnamonPowder { STANDARD_NO, LIGHT, MEDIUM, EXTRA; }
     public enum Drizzle { CARAMEL, MOCHA; }
     public enum CinnamonDolceSprinkles { STANDARD_NO, LIGHT, MEDIUM, EXTRA; }
@@ -113,6 +122,15 @@ public class ToppingCustomization extends Customization {
         toppingCustomizationAsJSON.put(JSON_CINNAMON_DOLCE_SPRINKLES, cinnamonDolceSprinkles);
         toppingCustomizationAsJSON.put(JSON_WHIPPED_CREAM, whippedCream);
         return toppingCustomizationAsJSON;
+    }
+
+    @Override
+    public double getPrice() {
+        // TODO:
+        if (coldFoam != null) {
+            return coldFoam.getPrice();
+        }
+        return 0;
     }
 
     public ColdFoam getColdFoam() {

@@ -5,14 +5,35 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class AddInCustomization extends Customization {
     public static final String NAME = "AddInCustomization";
     public static final String JSON_LINE_THE_CUP = "line the cup";
     public static final String JSON_POWDER = "powder";
 
-    public enum LineTheCup {STANDARD_NO, CARAMEL, MOCHA;}
+    public enum LineTheCup {
+        STANDARD_NO(0.00),
+        CARAMEL(0.60),
+        MOCHA(0.35);
 
-    public enum Powder {CHOCOLATE_MALT, VANILLA_BEAN;}
+        private final double price;
+        LineTheCup(double price) {
+            this.price = price;
+        }
+        double getPrice() { return price; }
+    }
+
+    public enum Powder {
+        CHOCOLATE_MALT(0.25),
+        VANILLA_BEAN(0.20);
+
+        private final double price;
+        Powder(double price) {
+            this.price = price;
+        }
+        double getPrice() { return price; }
+    }
 
     private LineTheCup lineTheCup;
     private Powder powder;
@@ -60,6 +81,20 @@ public class AddInCustomization extends Customization {
         addInCustomizationAsJSON.put(JSON_LINE_THE_CUP, lineTheCup);
         addInCustomizationAsJSON.put(JSON_POWDER, powder);
         return addInCustomizationAsJSON;
+    }
+
+    @Override
+    public double getPrice() {
+        // TODO:
+        if (lineTheCup != null && powder != null) {
+            return lineTheCup.getPrice() + powder.getPrice();
+        } else if (lineTheCup != null && powder == null) {
+            return lineTheCup.getPrice();
+        } else if (lineTheCup == null && powder != null) {
+            return powder.getPrice();
+        } else {
+            return 0;
+        }
     }
 
     public LineTheCup getLineTheCup() {

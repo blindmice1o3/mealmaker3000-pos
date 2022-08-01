@@ -10,12 +10,9 @@ public class FlavorCustomization extends Customization {
     public static final String JSON_SAUCE = "sauce";
     public static final String JSON_SYRUP = "syrup";
 
-    public enum Sauce {DARK_CARAMEL, MOCHA, WHITE_CHOCOLATE_MOCHA;}
-
-    public enum Syrup {
-        BROWN_SUGAR, CARAMEL, CINNAMON_DOLCE, HAZELNUT, PEPPERMINT, RASPBERRY,
-        SF_VANILLA, TOASTED_VANILLA, TOFFEE_NUT, VANILLA;
-    }
+    public enum Sauce { DARK_CARAMEL, MOCHA, WHITE_CHOCOLATE_MOCHA; }
+    public enum Syrup { BROWN_SUGAR, CARAMEL, CINNAMON_DOLCE, HAZELNUT, PEPPERMINT,
+        RASPBERRY, SF_VANILLA, TOASTED_VANILLA, TOFFEE_NUT, VANILLA; }
 
     private Sauce sauce;
     private Syrup syrup;
@@ -63,6 +60,12 @@ public class FlavorCustomization extends Customization {
         flavorCustomizationAsJSON.put(JSON_SAUCE, sauce);
         flavorCustomizationAsJSON.put(JSON_SYRUP, syrup);
         return flavorCustomizationAsJSON;
+    }
+
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
     }
 
     public Sauce getSauce() {

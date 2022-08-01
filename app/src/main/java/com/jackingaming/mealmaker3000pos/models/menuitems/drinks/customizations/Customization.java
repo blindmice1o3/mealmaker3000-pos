@@ -22,6 +22,8 @@ public abstract class Customization {
         return customizationAsJSON;
     }
 
+    public abstract double getPrice();
+
     public String getName() {
         return name;
     }

@@ -43,6 +43,12 @@ public class TeaCustomization extends Customization {
         return teaCustomizationAsJSON;
     }
 
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
+    }
+
     public AddChai getAddChai() {
         return addChai;
     }

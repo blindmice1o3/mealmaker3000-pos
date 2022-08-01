@@ -9,7 +9,7 @@ public class CupOptionCustomization extends Customization {
     public static final String NAME = "CupOptionCustomization";
     public static final String JSON_CUP_SIZE = "cup size";
 
-    public enum CupSize {STANDARD_NO, TALL, GRANDE, VENTI;}
+    public enum CupSize { STANDARD_NO, TALL, GRANDE, VENTI; }
 
     private CupSize cupSize;
 
@@ -41,6 +41,12 @@ public class CupOptionCustomization extends Customization {
         JSONObject cupOptionCustomizationAsJSON = super.toJSON();
         cupOptionCustomizationAsJSON.put(JSON_CUP_SIZE, cupSize);
         return cupOptionCustomizationAsJSON;
+    }
+
+    @Override
+    public double getPrice() {
+        // TODO:
+        return 0;
     }
 
     public CupSize getCupSize() {

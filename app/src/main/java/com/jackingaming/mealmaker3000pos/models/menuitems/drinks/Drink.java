@@ -56,5 +56,12 @@ public abstract class Drink extends MenuItem {
         return customizations;
     }
 
-    // TODO: override getPrice() to include price of customizations.
+    @Override
+    public double getPrice() {
+        double priceOfCustomizations = 0;
+        for (Customization customization : customizations) {
+            priceOfCustomizations += customization.getPrice();
+        }
+        return super.getPrice() + priceOfCustomizations;
+    }
 }
