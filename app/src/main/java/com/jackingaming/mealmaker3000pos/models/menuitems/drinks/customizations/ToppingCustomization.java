@@ -133,6 +133,41 @@ public class ToppingCustomization extends Customization {
         return 0;
     }
 
+    @Override
+    public boolean isMergeable(Customization customizationToBeAdded) {
+//        if (customizationToBeAdded instanceof AddInCustomization) {
+//            Log.i("AddInCustomization", "isMergeable(Customization) customizationToBeAdded instanceof AddInCustomization");
+//            AddInCustomization toBeAdded = (AddInCustomization) customizationToBeAdded;
+//
+//            // TODO: only CHECKING for mergeability... NOT merging in this method.
+//            if (lineTheCup == null && toBeAdded.getLineTheCup() == null) {
+//                return true;
+//            } else if (lineTheCup == null && toBeAdded.getLineTheCup() != null) {
+//                return true;
+//            } else if (lineTheCup != null && toBeAdded.getLineTheCup() == null) {
+//                return true;
+//            } else if (lineTheCup != null && toBeAdded.getLineTheCup() != null){
+//                Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup != null && toBeAdded.getLineTheCup() != null");
+//                if (lineTheCup == toBeAdded.getLineTheCup()) {
+//                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup: " + lineTheCup.toString());
+//                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup == toBeAdded.getLineTheCup()");
+//
+//
+//                    return false;
+//                } else {
+//                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup NOT == toBeAdded.getLineTheCup()");
+//                    return true;
+//                }
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            Log.i("AddInCustomization", "isMergeable(Customization) customizationToBeAdded is NOT instanceof AddInCustomization");
+//            return false;
+//        }
+        return true;
+    }
+
     public ColdFoam getColdFoam() {
         return coldFoam;
     }

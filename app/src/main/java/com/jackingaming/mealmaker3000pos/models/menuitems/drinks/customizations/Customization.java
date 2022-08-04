@@ -23,6 +23,7 @@ public abstract class Customization {
     }
 
     public abstract double getPrice();
+    public abstract boolean isMergeable(Customization customizationToBeAdded);
 
     public String getName() {
         return name;

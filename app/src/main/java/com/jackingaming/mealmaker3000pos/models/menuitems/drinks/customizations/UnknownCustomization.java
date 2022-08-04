@@ -27,6 +27,12 @@ public class UnknownCustomization extends Customization {
         return 0;
     }
 
+    @Override
+    public boolean isMergeable(Customization customizationToBeAdded) {
+        // TODO:
+        return false;
+    }
+
     public static class Builder {
         public Builder() {
         }

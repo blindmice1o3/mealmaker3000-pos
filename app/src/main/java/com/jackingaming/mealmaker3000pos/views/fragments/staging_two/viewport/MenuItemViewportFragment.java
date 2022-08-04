@@ -245,8 +245,6 @@ public class MenuItemViewportFragment extends Fragment {
                 Log.i(TAG, "selectedMenuItem is a Drink");
                 Drink selectedDrink = (Drink) selectedMenuItem;
 
-                // TODO: Check if already contains CARAMEL (also, it may
-                //  already have MOCHA... DON'T OVERWRITE IT WITHOUT MOCHA)
                 selectedDrink.addToCustomizations(
                         customization
                 );

@@ -97,6 +97,46 @@ public class AddInCustomization extends Customization {
         }
     }
 
+    @Override
+    public boolean isMergeable(Customization customizationToBeAdded) {
+        boolean mergeable = false;
+
+        if (customizationToBeAdded instanceof AddInCustomization) {
+            Log.i("AddInCustomization", "isMergeable(Customization) customizationToBeAdded instanceof AddInCustomization");
+            AddInCustomization toBeAdded = (AddInCustomization) customizationToBeAdded;
+            // TODO: only CHECKING for mergeability... NOT merging in this method.
+            if ( (lineTheCup == null && toBeAdded.getLineTheCup() == null) ||
+                    (lineTheCup == null && toBeAdded.getLineTheCup() != null) ||
+                    (lineTheCup != null && toBeAdded.getLineTheCup() == null) ) {
+                Log.i("AddInCustomization", "isMergeable(Customization)\n" +
+                        "(lineTheCup == null && toBeAdded.getLineTheCup() == null) ||\n" +
+                        "(lineTheCup == null && toBeAdded.getLineTheCup() != null) ||\n" +
+                        "(lineTheCup != null && toBeAdded.getLineTheCup() == null)");
+                mergeable = true;
+            } else if (lineTheCup != null && toBeAdded.getLineTheCup() != null) {
+                Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup != null && toBeAdded.getLineTheCup() != null");
+                if (lineTheCup != toBeAdded.getLineTheCup()) {
+                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup != toBeAdded.getLineTheCup()");
+                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup: " + lineTheCup.toString() + " | toBeAdded.getLineTheCup(): " + toBeAdded.getLineTheCup().toString());
+                    mergeable =  true;
+                } else {
+                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup == toBeAdded.getLineTheCup()");
+                    Log.i("AddInCustomization", "isMergeable(Customization) lineTheCup: " + lineTheCup.toString() + " | toBeAdded.getLineTheCup(): " + toBeAdded.getLineTheCup().toString());
+                }
+            } else {
+                Log.i("AddInCustomization", "isMergeable(Customization)\n" +
+                        "(lineTheCup == null && toBeAdded.getLineTheCup() == null) ||\n" +
+                        "(lineTheCup == null && toBeAdded.getLineTheCup() != null) ||\n" +
+                        "(lineTheCup != null && toBeAdded.getLineTheCup() == null) ||\n" +
+                        "(lineTheCup != null && toBeAdded.getLineTheCup() != null)");
+            }
+        } else {
+            Log.i("AddInCustomization", "isMergeable(Customization) customizationToBeAdded is NOT instanceof AddInCustomization");
+        }
+
+        return mergeable;
+    }
+
     public LineTheCup getLineTheCup() {
         return lineTheCup;
     }
