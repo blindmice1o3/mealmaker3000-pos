@@ -31,7 +31,14 @@ import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.AddInCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.CupOptionCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.Customization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.EspressoShotCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.FlavorCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.MilkCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.SweetenerCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.TeaCustomization;
+import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.ToppingCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.foods.Bread;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.CustomizationsAdapter;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.MenuItemAdapter;
@@ -134,11 +141,33 @@ public class MenuItemViewportFragment extends Fragment {
                     @Override
                     public void onCustomizationClick(Drink drink, int positionAbsoluteAdapter) {
                         Log.i(TAG, "onCustomizationClick(Drink, int)");
-
                         Log.i(TAG, "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
-                        if (!drink.getCustomizations().isEmpty()) {
-                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is NOT empty");
-                            drink.getCustomizations().remove(positionAbsoluteAdapter);
+
+                        if (!drink.isCustomizationEmpty()) {
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customization is NOT empty");
+
+                            Customization customizationToBeRemoved = drink.getCustomizations().get(positionAbsoluteAdapter);
+                            if (customizationToBeRemoved instanceof AddInCustomization) {
+                                drink.getAddInCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof CupOptionCustomization) {
+                                drink.getCupOptionCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof EspressoShotCustomization) {
+                                drink.getEspressoShotCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof FlavorCustomization) {
+                                drink.getFlavorCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof MilkCustomization) {
+                                drink.getMilkCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof SweetenerCustomization) {
+                                drink.getSweetenerCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof TeaCustomization) {
+                                drink.getTeaCustomizations().remove(customizationToBeRemoved);
+                            } else if (customizationToBeRemoved instanceof ToppingCustomization) {
+                                drink.getToppingCustomizations().remove(customizationToBeRemoved);
+                            } else {
+                                drink.getUnknownCustomizations().remove(customizationToBeRemoved);
+                            }
+
+//                            drink.getCustomizations().remove(positionAbsoluteAdapter);
                             menuItemAdapter.notifyDataSetChanged();
                             indexSelectedMenuItem = -1;
                             tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
@@ -147,8 +176,22 @@ public class MenuItemViewportFragment extends Fragment {
                                 viewPrevious = null;
                             }
                         } else {
-                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is empty");
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customization is empty");
                         }
+
+//                        if (!drink.getCustomizations().isEmpty()) {
+//                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is NOT empty");
+//                            drink.getCustomizations().remove(positionAbsoluteAdapter);
+//                            menuItemAdapter.notifyDataSetChanged();
+//                            indexSelectedMenuItem = -1;
+//                            tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
+//                            if (viewPrevious != null) {
+//                                viewPrevious.setAlpha(1.0f);
+//                                viewPrevious = null;
+//                            }
+//                        } else {
+//                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is empty");
+//                        }
                     }
                 });
     }

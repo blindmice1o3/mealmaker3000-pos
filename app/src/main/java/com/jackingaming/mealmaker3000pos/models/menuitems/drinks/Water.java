@@ -14,17 +14,17 @@ public class Water extends Drink {
 
     public Water() {
         super(NAME, DESCRIPTION, 0.05);
-        customizations.add(
+        addInCustomizations.add(
                 new AddInCustomization.Builder()
                         .powder(AddInCustomization.Powder.VANILLA_BEAN)
                         .lineTheCup(AddInCustomization.LineTheCup.MOCHA)
                         .build());
-        customizations.add(
+        flavorCustomizations.add(
                 new FlavorCustomization.Builder()
                         .sauce(FlavorCustomization.Sauce.WHITE_CHOCOLATE_MOCHA)
                         .syrup(FlavorCustomization.Syrup.TOFFEE_NUT)
                         .build());
-        customizations.add(
+        toppingCustomizations.add(
                 new ToppingCustomization.Builder()
                         .coldFoam(ToppingCustomization.ColdFoam.SALTED_CARAMEL_CREAM)
                         .cinnamonPowder(ToppingCustomization.CinnamonPowder.LIGHT)
