@@ -22,10 +22,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class Drink extends MenuItem {
-    //    public static final String JSON_CUSTOMIZATIONS = "customizations";
     public static final String JSON_ADD_IN_CUSTOMIZATIONS = "add in customizations";
     public static final String JSON_CUP_OPTION_CUSTOMIZATIONS = "cup option customizations";
     public static final String JSON_ESPRESSO_SHOT_CUSTOMIZATIONS = "espresso shot customizations";
@@ -38,189 +36,190 @@ public abstract class Drink extends MenuItem {
 
 
     // size, hot/cold (hot/iced),
-//    protected List<Customization> customizations;
-    protected List<AddInCustomization> addInCustomizations;
-    protected List<CupOptionCustomization> cupOptionCustomizations;
-    protected List<EspressoShotCustomization> espressoShotCustomizations;
-    protected List<FlavorCustomization> flavorCustomizations;
-    protected List<MilkCustomization> milkCustomizations;
-    protected List<SweetenerCustomization> sweetenerCustomizations;
-    protected List<TeaCustomization> teaCustomizations;
-    protected List<ToppingCustomization> toppingCustomizations;
-    protected List<UnknownCustomization> unknownCustomizations;
+    protected HashMap<String, List<Customization>> customizations;
 
     public Drink(String name, String description, double price) {
         super(name, description, price);
-//        customizations = new ArrayList<Customization>();
-        addInCustomizations = new ArrayList<>();
-        cupOptionCustomizations = new ArrayList<>();
-        espressoShotCustomizations = new ArrayList<>();
-        flavorCustomizations = new ArrayList<>();
-        milkCustomizations = new ArrayList<>();
-        sweetenerCustomizations = new ArrayList<>();
-        teaCustomizations = new ArrayList<>();
-        toppingCustomizations = new ArrayList<>();
-        unknownCustomizations = new ArrayList<>();
+        initCustomizations();
+    }
+
+    private void initCustomizations() {
+        customizations = new HashMap<>();
+
+        customizations.put(AddInCustomization.NAME, new ArrayList<>());
+        customizations.put(CupOptionCustomization.NAME, new ArrayList<>());
+        customizations.put(EspressoShotCustomization.NAME, new ArrayList<>());
+        customizations.put(FlavorCustomization.NAME, new ArrayList<>());
+        customizations.put(MilkCustomization.NAME, new ArrayList<>());
+        customizations.put(SweetenerCustomization.NAME, new ArrayList<>());
+        customizations.put(TeaCustomization.NAME, new ArrayList<>());
+        customizations.put(ToppingCustomization.NAME, new ArrayList<>());
+        customizations.put(UnknownCustomization.NAME, new ArrayList<>());
     }
 
     public Drink(JSONObject menuItemAsJSON)
             throws JSONException {
         super(menuItemAsJSON);
 
-        addInCustomizations = new ArrayList<>();
+        customizations = new HashMap<>();
+
+        List<Customization> addInCustomizations = new ArrayList<>();
         JSONArray addInCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_ADD_IN_CUSTOMIZATIONS);
         for (int i = 0; i < addInCustomizationsAsJSONArray.length(); i++) {
             JSONObject addInCustomizationAsJSON = (JSONObject) addInCustomizationsAsJSONArray.get(i);
             AddInCustomization addInCustomization = (AddInCustomization) Menu.parseToCustomization(addInCustomizationAsJSON);
             addInCustomizations.add(addInCustomization);
         }
+        customizations.put(AddInCustomization.NAME, addInCustomizations);
 
-        cupOptionCustomizations = new ArrayList<>();
+        List<Customization> cupOptionCustomizations = new ArrayList<>();
         JSONArray cupOptionCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_CUP_OPTION_CUSTOMIZATIONS);
         for (int i = 0; i < cupOptionCustomizationsAsJSONArray.length(); i++) {
             JSONObject cupOptionCustomizationAsJSON = (JSONObject) cupOptionCustomizationsAsJSONArray.get(i);
             CupOptionCustomization cupOptionCustomization = (CupOptionCustomization) Menu.parseToCustomization(cupOptionCustomizationAsJSON);
             cupOptionCustomizations.add(cupOptionCustomization);
         }
+        customizations.put(CupOptionCustomization.NAME, cupOptionCustomizations);
 
-        espressoShotCustomizations = new ArrayList<>();
+        List<Customization> espressoShotCustomizations = new ArrayList<>();
         JSONArray espressoShotCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_ESPRESSO_SHOT_CUSTOMIZATIONS);
         for (int i = 0; i < espressoShotCustomizationsAsJSONArray.length(); i++) {
             JSONObject espressoShotCustomizationAsJSON = (JSONObject) espressoShotCustomizationsAsJSONArray.get(i);
             EspressoShotCustomization espressoShotCustomization = (EspressoShotCustomization) Menu.parseToCustomization(espressoShotCustomizationAsJSON);
             espressoShotCustomizations.add(espressoShotCustomization);
         }
+        customizations.put(EspressoShotCustomization.NAME, espressoShotCustomizations);
 
-        flavorCustomizations = new ArrayList<>();
+        List<Customization> flavorCustomizations = new ArrayList<>();
         JSONArray flavorCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_FLAVOR_CUSTOMIZATIONS);
         for (int i = 0; i < flavorCustomizationsAsJSONArray.length(); i++) {
             JSONObject flavorCustomizationAsJSON = (JSONObject) flavorCustomizationsAsJSONArray.get(i);
             FlavorCustomization flavorCustomization = (FlavorCustomization) Menu.parseToCustomization(flavorCustomizationAsJSON);
             flavorCustomizations.add(flavorCustomization);
         }
+        customizations.put(FlavorCustomization.NAME, flavorCustomizations);
 
-        milkCustomizations = new ArrayList<>();
+        List<Customization> milkCustomizations = new ArrayList<>();
         JSONArray milkCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_MILK_CUSTOMIZATIONS);
         for (int i = 0; i < milkCustomizationsAsJSONArray.length(); i++) {
             JSONObject milkCustomizationAsJSON = (JSONObject) milkCustomizationsAsJSONArray.get(i);
             MilkCustomization milkCustomization = (MilkCustomization) Menu.parseToCustomization(milkCustomizationAsJSON);
             milkCustomizations.add(milkCustomization);
         }
+        customizations.put(MilkCustomization.NAME, milkCustomizations);
 
-        sweetenerCustomizations = new ArrayList<>();
+        List<Customization> sweetenerCustomizations = new ArrayList<>();
         JSONArray sweetenerCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_SWEETENER_CUSTOMIZATIONS);
         for (int i = 0; i < sweetenerCustomizationsAsJSONArray.length(); i++) {
             JSONObject sweetenerCustomizationAsJSON = (JSONObject) sweetenerCustomizationsAsJSONArray.get(i);
             SweetenerCustomization sweetenerCustomization = (SweetenerCustomization) Menu.parseToCustomization(sweetenerCustomizationAsJSON);
             sweetenerCustomizations.add(sweetenerCustomization);
         }
+        customizations.put(SweetenerCustomization.NAME, sweetenerCustomizations);
 
-        teaCustomizations = new ArrayList<>();
+        List<Customization> teaCustomizations = new ArrayList<>();
         JSONArray teaCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_TEA_CUSTOMIZATIONS);
         for (int i = 0; i < teaCustomizationsAsJSONArray.length(); i++) {
             JSONObject teaCustomizationAsJSON = (JSONObject) teaCustomizationsAsJSONArray.get(i);
             TeaCustomization teaCustomization = (TeaCustomization) Menu.parseToCustomization(teaCustomizationAsJSON);
             teaCustomizations.add(teaCustomization);
         }
+        customizations.put(TeaCustomization.NAME, teaCustomizations);
 
-        toppingCustomizations = new ArrayList<>();
+        List<Customization> toppingCustomizations = new ArrayList<>();
         JSONArray toppingCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_TOPPING_CUSTOMIZATIONS);
         for (int i = 0; i < toppingCustomizationsAsJSONArray.length(); i++) {
             JSONObject toppingCustomizationAsJSON = (JSONObject) toppingCustomizationsAsJSONArray.get(i);
             ToppingCustomization toppingCustomization = (ToppingCustomization) Menu.parseToCustomization(toppingCustomizationAsJSON);
             toppingCustomizations.add(toppingCustomization);
         }
+        customizations.put(ToppingCustomization.NAME, toppingCustomizations);
 
-        unknownCustomizations = new ArrayList<>();
+        List<Customization> unknownCustomizations = new ArrayList<>();
         JSONArray unknownCustomizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_UNKNOWN_CUSTOMIZATIONS);
         for (int i = 0; i < unknownCustomizationsAsJSONArray.length(); i++) {
             JSONObject unknownCustomizationAsJSON = (JSONObject) unknownCustomizationsAsJSONArray.get(i);
             UnknownCustomization unknownCustomization = (UnknownCustomization) Menu.parseToCustomization(unknownCustomizationAsJSON);
             unknownCustomizations.add(unknownCustomization);
         }
-
-//        customizations = new ArrayList<Customization>();
-//        JSONArray customizationsAsJSONArray = (JSONArray) menuItemAsJSON.get(JSON_CUSTOMIZATIONS);
-//        for (int i = 0; i < customizationsAsJSONArray.length(); i++) {
-//            JSONObject customizationAsJSON = (JSONObject) customizationsAsJSONArray.get(i);
-//            Customization customization = Menu.parseToCustomization(customizationAsJSON);
-//            customizations.add(customization);
-//        }
+        customizations.put(UnknownCustomization.NAME, unknownCustomizations);
     }
 
     @Override
     public JSONObject toJSON() throws JSONException {
         JSONObject menuItemAsJSON = super.toJSON();
 
+        List<Customization> addInCustomizations = customizations.get(AddInCustomization.NAME);
         JSONArray addInCustomizationsAsJSONArray = new JSONArray();
-        for (AddInCustomization addInCustomization : addInCustomizations) {
+        for (Customization addInCustomization : addInCustomizations) {
             JSONObject addInCustomizationAsJSON = addInCustomization.toJSON();
             addInCustomizationsAsJSONArray.put(addInCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_ADD_IN_CUSTOMIZATIONS, addInCustomizationsAsJSONArray);
 
+        List<Customization> cupOptionCustomizations = customizations.get(CupOptionCustomization.NAME);
         JSONArray cupOptionCustomizationsAsJSONArray = new JSONArray();
-        for (CupOptionCustomization cupOptionCustomization : cupOptionCustomizations) {
+        for (Customization cupOptionCustomization : cupOptionCustomizations) {
             JSONObject cupOptionCustomizationAsJSON = cupOptionCustomization.toJSON();
             cupOptionCustomizationsAsJSONArray.put(cupOptionCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_CUP_OPTION_CUSTOMIZATIONS, cupOptionCustomizationsAsJSONArray);
 
+        List<Customization> espressoShotCustomizations = customizations.get(EspressoShotCustomization.NAME);
         JSONArray espressoShotCustomizationsAsJSONArray = new JSONArray();
-        for (EspressoShotCustomization espressoShotCustomization : espressoShotCustomizations) {
+        for (Customization espressoShotCustomization : espressoShotCustomizations) {
             JSONObject espressoShotCustomizationAsJSON = espressoShotCustomization.toJSON();
             espressoShotCustomizationsAsJSONArray.put(espressoShotCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_ESPRESSO_SHOT_CUSTOMIZATIONS, espressoShotCustomizationsAsJSONArray);
 
+        List<Customization> flavorCustomizations = customizations.get(FlavorCustomization.NAME);
         JSONArray flavorCustomizationsAsJSONArray = new JSONArray();
-        for (FlavorCustomization flavorCustomization : flavorCustomizations) {
+        for (Customization flavorCustomization : flavorCustomizations) {
             JSONObject flavorCustomizationAsJSON = flavorCustomization.toJSON();
             flavorCustomizationsAsJSONArray.put(flavorCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_FLAVOR_CUSTOMIZATIONS, flavorCustomizationsAsJSONArray);
 
+        List<Customization> milkCustomizations = customizations.get(MilkCustomization.NAME);
         JSONArray milkCustomizationsAsJSONArray = new JSONArray();
-        for (MilkCustomization milkCustomization : milkCustomizations) {
+        for (Customization milkCustomization : milkCustomizations) {
             JSONObject milkCustomizationAsJSON = milkCustomization.toJSON();
             milkCustomizationsAsJSONArray.put(milkCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_MILK_CUSTOMIZATIONS, milkCustomizationsAsJSONArray);
 
+        List<Customization> sweetenerCustomizations = customizations.get(SweetenerCustomization.NAME);
         JSONArray sweetenerCustomizationsAsJSONArray = new JSONArray();
-        for (SweetenerCustomization sweetenerCustomization : sweetenerCustomizations) {
+        for (Customization sweetenerCustomization : sweetenerCustomizations) {
             JSONObject sweetenerCustomizationAsJSON = sweetenerCustomization.toJSON();
             sweetenerCustomizationsAsJSONArray.put(sweetenerCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_SWEETENER_CUSTOMIZATIONS, sweetenerCustomizationsAsJSONArray);
 
+        List<Customization> teaCustomizations = customizations.get(TeaCustomization.NAME);
         JSONArray teaCustomizationsAsJSONArray = new JSONArray();
-        for (TeaCustomization teaCustomization : teaCustomizations) {
+        for (Customization teaCustomization : teaCustomizations) {
             JSONObject teaCustomizationAsJSON = teaCustomization.toJSON();
             teaCustomizationsAsJSONArray.put(teaCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_TEA_CUSTOMIZATIONS, teaCustomizationsAsJSONArray);
 
+        List<Customization> toppingCustomizations = customizations.get(ToppingCustomization.NAME);
         JSONArray toppingCustomizationsAsJSONArray = new JSONArray();
-        for (ToppingCustomization toppingCustomization : toppingCustomizations) {
+        for (Customization toppingCustomization : toppingCustomizations) {
             JSONObject toppingCustomizationAsJSON = toppingCustomization.toJSON();
             toppingCustomizationsAsJSONArray.put(toppingCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_TOPPING_CUSTOMIZATIONS, toppingCustomizationsAsJSONArray);
 
+        List<Customization> unknownCustomizations = customizations.get(UnknownCustomization.NAME);
         JSONArray unknownCustomizationsAsJSONArray = new JSONArray();
-        for (UnknownCustomization unknownCustomization : unknownCustomizations) {
+        for (Customization unknownCustomization : unknownCustomizations) {
             JSONObject unknownCustomizationAsJSON = unknownCustomization.toJSON();
             unknownCustomizationsAsJSONArray.put(unknownCustomizationAsJSON);
         }
         menuItemAsJSON.put(JSON_UNKNOWN_CUSTOMIZATIONS, unknownCustomizationsAsJSONArray);
-
-//        JSONArray customizationsAsJSONArray = new JSONArray();
-//        for (Customization customization : customizations) {
-//            JSONObject customizationAsJSON = customization.toJSON();
-//            customizationsAsJSONArray.put(customizationAsJSON);
-//        }
-//        menuItemAsJSON.put(JSON_CUSTOMIZATIONS, customizationsAsJSONArray);
 
         return menuItemAsJSON;
     }
@@ -233,201 +232,178 @@ public abstract class Drink extends MenuItem {
         Log.d("Drink", nameCustomizationToBeAdded);
         if (AddInCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof AddInCustomization) {
-                addInCustomizations.add((AddInCustomization) customization);
+                customizations.get(AddInCustomization.NAME).add(customization);
             }
         } else if (CupOptionCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof CupOptionCustomization) {
-                cupOptionCustomizations.add((CupOptionCustomization) customization);
+                customizations.get(CupOptionCustomization.NAME).add(customization);
             }
         } else if (EspressoShotCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof EspressoShotCustomization) {
-                espressoShotCustomizations.add((EspressoShotCustomization) customization);
+                customizations.get(EspressoShotCustomization.NAME).add(customization);
             }
         } else if (FlavorCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof FlavorCustomization) {
-                flavorCustomizations.add((FlavorCustomization) customization);
+                customizations.get(FlavorCustomization.NAME).add(customization);
             }
         } else if (MilkCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof MilkCustomization) {
-                milkCustomizations.add((MilkCustomization) customization);
+                customizations.get(MilkCustomization.NAME).add(customization);
             }
         } else if (SweetenerCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof SweetenerCustomization) {
-                sweetenerCustomizations.add((SweetenerCustomization) customization);
+                customizations.get(SweetenerCustomization.NAME).add(customization);
             }
         } else if (TeaCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof TeaCustomization) {
-                teaCustomizations.add((TeaCustomization) customization);
+                customizations.get(TeaCustomization.NAME).add(customization);
             }
         } else if (ToppingCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof ToppingCustomization) {
-                toppingCustomizations.add((ToppingCustomization) customization);
+                customizations.get(ToppingCustomization.NAME).add(customization);
             }
         } else {
             if (customization instanceof UnknownCustomization) {
-                unknownCustomizations.add((UnknownCustomization) customization);
+                customizations.get(UnknownCustomization.NAME).add(customization);
             } else {
                 Log.d("Drink", "addToCustomizations(Customization) else-clause customization is NOT instanceof UnknownCustomization");
             }
         }
-
-
-//        for (int i = 0; i < customizations.size(); i++) {
-//            Customization customizationInsideDrink = customizations.get(i);
-//            String nameCustomizationInsideDrink = customizationInsideDrink.getName();
-//
-//            // is the customizationToBeAdded already inside inside Drink's customizations list?
-//            if (nameCustomizationInsideDrink.equals(nameCustomizationToBeAdded)) {
-//                Log.d("Drink", "addToCustomizations(Customization) nameCustomizationInsideDrink equals() nameCustomizationToBeAdded");
-//                if (customizationInsideDrink.isMergeable(customization)) {
-//                    Log.i("Drink", "addToCustomizations(Customization) customizationInsideDrink isMergeable() customization");
-//                    // TODO:
-//
-//
-//                } else {
-//                    Log.i("Drink", "addToCustomizations(Customization) customizationInsideDrink NOT isMergeable() customization");
-//                }
-//            } else {
-//                Log.i("Drink", "addToCustomizations(Customization) nameCustomizationInsideDrink NOT equals() nameCustomizationToBeAdded");
-//            }
-//        }
-//
-//        customizations.add(customization);
     }
 
     public boolean isCustomizationEmpty() {
-        return addInCustomizations.isEmpty() &&
-                cupOptionCustomizations.isEmpty() &&
-                espressoShotCustomizations.isEmpty() &&
-                flavorCustomizations.isEmpty() &&
-                milkCustomizations.isEmpty() &&
-                sweetenerCustomizations.isEmpty() &&
-                teaCustomizations.isEmpty() &&
-                toppingCustomizations.isEmpty() &&
-                unknownCustomizations.isEmpty();
+        return customizations.get(AddInCustomization.NAME).isEmpty() &&
+                customizations.get(CupOptionCustomization.NAME).isEmpty() &&
+                customizations.get(EspressoShotCustomization.NAME).isEmpty() &&
+                customizations.get(FlavorCustomization.NAME).isEmpty() &&
+                customizations.get(MilkCustomization.NAME).isEmpty() &&
+                customizations.get(SweetenerCustomization.NAME).isEmpty() &&
+                customizations.get(TeaCustomization.NAME).isEmpty() &&
+                customizations.get(ToppingCustomization.NAME).isEmpty() &&
+                customizations.get(UnknownCustomization.NAME).isEmpty();
     }
 
-    public List<AddInCustomization> getAddInCustomizations() {
-        return addInCustomizations;
-    }
-
-    public List<CupOptionCustomization> getCupOptionCustomizations() {
-        return cupOptionCustomizations;
-    }
-
-    public List<EspressoShotCustomization> getEspressoShotCustomizations() {
-        return espressoShotCustomizations;
-    }
-
-    public List<FlavorCustomization> getFlavorCustomizations() {
-        return flavorCustomizations;
-    }
-
-    public List<MilkCustomization> getMilkCustomizations() {
-        return milkCustomizations;
-    }
-
-    public List<SweetenerCustomization> getSweetenerCustomizations() {
-        return sweetenerCustomizations;
-    }
-
-    public List<TeaCustomization> getTeaCustomizations() {
-        return teaCustomizations;
-    }
-
-    public List<ToppingCustomization> getToppingCustomizations() {
-        return toppingCustomizations;
-    }
-
-    public List<UnknownCustomization> getUnknownCustomizations() {
-        return unknownCustomizations;
+    public void removeCustomization(Customization customizationToBeRemoved) {
+        if (customizationToBeRemoved instanceof AddInCustomization) {
+            customizations.get(AddInCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof CupOptionCustomization) {
+            customizations.get(CupOptionCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof EspressoShotCustomization) {
+            customizations.get(EspressoShotCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof FlavorCustomization) {
+            customizations.get(FlavorCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof MilkCustomization) {
+            customizations.get(MilkCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof SweetenerCustomization) {
+            customizations.get(SweetenerCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof TeaCustomization) {
+            customizations.get(TeaCustomization.NAME).remove(customizationToBeRemoved);
+        } else if (customizationToBeRemoved instanceof ToppingCustomization) {
+            customizations.get(ToppingCustomization.NAME).remove(customizationToBeRemoved);
+        } else {
+            customizations.get(UnknownCustomization.NAME).remove(customizationToBeRemoved);
+        }
     }
 
     public List<Customization> getCustomizations() {
-        List<Customization> customizations = new ArrayList<>();
+        List<Customization> customizationsAllInOne = new ArrayList<>();
 
-        for (AddInCustomization addInCustomization : addInCustomizations) {
-            customizations.add(addInCustomization);
+        List<Customization> addInCustomizations = customizations.get(AddInCustomization.NAME);
+        for (Customization addInCustomization : addInCustomizations) {
+            customizationsAllInOne.add(addInCustomization);
         }
 
-        for (CupOptionCustomization cupOptionCustomization : cupOptionCustomizations) {
-            customizations.add(cupOptionCustomization);
+        List<Customization> cupOptionCustomizations = customizations.get(CupOptionCustomization.NAME);
+        for (Customization cupOptionCustomization : cupOptionCustomizations) {
+            customizationsAllInOne.add(cupOptionCustomization);
         }
 
-        for (EspressoShotCustomization espressoShotCustomization : espressoShotCustomizations) {
-            customizations.add(espressoShotCustomization);
+        List<Customization> espressoShotCustomizations = customizations.get(EspressoShotCustomization.NAME);
+        for (Customization espressoShotCustomization : espressoShotCustomizations) {
+            customizationsAllInOne.add(espressoShotCustomization);
         }
 
-        for (FlavorCustomization flavorCustomization : flavorCustomizations) {
-            customizations.add(flavorCustomization);
+        List<Customization> flavorCustomizations = customizations.get(FlavorCustomization.NAME);
+        for (Customization flavorCustomization : flavorCustomizations) {
+            customizationsAllInOne.add(flavorCustomization);
         }
 
-        for (MilkCustomization milkCustomization : milkCustomizations) {
-            customizations.add(milkCustomization);
+        List<Customization> milkCustomizations = customizations.get(MilkCustomization.NAME);
+        for (Customization milkCustomization : milkCustomizations) {
+            customizationsAllInOne.add(milkCustomization);
         }
 
-        for (SweetenerCustomization sweetenerCustomization : sweetenerCustomizations) {
-            customizations.add(sweetenerCustomization);
+        List<Customization> sweetenerCustomizations = customizations.get(SweetenerCustomization.NAME);
+        for (Customization sweetenerCustomization : sweetenerCustomizations) {
+            customizationsAllInOne.add(sweetenerCustomization);
         }
 
-        for (TeaCustomization teaCustomization : teaCustomizations) {
-            customizations.add(teaCustomization);
+        List<Customization> teaCustomizations = customizations.get(TeaCustomization.NAME);
+        for (Customization teaCustomization : teaCustomizations) {
+            customizationsAllInOne.add(teaCustomization);
         }
 
-        for (ToppingCustomization toppingCustomization : toppingCustomizations) {
-            customizations.add(toppingCustomization);
+        List<Customization> toppingCustomizations = customizations.get(ToppingCustomization.NAME);
+        for (Customization toppingCustomization : toppingCustomizations) {
+            customizationsAllInOne.add(toppingCustomization);
         }
 
-        for (UnknownCustomization unknownCustomization : unknownCustomizations) {
-            customizations.add(unknownCustomization);
+        List<Customization> unknownCustomizations = customizations.get(UnknownCustomization.NAME);
+        for (Customization unknownCustomization : unknownCustomizations) {
+            customizationsAllInOne.add(unknownCustomization);
         }
 
-        return customizations;
+        return customizationsAllInOne;
     }
 
     @Override
     public double getPrice() {
         double priceOfCustomizations = 0;
 
-        for (AddInCustomization addInCustomization : addInCustomizations) {
+        List<Customization> addInCustomizations = customizations.get(AddInCustomization.NAME);
+        for (Customization addInCustomization : addInCustomizations) {
             priceOfCustomizations += addInCustomization.getPrice();
         }
 
-        for (CupOptionCustomization cupOptionCustomization : cupOptionCustomizations) {
+        List<Customization> cupOptionCustomizations = customizations.get(CupOptionCustomization.NAME);
+        for (Customization cupOptionCustomization : cupOptionCustomizations) {
             priceOfCustomizations += cupOptionCustomization.getPrice();
         }
 
-        for (EspressoShotCustomization espressoShotCustomization : espressoShotCustomizations) {
+        List<Customization> espressoShotCustomizations = customizations.get(EspressoShotCustomization.NAME);
+        for (Customization espressoShotCustomization : espressoShotCustomizations) {
             priceOfCustomizations += espressoShotCustomization.getPrice();
         }
 
-        for (FlavorCustomization flavorCustomization : flavorCustomizations) {
+        List<Customization> flavorCustomizations = customizations.get(FlavorCustomization.NAME);
+        for (Customization flavorCustomization : flavorCustomizations) {
             priceOfCustomizations += flavorCustomization.getPrice();
         }
 
-        for (MilkCustomization milkCustomization : milkCustomizations) {
+        List<Customization> milkCustomizations = customizations.get(MilkCustomization.NAME);
+        for (Customization milkCustomization : milkCustomizations) {
             priceOfCustomizations += milkCustomization.getPrice();
         }
 
-        for (SweetenerCustomization sweetenerCustomization : sweetenerCustomizations) {
+        List<Customization> sweetenerCustomizations = customizations.get(SweetenerCustomization.NAME);
+        for (Customization sweetenerCustomization : sweetenerCustomizations) {
             priceOfCustomizations += sweetenerCustomization.getPrice();
         }
 
-        for (TeaCustomization teaCustomization : teaCustomizations) {
+        List<Customization> teaCustomizations = customizations.get(TeaCustomization.NAME);
+        for (Customization teaCustomization : teaCustomizations) {
             priceOfCustomizations += teaCustomization.getPrice();
         }
 
-        for (ToppingCustomization toppingCustomization : toppingCustomizations) {
+        List<Customization> toppingCustomizations = customizations.get(ToppingCustomization.NAME);
+        for (Customization toppingCustomization : toppingCustomizations) {
             priceOfCustomizations += toppingCustomization.getPrice();
         }
 
-        for (UnknownCustomization unknownCustomization : unknownCustomizations) {
+        List<Customization> unknownCustomizations = customizations.get(UnknownCustomization.NAME);
+        for (Customization unknownCustomization : unknownCustomizations) {
             priceOfCustomizations += unknownCustomization.getPrice();
         }
-
-//        for (Customization customization : customizations) {
-//            priceOfCustomizations += customization.getPrice();
-//        }
 
         return super.getPrice() + priceOfCustomizations;
     }

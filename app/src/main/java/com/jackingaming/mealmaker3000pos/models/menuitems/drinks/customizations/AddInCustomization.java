@@ -5,8 +5,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 public class AddInCustomization extends Customization {
     public static final String NAME = "AddInCustomization";
     public static final String JSON_LINE_THE_CUP = "line the cup";
