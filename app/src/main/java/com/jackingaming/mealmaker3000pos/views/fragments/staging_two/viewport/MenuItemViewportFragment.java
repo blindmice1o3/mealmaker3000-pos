@@ -134,11 +134,14 @@ public class MenuItemViewportFragment extends Fragment {
                     @Override
                     public void onCustomizationClick(Drink drink, int positionAbsoluteAdapter) {
                         Log.i(TAG, "onCustomizationClick(Drink, int)");
-
                         Log.i(TAG, "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
-                        if (!drink.getCustomizations().isEmpty()) {
-                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is NOT empty");
-                            drink.getCustomizations().remove(positionAbsoluteAdapter);
+
+                        if (!drink.isCustomizationEmpty()) {
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customization is NOT empty");
+
+                            Customization customizationToBeRemoved = drink.getCustomizations().get(positionAbsoluteAdapter);
+                            drink.removeCustomization(customizationToBeRemoved);
+
                             menuItemAdapter.notifyDataSetChanged();
                             indexSelectedMenuItem = -1;
                             tvIndexSelectedMenuItem.setText(Integer.toString(indexSelectedMenuItem));
@@ -147,7 +150,7 @@ public class MenuItemViewportFragment extends Fragment {
                                 viewPrevious = null;
                             }
                         } else {
-                            Log.i(TAG, "onCustomizationClick(Drink, int) customizations is empty");
+                            Log.i(TAG, "onCustomizationClick(Drink, int) customization is empty");
                         }
                     }
                 });

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
@@ -22,8 +21,6 @@ import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.MilkInputFrag
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.PagerAdapter;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.SyrupInputFragment;
 import com.jackingaming.mealmaker3000pos.views.fragments.tablayout.VerticalTextView;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.

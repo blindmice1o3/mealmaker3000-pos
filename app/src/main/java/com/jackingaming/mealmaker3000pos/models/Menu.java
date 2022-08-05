@@ -1,7 +1,6 @@
 package com.jackingaming.mealmaker3000pos.models;
 
 import android.util.Log;
-import android.view.View;
 
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.AddInCustomization;
 import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.customizations.CupOptionCustomization;
