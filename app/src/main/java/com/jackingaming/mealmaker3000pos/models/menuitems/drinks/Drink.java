@@ -1,6 +1,7 @@
 package com.jackingaming.mealmaker3000pos.models.menuitems.drinks;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jackingaming.mealmaker3000pos.models.Menu;
 import com.jackingaming.mealmaker3000pos.models.menuitems.MenuItem;
@@ -224,15 +225,53 @@ public abstract class Drink extends MenuItem {
         return menuItemAsJSON;
     }
 
+    private boolean hasDuplicateLineTheCup(AddInCustomization customizationToBeAdded) {
+        for (Customization customization : customizations.get(AddInCustomization.NAME)) {
+            AddInCustomization customizationAlreadyInDrink = (AddInCustomization) customization;
+            if (customizationAlreadyInDrink.getLineTheCup() == customizationToBeAdded.getLineTheCup()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasDuplicatePowder(AddInCustomization customizationToBeAdded) {
+        for (Customization customization : customizations.get(AddInCustomization.NAME)) {
+            AddInCustomization customizationAlreadyInDrink = (AddInCustomization) customization;
+            if (customizationAlreadyInDrink.getPowder() == customizationToBeAdded.getPowder()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addToCustomizations(Customization customization) {
+        Log.i("Drink", "addToCustomizations(Customization)");
         // TODO: Check if already contains CARAMEL (also, it may
         //  already have MOCHA... DON'T OVERWRITE IT WITHOUT MOCHA)
 
         String nameCustomizationToBeAdded = customization.getName();
-        Log.d("Drink", nameCustomizationToBeAdded);
+        Log.i("Drink", "nameCustomizationToBeAdded: " + nameCustomizationToBeAdded);
         if (AddInCustomization.NAME.equals(nameCustomizationToBeAdded)) {
-            if (customization instanceof AddInCustomization) {
-                customizations.get(AddInCustomization.NAME).add(customization);
+            AddInCustomization customizationToBeAdded = (AddInCustomization) customization;
+            if (customizationToBeAdded.getLineTheCup() == null) {
+                Log.i("Drink", "customizationToBeAdded.getLineTheCup() == null");
+                if (!hasDuplicatePowder(customizationToBeAdded)) {
+                    Log.i("Drink", "NOT hasDuplicatePowder() | adding to customizations.");
+                    customizations.get(AddInCustomization.NAME).add(customizationToBeAdded);
+                } else {
+                    Log.i("Drink", "hasDuplicatePowder() | NOT adding to customizations.");
+                }
+            } else if (customizationToBeAdded.getPowder() == null) {
+                Log.i("Drink", "customizationToBeAdded.getPowder() == null");
+                if (!hasDuplicateLineTheCup(customizationToBeAdded)) {
+                    Log.i("Drink", "NOT hasDuplicateLineTheCup() | adding to customizations.");
+                    customizations.get(AddInCustomization.NAME).add(customizationToBeAdded);
+                } else {
+                    Log.i("Drink", "hasDuplicateLineTheCup() | NOT adding to customizations.");
+                }
+            } else {
+                Log.i("Drink", "customizationToBeAdded.getLineTheCup() != null && customizationToBeAdded.getPowder() != null");
             }
         } else if (CupOptionCustomization.NAME.equals(nameCustomizationToBeAdded)) {
             if (customization instanceof CupOptionCustomization) {
