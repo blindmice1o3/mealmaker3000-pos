@@ -31,6 +31,7 @@ public class RecordOfMealAdapter extends
     public interface OnItemClickListener {
         void onCheckBoxClicked(View view, int positionAbsoluteAdapter);
     }
+
     private OnItemClickListener listener;
 
     // Provide a direct reference to each of the views within an itemView
@@ -103,8 +104,9 @@ public class RecordOfMealAdapter extends
                     if (handedOffCheckBox.isChecked()) {
                         Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox isChecked()");
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition();
-                        listener.onCheckBoxClicked(view, positionAbsoluteAdapter);
-                        handedOffCheckBox.setChecked(false);
+                        if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) {
+                            listener.onCheckBoxClicked(view, positionAbsoluteAdapter);
+                        }
                     } else {
                         Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox NOT isChecked()");
                     }
