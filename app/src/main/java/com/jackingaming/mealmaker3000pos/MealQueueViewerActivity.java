@@ -75,10 +75,10 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         adapter = new RecordOfMealAdapter(recordsOfMeal,
                 new RecordOfMealAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(View itemView, int position) {
+                    public void onCheckBoxClicked(View view, int positionAbsoluteAdapter) {
                         Log.i(TAG, "onItemClick(View, int)");
-                        recordsOfMeal.remove(position);
-                        adapter.notifyItemRemoved(position);
+                        recordsOfMeal.remove(positionAbsoluteAdapter);
+                        adapter.notifyItemRemoved(positionAbsoluteAdapter);
                         saveRecordsOfMeal();
                     }
                 });

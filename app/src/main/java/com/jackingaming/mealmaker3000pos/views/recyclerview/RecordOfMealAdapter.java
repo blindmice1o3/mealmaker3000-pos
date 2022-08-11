@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,12 +28,9 @@ import java.util.List;
 public class RecordOfMealAdapter extends
         RecyclerView.Adapter<RecordOfMealAdapter.ViewHolder> {
 
-    // Define the listener interface so the parent activity or fragment
-    // can implement it (passed into the constructor of RecordOfMealAdapter).
     public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+        void onCheckBoxClicked(View view, int positionAbsoluteAdapter);
     }
-
     private OnItemClickListener listener;
 
     // Provide a direct reference to each of the views within an itemView
@@ -43,8 +41,9 @@ public class RecordOfMealAdapter extends
         private TextView keyTextView;
         private RecyclerView valueRecyclerView;
         private TextView timestampTextView;
-        private TextView topicTextView;
         private TextView offsetTextView;
+        private CheckBox handedOffCheckBox;
+        private TextView topicTextView;
         private TextView partitionTextView;
 
         // We also create a constructor that accepts the entire item row
@@ -56,23 +55,10 @@ public class RecordOfMealAdapter extends
             keyTextView = (TextView) itemView.findViewById(R.id.tv_key);
             valueRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_value);
             timestampTextView = (TextView) itemView.findViewById(R.id.tv_timestamp);
-            topicTextView = (TextView) itemView.findViewById(R.id.tv_topic);
             offsetTextView = (TextView) itemView.findViewById(R.id.tv_offset);
+            handedOffCheckBox = (CheckBox) itemView.findViewById(R.id.cb_handed_off);
+            topicTextView = (TextView) itemView.findViewById(R.id.tv_topic);
             partitionTextView = (TextView) itemView.findViewById(R.id.tv_partition);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("RecordOfMealAdapter", "ViewHolder onClick(View)");
-                    if (listener != null) {
-                        int positionAbsoluteAdapter = getAbsoluteAdapterPosition();
-                        Log.i("RecordOfMealAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
-                        if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, positionAbsoluteAdapter);
-                        }
-                    }
-                }
-            });
         }
 
         public void bindData(RecordOfMeal recordOfMeal) {
@@ -109,8 +95,23 @@ public class RecordOfMealAdapter extends
             }
 
             timestampTextView.setText("TIMESTAMP: " + Long.toString(recordOfMeal.getTimestamp()));
-            topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
             offsetTextView.setText("OFFSET: " + Long.toString(recordOfMeal.getOffset()));
+
+            handedOffCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (handedOffCheckBox.isChecked()) {
+                        Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox isChecked()");
+                        int positionAbsoluteAdapter = getAbsoluteAdapterPosition();
+                        listener.onCheckBoxClicked(view, positionAbsoluteAdapter);
+                        handedOffCheckBox.setChecked(false);
+                    } else {
+                        Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox NOT isChecked()");
+                    }
+                }
+            });
+
+            topicTextView.setText("TOPIC: " + recordOfMeal.getTopic());
             partitionTextView.setText("PARTITION: " + Integer.toString(recordOfMeal.getPartition()));
         }
     }
