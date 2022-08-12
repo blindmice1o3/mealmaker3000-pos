@@ -70,8 +70,8 @@ public class RecordOfMealAdapter extends
                 JSONObject mealAsJSON = new JSONObject(mealAsJSONString);
                 Meal meal = new Meal(mealAsJSON);
 
-                MenuItemAdapter menuItemAdapter = new MenuItemAdapter(meal.getMenuItems(),
-                        new MenuItemAdapter.MenuItemClickListener() {
+                MenuItemWithCheckBoxAdapter menuItemWithCheckBoxAdapter = new MenuItemWithCheckBoxAdapter(meal.getMenuItems(),
+                        new MenuItemWithCheckBoxAdapter.MenuItemWithCheckBoxClickListener() {
                             @Override
                             public void onItemClick(View view, int positionAbsoluteAdapter) {
                                 Log.i("RecordOfMealAdapter", "onItemClick(View, int)");
@@ -85,7 +85,7 @@ public class RecordOfMealAdapter extends
                                 // TODO:
                             }
                         });
-                valueRecyclerView.setAdapter(menuItemAdapter);
+                valueRecyclerView.setAdapter(menuItemWithCheckBoxAdapter);
                 valueRecyclerView.setLayoutManager(new LinearLayoutManager(valueRecyclerView.getContext()));
                 RecyclerView.ItemDecoration itemDecoration =
                         new DividerItemDecoration(valueRecyclerView.getContext(),

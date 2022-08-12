@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -49,8 +50,6 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meal_queue_viewer);
         Log.i(TAG, "onCreate(Bundle)");
 
-//        setTitle("MealMaker3000QueueViewer");
-
         // Initialize recordsOfMeal
         recordsOfMeal = new ArrayList<RecordOfMeal>();
 //        loadRecordsOfMeal();
@@ -80,6 +79,7 @@ public class MealQueueViewerActivity extends AppCompatActivity {
                         recordsOfMeal.remove(positionAbsoluteAdapter);
                         adapter.notifyItemRemoved(positionAbsoluteAdapter);
                         saveRecordsOfMeal();
+                        ((CheckBox)view).setChecked(false);
                     }
                 });
         // Attach the adapter to the recyclerview to populate items

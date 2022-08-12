@@ -1,10 +1,13 @@
 package com.jackingaming.mealmaker3000pos.views.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,45 +20,54 @@ import com.jackingaming.mealmaker3000pos.models.menuitems.drinks.Drink;
 
 import java.util.List;
 
-public class MenuItemAdapter
+public class MenuItemWithCheckBoxAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_DRINK = 0;
     private static final int VIEW_TYPE_NOT_DRINK = 1;
 
-    public interface MenuItemClickListener {
+    public interface MenuItemWithCheckBoxClickListener {
         void onItemClick(View view, int positionAbsoluteAdapter);
     }
-    private MenuItemClickListener menuItemClickListener;
+
+    private MenuItemWithCheckBoxClickListener menuItemWithCheckBoxClickListener;
 
     public class ViewHolderNotDrink extends RecyclerView.ViewHolder {
-        private TextView tvMenuItemPosition;
-        private TextView tvMenuItemName;
+        private CheckBox cbMenuItemName;
         private TextView tvMenuItemPrice;
 
         public ViewHolderNotDrink(@NonNull View itemView) {
             super(itemView);
-            tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
-            tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
+            cbMenuItemName = (CheckBox) itemView.findViewById(R.id.cb_menuitem_name);
             tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
-
         }
 
         public void bindData(RecyclerView.ViewHolder viewHolderNotDrink, int position) {
             MenuItem menuItem = menuItems.get(position);
 
-            tvMenuItemPosition.setText(Integer.toString(position));
-            tvMenuItemName.setText(menuItem.getName());
+            cbMenuItemName.setText(menuItem.getName());
             tvMenuItemPrice.setText(Double.toString(menuItem.getPrice()));
 
+            cbMenuItemName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    Log.i("MenuItemWithCheckBoxAdapter", "ViewHolderNotDrink onCheckedChanged(CompoundButton, boolean) isChecked: " + isChecked);
+                    if (isChecked) {
+                        // TODO: validate checked state of other menuitems in this meal.
+                    }
+                }
+            });
+
             viewHolderNotDrink.itemView.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("LongLogTag")
                 @Override
                 public void onClick(View view) {
-                    Log.i("MenuItemAdapter", "ViewHolderNotDrink onClick(View)");
-                    if (menuItemClickListener != null) {
+                    Log.i("MenuItemWithCheckBoxAdapter", "ViewHolderNotDrink onClick(View)");
+                    if (menuItemWithCheckBoxClickListener != null) {
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
-                        Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        Log.i("MenuItemWithCheckBoxAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
                         if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                            menuItemClickListener.onItemClick(view, positionAbsoluteAdapter);
+                            menuItemWithCheckBoxClickListener.onItemClick(view, positionAbsoluteAdapter);
                         }
                     }
                 }
@@ -64,15 +76,13 @@ public class MenuItemAdapter
     }
 
     public class ViewHolderDrink extends RecyclerView.ViewHolder {
-        private TextView tvMenuItemPosition;
-        private TextView tvMenuItemName;
+        private CheckBox cbMenuItemName;
         private TextView tvMenuItemPrice;
         private RecyclerView rvChildCustomizations;
 
         public ViewHolderDrink(@NonNull View itemView) {
             super(itemView);
-            tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
-            tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
+            cbMenuItemName = (CheckBox) itemView.findViewById(R.id.cb_menuitem_name);
             tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
             rvChildCustomizations = (RecyclerView) itemView.findViewById(R.id.rv_child_customizations);
         }
@@ -81,8 +91,7 @@ public class MenuItemAdapter
             // ViewHolderDrink means menuItem is a Drink (checked in [getItemViewType]).
             Drink drink = (Drink) menuItems.get(position);
 
-            tvMenuItemPosition.setText(Integer.toString(position));
-            tvMenuItemName.setText(drink.getName());
+            cbMenuItemName.setText(drink.getName());
             tvMenuItemPrice.setText(Double.toString(drink.getPrice()));
 
             CustomizationsAdapter customizationsAdapter = new CustomizationsAdapter(drink, customizationClickListener);
@@ -90,15 +99,27 @@ public class MenuItemAdapter
             LinearLayoutManager layoutManager = new LinearLayoutManager(rvChildCustomizations.getContext());
             rvChildCustomizations.setLayoutManager(layoutManager);
 
+            cbMenuItemName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    Log.i("MenuItemWithCheckBoxAdapter", "ViewHolderDrink onCheckedChanged(CompoundButton, boolean) isChecked: " + isChecked);
+                    if (isChecked) {
+                        // TODO: validate checked state of other menuitems in this meal.
+                    }
+                }
+            });
+
             viewHolderDrink.itemView.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("LongLogTag")
                 @Override
                 public void onClick(View view) {
-                    Log.i("MenuItemAdapter", "ViewHolderDrink onClick(View)");
-                    if (menuItemClickListener != null) {
+                    Log.i("MenuItemWithCheckBoxAdapter", "ViewHolderDrink onClick(View)");
+                    if (menuItemWithCheckBoxClickListener != null) {
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition(); // gets item position
-                        Log.i("MenuItemAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
+                        Log.i("MenuItemWithCheckBoxAdapter", "positionAbsoluteAdapter: " + positionAbsoluteAdapter);
                         if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                            menuItemClickListener.onItemClick(view, positionAbsoluteAdapter);
+                            menuItemWithCheckBoxClickListener.onItemClick(view, positionAbsoluteAdapter);
                         }
                     }
                 }
@@ -109,11 +130,11 @@ public class MenuItemAdapter
     private List<MenuItem> menuItems;
     private CustomizationsAdapter.OnItemClickListener customizationClickListener;
 
-    public MenuItemAdapter(List<MenuItem> menuItems,
-                           MenuItemClickListener menuItemClickListener,
-                           CustomizationsAdapter.OnItemClickListener customizationClickListener) {
+    public MenuItemWithCheckBoxAdapter(List<MenuItem> menuItems,
+                                       MenuItemWithCheckBoxClickListener menuItemWithCheckBoxClickListener,
+                                       CustomizationsAdapter.OnItemClickListener customizationClickListener) {
         this.menuItems = menuItems;
-        this.menuItemClickListener = menuItemClickListener;
+        this.menuItemWithCheckBoxClickListener = menuItemWithCheckBoxClickListener;
         this.customizationClickListener = customizationClickListener;
     }
 
@@ -132,10 +153,10 @@ public class MenuItemAdapter
         View itemView = null;
         RecyclerView.ViewHolder viewHolder = null;
         if (viewType == VIEW_TYPE_DRINK) {
-            itemView = inflater.inflate(R.layout.rv_menuitem_drink, parent, false);
+            itemView = inflater.inflate(R.layout.rv_menuitem_drink_w_checkbox, parent, false);
             viewHolder = new ViewHolderDrink(itemView);
         } else {
-            itemView = inflater.inflate(R.layout.rv_menuitem_notdrink, parent, false);
+            itemView = inflater.inflate(R.layout.rv_menuitem_notdrink_w_checkbox, parent, false);
             viewHolder = new ViewHolderNotDrink(itemView);
         }
 
