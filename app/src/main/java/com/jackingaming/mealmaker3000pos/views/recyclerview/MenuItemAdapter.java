@@ -29,22 +29,23 @@ public class MenuItemAdapter
 
     public class ViewHolderNotDrink extends RecyclerView.ViewHolder {
         private TextView tvMenuItemPosition;
-        private TextView tvMenuItemPrice;
         private TextView tvMenuItemName;
+        private TextView tvMenuItemPrice;
 
         public ViewHolderNotDrink(@NonNull View itemView) {
             super(itemView);
             tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
-            tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
             tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
+            tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
+
         }
 
         public void bindData(RecyclerView.ViewHolder viewHolderNotDrink, int position) {
             MenuItem menuItem = menuItems.get(position);
 
             tvMenuItemPosition.setText(Integer.toString(position));
-            tvMenuItemPrice.setText(Double.toString(menuItem.getPrice()));
             tvMenuItemName.setText(menuItem.getName());
+            tvMenuItemPrice.setText(Double.toString(menuItem.getPrice()));
 
             viewHolderNotDrink.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,15 +65,15 @@ public class MenuItemAdapter
 
     public class ViewHolderDrink extends RecyclerView.ViewHolder {
         private TextView tvMenuItemPosition;
-        private TextView tvMenuItemPrice;
         private TextView tvMenuItemName;
+        private TextView tvMenuItemPrice;
         private RecyclerView rvChildCustomizations;
 
         public ViewHolderDrink(@NonNull View itemView) {
             super(itemView);
             tvMenuItemPosition = (TextView) itemView.findViewById(R.id.tv_menuitem_position);
-            tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
             tvMenuItemName = (TextView) itemView.findViewById(R.id.tv_menuitem_name);
+            tvMenuItemPrice = (TextView) itemView.findViewById(R.id.tv_menuitem_price);
             rvChildCustomizations = (RecyclerView) itemView.findViewById(R.id.rv_child_customizations);
         }
 
@@ -81,8 +82,8 @@ public class MenuItemAdapter
             Drink drink = (Drink) menuItems.get(position);
 
             tvMenuItemPosition.setText(Integer.toString(position));
-            tvMenuItemPrice.setText(Double.toString(drink.getPrice()));
             tvMenuItemName.setText(drink.getName());
+            tvMenuItemPrice.setText(Double.toString(drink.getPrice()));
 
             CustomizationsAdapter customizationsAdapter = new CustomizationsAdapter(drink, customizationClickListener);
             rvChildCustomizations.setAdapter(customizationsAdapter);

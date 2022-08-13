@@ -12,7 +12,7 @@ public class Water extends Drink {
     public static final String DESCRIPTION = "At least 3 times more hydrating than bread!";
 
     public Water() {
-        super(NAME, DESCRIPTION, 0.05);
+        super(NAME, DESCRIPTION, 0.05, false);
         customizations.get(AddInCustomization.NAME).add(
                 new AddInCustomization.Builder()
                         .powder(AddInCustomization.Powder.VANILLA_BEAN)

@@ -6,8 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class Food extends MenuItem {
-    public Food(String name, String description, double price) {
-        super(name, description, price);
+    public Food(String name, String description, double price, boolean handedOff) {
+        super(name, description, price, handedOff);
     }
 
     public Food(JSONObject menuItemAsJSON)

@@ -8,7 +8,7 @@ public class UnknownMenuItem extends MenuItem {
     public static final String DESCRIPTION = "null subclass for MenuItem";
 
     public UnknownMenuItem() {
-        super(NAME, DESCRIPTION, -0.002);
+        super(NAME, DESCRIPTION, -0.002, false);
     }
 
     public UnknownMenuItem(JSONObject menuItemAsJSON)

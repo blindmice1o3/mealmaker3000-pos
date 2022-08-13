@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.jackingaming.mealmaker3000pos.models.Meal;
 import com.jackingaming.mealmaker3000pos.models.RecordOfMeal;
 import com.jackingaming.mealmaker3000pos.views.recyclerview.RecordOfMealAdapter;
 
@@ -49,8 +51,6 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meal_queue_viewer);
         Log.i(TAG, "onCreate(Bundle)");
 
-//        setTitle("MealMaker3000QueueViewer");
-
         // Initialize recordsOfMeal
         recordsOfMeal = new ArrayList<RecordOfMeal>();
 //        loadRecordsOfMeal();
@@ -73,13 +73,39 @@ public class MealQueueViewerActivity extends AppCompatActivity {
         rvMealQueueViewer = findViewById(R.id.rv_meal_queue_viewer);
         // Create adapter passing in the records of meal data
         adapter = new RecordOfMealAdapter(recordsOfMeal,
-                new RecordOfMealAdapter.OnItemClickListener() {
+                new RecordOfMealAdapter.CheckBoxListener() {
                     @Override
-                    public void onItemClick(View itemView, int position) {
-                        Log.i(TAG, "onItemClick(View, int)");
-                        recordsOfMeal.remove(position);
-                        adapter.notifyItemRemoved(position);
+                    public void onCheckBoxChecked(int positionAbsoluteAdapter) {
+                        Log.i(TAG, "onCheckBoxChecked(int)");
+                        recordsOfMeal.remove(positionAbsoluteAdapter);
+                        adapter.notifyItemRemoved(positionAbsoluteAdapter);
                         saveRecordsOfMeal();
+                    }
+
+                    @Override
+                    public void onAllCheckBoxChecked(Meal meal) {
+                        Log.i(TAG, "onAllCheckBoxChecked(Meal)");
+                        int indexMealToRemove = -1;
+                        for (int i = 0; i < recordsOfMeal.size(); i++) {
+                            String mealAsJSONString = recordsOfMeal.get(i).getValueMealAsJSONString();
+                            JSONObject mealAsJSON = null;
+                            try {
+                                mealAsJSON = new JSONObject(mealAsJSONString);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Meal mealFromCollection = new Meal(mealAsJSON);
+                            if (mealFromCollection.getId() == meal.getId()) {
+                                indexMealToRemove = i;
+                                break;
+                            }
+                        }
+
+                        if (indexMealToRemove > -1) {
+                            recordsOfMeal.remove(indexMealToRemove);
+                            adapter.notifyItemRemoved(indexMealToRemove);
+                            saveRecordsOfMeal();
+                        }
                     }
                 });
         // Attach the adapter to the recyclerview to populate items
