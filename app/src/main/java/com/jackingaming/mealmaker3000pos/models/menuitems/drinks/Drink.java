@@ -39,8 +39,8 @@ public abstract class Drink extends MenuItem {
     // size, hot/cold (hot/iced),
     protected HashMap<String, List<Customization>> customizations;
 
-    public Drink(String name, String description, double price) {
-        super(name, description, price);
+    public Drink(String name, String description, double price, boolean handedOff) {
+        super(name, description, price, handedOff);
         initCustomizations();
     }
 

@@ -8,7 +8,7 @@ public class Bread extends Food {
     public static final String DESCRIPTION = "Brought to you by multiplying yeast!";
 
     public Bread() {
-        super(NAME, DESCRIPTION, 0.25);
+        super(NAME, DESCRIPTION, 0.25, false);
     }
 
     public Bread(JSONObject menuItemAsJSON)

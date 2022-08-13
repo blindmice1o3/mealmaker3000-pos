@@ -28,11 +28,12 @@ import java.util.List;
 public class RecordOfMealAdapter extends
         RecyclerView.Adapter<RecordOfMealAdapter.ViewHolder> {
 
-    public interface OnItemClickListener {
-        void onCheckBoxClicked(View view, int positionAbsoluteAdapter);
+    public interface CheckBoxListener {
+        void onCheckBoxChecked(int positionAbsoluteAdapter);
+        void onAllCheckBoxChecked(Meal meal);
     }
 
-    private OnItemClickListener listener;
+    private CheckBoxListener listener;
 
     // Provide a direct reference to each of the views within an itemView
     // Used to cache the views within the item layout for fast access
@@ -70,12 +71,13 @@ public class RecordOfMealAdapter extends
                 JSONObject mealAsJSON = new JSONObject(mealAsJSONString);
                 Meal meal = new Meal(mealAsJSON);
 
-                MenuItemWithCheckBoxAdapter menuItemWithCheckBoxAdapter = new MenuItemWithCheckBoxAdapter(meal.getMenuItems(),
-                        new MenuItemWithCheckBoxAdapter.MenuItemWithCheckBoxClickListener() {
+                MenuItemWithCheckBoxAdapter menuItemWithCheckBoxAdapter = new MenuItemWithCheckBoxAdapter(meal,
+                        new MenuItemWithCheckBoxAdapter.CheckBoxListener() {
                             @Override
-                            public void onItemClick(View view, int positionAbsoluteAdapter) {
-                                Log.i("RecordOfMealAdapter", "onItemClick(View, int)");
+                            public void onCheckedAllCheckBox(Meal meal) {
+                                Log.i("RecordOfMealAdapter", "onCheckedAllCheckBox(Meal)");
                                 // TODO:
+                                listener.onAllCheckBoxChecked(meal);
                             }
                         },
                         new CustomizationsAdapter.OnItemClickListener() {
@@ -101,11 +103,13 @@ public class RecordOfMealAdapter extends
             handedOffCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    CheckBox handedOffCheckBox = (CheckBox) view;
                     if (handedOffCheckBox.isChecked()) {
                         Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox isChecked()");
                         int positionAbsoluteAdapter = getAbsoluteAdapterPosition();
                         if (positionAbsoluteAdapter != RecyclerView.NO_POSITION) {
-                            listener.onCheckBoxClicked(view, positionAbsoluteAdapter);
+                            handedOffCheckBox.setChecked(false);
+                            listener.onCheckBoxChecked(positionAbsoluteAdapter);
                         }
                     } else {
                         Log.i("RecordOfMealAdapter", "handedOffCheckBox's click listener - handedOffCheckBox NOT isChecked()");
@@ -120,7 +124,7 @@ public class RecordOfMealAdapter extends
 
     private List<RecordOfMeal> recordsOfMeal;
 
-    public RecordOfMealAdapter(List<RecordOfMeal> recordsOfMeal, OnItemClickListener listener) {
+    public RecordOfMealAdapter(List<RecordOfMeal> recordsOfMeal, CheckBoxListener listener) {
         this.recordsOfMeal = recordsOfMeal;
         this.listener = listener;
     }
